@@ -57,14 +57,14 @@
                                                 <span class="badge rounded-pill bg-success text-white">Normal</span>
                                             <?php endif; ?></p>
                                         <hr class="mt-0">
-                                        <p class="mb-0"><b>Dibuat Oleh</b>
+                                        <p class="mb-0"><b>Oleh</b>
                                             <br><?php if ($data->NamaLengkap == '') : ?>
                                                 <span class="badge rounded-pill bg-danger text-white">User Telah Terhapus!</span>
                                             <?php else : ?>
                                                 <?= $data->NamaLengkap ?>
                                             <?php endif; ?></p>
                                         <hr class="mt-0">
-                                        <p class="mb-0"><b>Tanggal Dibuat</b>
+                                        <p class="mb-0"><b>Tanggal</b>
                                             <br> <?= tgl_indo(date('Y-m-d', $data->TanggalBarang)); ?></p>
                                         <hr class="mt-0">
                                     </div>

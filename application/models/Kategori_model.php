@@ -35,7 +35,7 @@ class Kategori_model extends CI_Model
         $this->db->select('*');
         $this->db->from('tb_kategori');
         $this->db->where('IdPerusahaan', $user);
-        $this->db->order_by('Idkategori', 'DESC');
+        $this->db->order_by('Tanggalkategori', 'DESC');
 
         $query = $this->db->get();
         return $query;

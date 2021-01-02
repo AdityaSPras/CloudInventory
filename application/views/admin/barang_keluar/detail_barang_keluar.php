@@ -47,7 +47,7 @@
                                         <p class="mb-0"><b>Total Harga</b>
                                             <br><?= rupiah($data->TotalKeluar) ?></p>
                                         <hr class="mt-0">
-                                        <p class="mb-0"><b>Dibuat Oleh</b>
+                                        <p class="mb-0"><b>Oleh</b>
                                             <br><?php if ($data->NamaLengkap == '') : ?>
                                                 <span class="badge rounded-pill bg-danger text-white">User Telah Terhapus!</span>
                                             <?php else : ?>

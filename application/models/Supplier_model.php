@@ -35,7 +35,7 @@ class Supplier_model extends CI_Model
         $this->db->select('*');
         $this->db->from('tb_supplier');
         $this->db->where('IdPerusahaan', $user);
-        $this->db->order_by('IdSupplier', 'DESC');
+        $this->db->order_by('TanggalSupplier', 'DESC');
 
         $query = $this->db->get();
         return $query;

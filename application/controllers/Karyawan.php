@@ -396,8 +396,8 @@ class Karyawan extends CI_Controller
     // Fungsi Untuk Ubah Satuan Barang Perusahaan
     public function ubah_satuan()
     {
-        $IdUser        = $this->session->userdata('IdUser');
         $IdSatuan      = $this->input->post('IdSatuan');
+        $IdUser        = $this->session->userdata('IdUser');
         $NamaSatuan    = $this->input->post('NamaSatuan', true);
         $Keterangan    = $this->input->post('Keterangan', true);
         $TanggalSatuan = time();
@@ -527,8 +527,8 @@ class Karyawan extends CI_Controller
     // Fungsi Untuk Ubah Supplier Barang Perusahaan
     public function ubah_supplier()
     {
-        $IdUser               = $this->session->userdata('IdUser');
         $IdSupplier           = $this->input->post('IdSupplier');
+        $IdUser               = $this->session->userdata('IdUser');
         $NamaSupplier         = $this->input->post('NamaSupplier', true);
         $AlamatSupplier       = $this->input->post('AlamatSupplier', true);
         $NomorTeleponSupplier = $this->input->post('NomorTeleponSupplier', true);

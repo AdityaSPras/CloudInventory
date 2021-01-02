@@ -35,7 +35,7 @@ class Satuan_model extends CI_Model
         $this->db->select('*');
         $this->db->from('tb_satuan');
         $this->db->where('IdPerusahaan', $user);
-        $this->db->order_by('IdSatuan', 'DESC');
+        $this->db->order_by('TanggalSatuan', 'DESC');
 
         $query = $this->db->get();
         return $query;

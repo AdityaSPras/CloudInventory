@@ -720,8 +720,8 @@ class Admin extends CI_Controller
     // Fungsi Untuk Ubah Satuan Barang Perusahaan
     public function ubah_satuan()
     {
-        $IdUser        = $this->session->userdata('IdUser');
         $IdSatuan      = $this->input->post('IdSatuan');
+        $IdUser        = $this->session->userdata('IdUser');
         $NamaSatuan    = $this->input->post('NamaSatuan', true);
         $Keterangan    = $this->input->post('Keterangan', true);
         $TanggalSatuan = time();
@@ -862,8 +862,8 @@ class Admin extends CI_Controller
     // Fungsi Untuk Ubah Supplier Barang Perusahaan
     public function ubah_supplier()
     {
-        $IdUser               = $this->session->userdata('IdUser');
         $IdSupplier           = $this->input->post('IdSupplier');
+        $IdUser               = $this->session->userdata('IdUser');
         $NamaSupplier         = $this->input->post('NamaSupplier', true);
         $AlamatSupplier       = $this->input->post('AlamatSupplier', true);
         $NomorTeleponSupplier = $this->input->post('NomorTeleponSupplier', true);
@@ -1304,6 +1304,7 @@ class Admin extends CI_Controller
     public function ubah_barang_masuk()
     {
         $IdBarangMasuk = $this->input->post('IdBarangMasuk');
+        $IdUser        = $this->session->userdata('IdUser');
         $Barang        = $this->input->post('IdBarang');
         $Supplier      = $this->input->post('IdSupplier');
         $HargaMasuk    = $this->input->post('HargaMasuk', true);
@@ -1313,6 +1314,7 @@ class Admin extends CI_Controller
         $IdBarang      = decrypt_url($Barang);
 
         $data = array(
+            'IdUser'        => $IdUser,
             'IdBarang'      => $IdBarang,
             'IdSupplier'    => $IdSupplier,
             'HargaMasuk'    => $HargaMasuk,
@@ -1468,6 +1470,7 @@ class Admin extends CI_Controller
     public function ubah_barang_keluar()
     {
         $IdBarangKeluar = $this->input->post('IdBarangKeluar');
+        $IdUser         = $this->session->userdata('IdUser');
         $Barang         = $this->input->post('IdBarang');
         $HargaKeluar    = $this->input->post('HargaKeluar', true);
         $TanggalKeluar  = $this->input->post('TanggalKeluar', true);
@@ -1475,11 +1478,12 @@ class Admin extends CI_Controller
         $IdBarang       = decrypt_url($Barang);
 
         $data = array(
+            'IdUser'        => $IdUser,
             'IdBarang'      => $IdBarang,
             'HargaKeluar'   => $HargaKeluar,
             'TanggalKeluar' => $TanggalKeluar,
             'JumlahKeluar'  => $JumlahKeluar,
-            'TotalKeluar'    => $HargaKeluar * $JumlahKeluar
+            'TotalKeluar'   => $HargaKeluar * $JumlahKeluar
         );
 
         $id    = decrypt_url($IdBarangKeluar);
