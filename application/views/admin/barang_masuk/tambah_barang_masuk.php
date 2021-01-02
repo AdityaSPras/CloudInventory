@@ -1,14 +1,6 @@
 <!-- Begin Page Content -->
 <div class="container-fluid">
 
-    <!-- Awal Pesan -->
-    <div class="row">
-        <div class="col-md-12 text-center">
-            <?= $this->session->flashdata('message'); ?>
-        </div>
-    </div>
-    <!-- Akhir Pesan -->
-
     <div class="row">
         <div class="col-lg-12">
             <div class="card shadow mb-4">
@@ -103,6 +95,3 @@
 
 </div>
 <!-- End of Main Content -->
-<script src="<?= base_url('assets'); ?>/jquery/jquery-3.5.1.min.js"></script>
-<script src="<?= base_url('assets'); ?>/datepicker/dist/js/bootstrap-datepicker.min.js"></script>
-<script src="<?= base_url('assets'); ?>/chosen/chosen.jquery.min.js"></script>

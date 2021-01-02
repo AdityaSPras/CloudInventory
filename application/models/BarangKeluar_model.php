@@ -31,12 +31,12 @@ class BarangKeluar_model extends CI_Model
     public function jumlahBarangKeluar()
     {
         $harian = date('Y-m-d');
-        $user   = $this->session->userdata('IdPerusahaan');
+        $user   = $this->session->userdata('Email');
 
         $this->db->select('*');
         $this->db->from('tb_barang_keluar as tbk');
         $this->db->join('tb_user as tu', 'tu.IdPerusahaan = tbk.IdPerusahaan', 'left');
-        $this->db->where('tbk.IdPerusahaan', $user);
+        $this->db->where('tu.Email', $user);
         $this->db->like('TanggalKeluar', $harian);
 
         $query = $this->db->get();

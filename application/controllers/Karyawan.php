@@ -443,7 +443,7 @@ class Karyawan extends CI_Controller
     // Fungsi Untuk Tambah Supplier Barang Perusahaan
     public function tambah_supplier()
     {
-        // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Admin
+        // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Karyawan
         if ($this->session->userdata('Level') == "Karyawan") {
 
             $data['title']      = 'Tambah Supplier Barang';
@@ -451,7 +451,7 @@ class Karyawan extends CI_Controller
             $data['perusahaan'] = $this->profil->dataProfil()->row_array();
 
             // Membuat Aturan Pengisian Form atau Inputan Untuk Nama Supplier Barang
-            $this->form_validation->set_rules('NamaSupplier', 'Nama Supplier', 'required|trim', [
+            $this->form_validation->set_rules('NamaSupplier', 'Nama Supplier Barang', 'required|trim', [
                 'required' => 'Nama Supplier Tidak Boleh Kosong!'
             ]);
 
@@ -555,96 +555,460 @@ class Karyawan extends CI_Controller
     }
     // -------------------------------------------------------- AKHIR FUNGSI UNTUK SUPPLIER BARANG -------------------------------------------------------- //
 
-    //---------------------------- AWAL FUNGSI UNTUK BARANG ----------------------------//
+    // -------------------------------------------------------- AWAL FUNGSI UNTUK BARANG -------------------------------------------------------- //
+    // Fungsi Untuk Menampilkan Daftar Barang Perusahaan
     public function barang()
     {
+        // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Karyawan
         if ($this->session->userdata('Level') == "Karyawan") {
-            $data['title'] = 'Barang';
-            $data['user'] = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
-            $data['perusahaan'] = $this->profil->dataProfil()->row_array();
-            $data['barang'] = $this->barang->daftarBarang()->result();
 
+            $data['title']         = 'Barang';
+            $data['user']          = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['perusahaan']    = $this->profil->dataProfil()->row_array();
+            $data['daftar_barang'] = $this->barang->dataBarang()->result();
+            $data['jumlah_barang'] = $this->barang->jumlahBarang();
+            $data['status_paket']  = $this->profil->statusPaket()->row_array();
+
+            // Melakukan Load View Halaman Daftar Barang Perusahaan Untuk Karyawan
             $this->load->view('templates/karyawan_header', $data);
             $this->load->view('karyawan/barang/index', $data);
             $this->load->view('templates/users_footer');
         } else {
+            // Jika Session User Level Bukan Karyawan Maka Akan Diarahkan Ke Halaman Error 403
             $this->load->view('error');
         }
     }
-    //---------------------------- AKHIR FUNGSI UNTUK BARANG ----------------------------//
 
-    //---------------------------- AWAL FUNGSI UNTUK BARANG MASUK ----------------------------//
+    // Fungsi Untuk Tambah Barang Perusahaan
+    public function tambah_barang()
+    {
+        // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Karyawan
+        if ($this->session->userdata('Level') == "Karyawan") {
+
+            $data['title']           = 'Tambah Barang';
+            $data['user']            = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['perusahaan']      = $this->profil->dataProfil()->row_array();
+            $data['data_kategori']   = $this->kategori->dataKategori()->result();
+            $data['data_satuan']     = $this->satuan->dataSatuan()->result();
+            $data['jumlah_kategori'] = $this->kategori->dataKategori()->num_rows();
+            $data['jumlah_satuan']   = $this->satuan->dataSatuan()->num_rows();
+
+            // Membuat Aturan Pengisian Form atau Inputan Untuk Nama Barang
+            $this->form_validation->set_rules('NamaBarang', 'Nama Barang', 'required|trim', [
+                'required' => 'Nama Barang Tidak Boleh Kosong!'
+            ]);
+
+            // Membuat Aturan Pengisian Form atau Inputan Untuk Harga Jual Barang
+            $this->form_validation->set_rules('HargaJual', 'Harga Jual Barang', 'required|trim', [
+                'required' => 'Harga Jual Barang Tidak Boleh Kosong!'
+            ]);
+
+            // Membuat Aturan Pengisian Form atau Inputan Untuk Nama Kategori Barang
+            $this->form_validation->set_rules('IdKategori', 'Nama Kategori Barang', 'required', [
+                'required' => 'Kategori Barang Tidak Boleh Kosong!'
+            ]);
+
+            // Membuat Aturan Pengisian Form atau Inputan Untuk Nama Satuan Barang
+            $this->form_validation->set_rules('IdSatuan', 'Nama Satuan Barang', 'required', [
+                'required' => 'Satuan Barang Tidak Boleh Kosong!'
+            ]);
+
+            // Membuat Aturan Pengisian Form atau Inputan Untuk Stok Barang
+            $this->form_validation->set_rules('Stok', 'Stok Barang', 'required|trim', [
+                'required' => 'Stok Awal Barang Tidak Boleh Kosong!'
+            ]);
+
+            // Membuat Aturan Pengisian Form atau Inputan Untuk Stok Minimum Barang
+            $this->form_validation->set_rules('StokMinimum', 'Stok Minimum Barang', 'required|trim', [
+                'required' => 'Stok Minimum Barang Tidak Boleh Kosong!'
+            ]);
+
+            if ($this->form_validation->run() == false) {
+                // Melakukan Load View Halaman Tambah Barang Perusahaan Untuk Karyawan
+                $this->load->view('templates/karyawan_header', $data);
+                $this->load->view('karyawan/barang/tambah_barang', $data);
+                $this->load->view('templates/users_footer');
+            } else {
+                $IdBarang      = $this->barang->kodeBarang();
+                $IdUser        = $this->session->userdata('IdUser');
+                $IdPerusahaan  = $this->session->userdata('IdPerusahaan');
+                $Kategori      = $this->input->post('IdKategori');
+                $Satuan        = $this->input->post('IdSatuan');
+                $NamaBarang    = $this->input->post('NamaBarang', true);
+                $HargaJual     = $this->input->post('HargaJual', true);
+                $Stok          = $this->input->post('Stok', true);
+                $StokMinimum   = $this->input->post('StokMinimum', true);
+                $TanggalBarang = time();
+                $IdKategori    = decrypt_url($Kategori);
+                $IdSatuan      = decrypt_url($Satuan);
+
+                $config['allowed_types'] = 'png|PNG|jpg|JPG|jpeg|JPEG';
+                $config['max_size']      = '2048';
+                $config['upload_path']   = './assets/img/items/';
+
+                $this->load->library('upload', $config);
+
+                $namaFile = $_FILES['Gambar']['name'];
+
+                if ($namaFile == '') {
+                    $ganti = 'items_default.png';
+                } else {
+                    if (!$this->upload->do_upload('Gambar')) {
+                        $this->session->set_flashdata('error', 'Upload Gambar Gagal!');
+                        redirect('karyawan/tambah_barang');
+                    } else {
+                        $data = array('Gambar' => $this->upload->data());
+
+                        $nama_file = $data['Gambar']['file_name'];
+                        $ganti     = str_replace(" ", "_", $nama_file);
+                    }
+                }
+
+                $data = array(
+                    'IdBarang'      => $IdBarang,
+                    'IdUser'        => $IdUser,
+                    'IdPerusahaan'  => $IdPerusahaan,
+                    'IdKategori'    => $IdKategori,
+                    'IdSatuan'      => $IdSatuan,
+                    'NamaBarang'    => $NamaBarang,
+                    'Gambar'        => $ganti,
+                    'HargaJual'     => $HargaJual,
+                    'Stok'          => $Stok,
+                    'StokMinimum'   => $StokMinimum,
+                    'TanggalBarang' => $TanggalBarang
+                );
+
+                $this->barang->tambahBarang($data, 'tb_barang');
+                $this->session->set_flashdata('success', 'Barang Berhasil Ditambah');
+                redirect('karyawan/barang');
+            }
+        } else {
+            // Jika Session User Level Bukan Karyawan Maka Akan Diarahkan Ke Halaman Error 403
+            $this->load->view('error');
+        }
+    }
+
+    // Fungsi Untuk Menampilkan Detail Barang Perusahaan
+    public function detail_barang($id)
+    {
+        // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Karyawan
+        if ($this->session->userdata('Level') == "Karyawan") {
+
+            $id                    = decrypt_url($id);
+            $data['title']         = 'Detail Barang';
+            $data['detail_barang'] = $this->barang->detailBarang($id)->result();
+            $data['user']          = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+
+            if ($id == NULL) {
+                // Jika ID Barang Tidak Ditemukan Akan Diarahkan Ke Halaman Error 404
+                redirect('error');
+            } else {
+                // Melakukan Load View Halaman Detail Barang Perusahaan Untuk Karyawan
+                $this->load->view('templates/karyawan_header', $data);
+                $this->load->view('karyawan/barang/detail_barang', $data);
+                $this->load->view('templates/users_footer');
+            }
+        } else {
+            // Jika Session User Level Bukan Karyawan Maka Akan Diarahkan Ke Halaman Error 403
+            $this->load->view('error');
+        }
+    }
+    // -------------------------------------------------------- AKHIR FUNGSI UNTUK BARANG -------------------------------------------------------- //
+
+    // -------------------------------------------------------- AWAL FUNGSI UNTUK BARANG MASUK -------------------------------------------------------- //
+    // Fungsi Untuk Menampilkan Daftar Barang Masuk Perusahaan
     public function barang_masuk()
     {
+        // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Karyawan
         if ($this->session->userdata('Level') == "Karyawan") {
-            $data['title'] = 'Barang Masuk';
-            $data['user'] = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
-            $data['perusahaan'] = $this->profil->dataProfil()->row_array();
-            $data['barang_masuk'] = $this->barang_masuk->daftarBarangMasuk()->result();
 
+            $data['title']               = 'Barang Masuk';
+            $data['user']                = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['perusahaan']          = $this->profil->dataProfil()->row_array();
+            $data['daftar_barang_masuk'] = $this->barang_masuk->daftarBarangMasuk()->result();
+            $data['data_supplier']       = $this->supplier->dataSupplier()->result();
+            $data['jumlah_supplier']     = $this->supplier->dataSupplier()->num_rows();
+
+            // Melakukan Load View Halaman Daftar Barang Masuk Perusahaan Untuk Karyawan
             $this->load->view('templates/karyawan_header', $data);
             $this->load->view('karyawan/barang_masuk/index', $data);
             $this->load->view('templates/users_footer');
         } else {
+            // Jika Session User Level Bukan Karyawan Maka Akan Diarahkan Ke Halaman Error 403
             $this->load->view('error');
         }
     }
-    //---------------------------- AKHIR FUNGSI UNTUK BARANG MASUK ----------------------------//
 
-    //---------------------------- AWAL FUNGSI UNTUK BARANG KELUAR ----------------------------//
+    // Fungsi Untuk Tambah Barang Masuk Perusahaan
+    public function tambah_barang_masuk()
+    {
+        // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Karyawan
+        if ($this->session->userdata('Level') == "Karyawan") {
+
+            $data['title']           = 'Tambah Barang Masuk';
+            $data['user']            = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['perusahaan']      = $this->profil->dataProfil()->row_array();
+            $data['data_barang']     = $this->barang->dataBarang()->result();
+            $data['data_supplier']   = $this->supplier->dataSupplier()->result();
+            $data['jumlah_barang']   = $this->barang->dataBarang()->num_rows();
+            $data['jumlah_supplier'] = $this->supplier->dataSupplier()->num_rows();
+
+            // Membuat Aturan Pengisian Form atau Inputan Untuk Nama Barang Masuk
+            $this->form_validation->set_rules('IdBarang', 'Nama Barang Masuk', 'required|trim', [
+                'required' => 'Nama Barang Tidak Boleh Kosong!'
+            ]);
+
+            // Membuat Aturan Pengisian Form atau Inputan Untuk Nama Supplier Barang
+            $this->form_validation->set_rules('IdSupplier', 'Nama Supplier Barang', 'required|trim', [
+                'required' => 'Nama Supplier Tidak Boleh Kosong!'
+            ]);
+
+            // Membuat Aturan Pengisian Form atau Inputan Untuk Harga Beli Barang
+            $this->form_validation->set_rules('HargaMasuk', 'Harga Beli Barang', 'required|trim', [
+                'required' => 'Harga Masuk Barang Tidak Boleh Kosong!'
+            ]);
+
+            // Membuat Aturan Pengisian Form atau Inputan Untuk Jumlah Masuk Barang
+            $this->form_validation->set_rules('JumlahMasuk', 'Jumlah Masuk Barang', 'required|trim', [
+                'required' => 'Jumlah Masuk Barang Tidak Boleh Kosong!'
+            ]);
+
+            // Membuat Aturan Pengisian Form atau Inputan Untuk Tanggal Masuk Barang
+            $this->form_validation->set_rules('TanggalMasuk', 'Tanggal Masuk Barang', 'required|trim', [
+                'required' => 'Tanggal Masuk Barang Tidak Boleh Kosong!'
+            ]);
+
+            if ($this->form_validation->run() == false) {
+                // Melakukan Load View Halaman Tambah Barang Masuk Perusahaan Untuk Karyawan
+                $this->load->view('templates/karyawan_header', $data);
+                $this->load->view('karyawan/barang_masuk/tambah_barang_masuk', $data);
+                $this->load->view('templates/users_footer');
+            } else {
+                $IdBarangMasuk = $this->barang_masuk->kodeBarangMasuk();
+                $IdUser        = $this->session->userdata('IdUser');
+                $IdPerusahaan  = $this->session->userdata('IdPerusahaan');
+                $Barang        = $this->input->post('IdBarang');
+                $Supplier      = $this->input->post('IdSupplier');
+                $HargaMasuk    = $this->input->post('HargaMasuk', true);
+                $TanggalMasuk  = $this->input->post('TanggalMasuk', true);
+                $JumlahMasuk   = $this->input->post('JumlahMasuk', true);
+                $IdBarang      = decrypt_url($Barang);
+                $IdSupplier    = decrypt_url($Supplier);
+
+                $data = array(
+                    'IdBarangMasuk' => $IdBarangMasuk,
+                    'IdUser'        => $IdUser,
+                    'IdPerusahaan'  => $IdPerusahaan,
+                    'IdBarang'      => $IdBarang,
+                    'IdSupplier'    => $IdSupplier,
+                    'HargaMasuk'    => $HargaMasuk,
+                    'TanggalMasuk'  => $TanggalMasuk,
+                    'JumlahMasuk'   => $JumlahMasuk
+                );
+
+                $this->barang_masuk->tambahBarangMasuk($data, 'tb_barang_masuk');
+                $this->session->set_flashdata('success', 'Barang Masuk Berhasil Ditambah');
+                redirect('karyawan/barang_masuk');
+            }
+        } else {
+            // Jika Session User Level Bukan Karyawan Maka Akan Diarahkan Ke Halaman Error 403
+            $this->load->view('error');
+        }
+    }
+
+    // Fungsi Untuk Menampilkan Detail Barang Masuk Perusahaan
+    public function detail_barang_masuk($id)
+    {
+        // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Karyawan
+        if ($this->session->userdata('Level') == "Karyawan") {
+
+            $id                          = decrypt_url($id);
+            $data['title']               = 'Detail Barang Masuk';
+            $data['detail_barang_masuk'] = $this->barang_masuk->detailBarangMasuk($id)->result();
+            $data['user']                = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+
+            if ($id == NULL) {
+                // Jika ID Barang Masuk Tidak Ditemukan Akan Diarahkan Ke Halaman Error 404
+                redirect('error');
+            } else {
+                // Melakukan Load View Halaman Detail Barang Masuk Perusahaan Untuk Karyawan
+                $this->load->view('templates/karyawan_header', $data);
+                $this->load->view('karyawan/barang_masuk/detail_barang_masuk', $data);
+                $this->load->view('templates/users_footer');
+            }
+        } else {
+            // Jika Session User Level Bukan Karyawan Maka Akan Diarahkan Ke Halaman Error 403
+            $this->load->view('error');
+        }
+    }
+    // -------------------------------------------------------- AKHIR FUNGSI UNTUK BARANG MASUK -------------------------------------------------------- //
+
+    // -------------------------------------------------------- AWAL FUNGSI UNTUK BARANG KELUAR --------------------------------------------------------//
+    // Fungsi Untuk Menampilkan Daftar Barang Keluar Perusahaan
     public function barang_keluar()
     {
+        // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Karyawan
         if ($this->session->userdata('Level') == "Karyawan") {
-            $data['title'] = 'Barang Keluar';
-            $data['user'] = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
-            $data['perusahaan'] = $this->profil->dataProfil()->row_array();
-            $data['barang_keluar'] = $this->barang_keluar->daftarBarangKeluar()->result();
 
+            $data['title']                = 'Barang Keluar';
+            $data['user']                 = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['perusahaan']           = $this->profil->dataProfil()->row_array();
+            $data['daftar_barang_keluar'] = $this->barang_keluar->daftarBarangKeluar()->result();
+
+            // Melakukan Load View Halaman Daftar Barang Keluar Perusahaan Untuk Karyawan
             $this->load->view('templates/karyawan_header', $data);
             $this->load->view('karyawan/barang_keluar/index', $data);
             $this->load->view('templates/users_footer');
         } else {
+            // Jika Session User Level Bukan Karyawan Maka Akan Diarahkan Ke Halaman Error 403
             $this->load->view('error');
         }
     }
-    //---------------------------- AKHIR FUNGSI UNTUK BARANG KELUAR ----------------------------//
 
-    //---------------------------- AWAL FUNGSI UNTUK KRITIK & SARAN ----------------------------//
+    // Fungsi Untuk Tambah Barang Keluar Perusahaan
+    public function tambah_barang_keluar()
+    {
+        // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Karyawan
+        if ($this->session->userdata('Level') == "Karyawan") {
+
+            $data['title']           = 'Tambah Barang Keluar';
+            $data['user']            = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['perusahaan']      = $this->profil->dataProfil()->row_array();
+            $data['data_barang']     = $this->barang->dataBarang()->result();
+            $data['jumlah_barang']   = $this->barang->dataBarang()->num_rows();
+
+            // Membuat Aturan Pengisian Form atau Inputan Untuk Nama Barang Keluar
+            $this->form_validation->set_rules('IdBarang', 'Nama Barang Keluar', 'required|trim', [
+                'required' => 'Nama Barang Tidak Boleh Kosong!'
+            ]);
+
+            // Membuat Aturan Pengisian Form atau Inputan Untuk Harga Keluar Barang
+            $this->form_validation->set_rules('HargaKeluar', 'Harga Keluar Barang', 'required|trim', [
+                'required' => 'Harga Keluar Barang Tidak Boleh Kosong!'
+            ]);
+
+            // Membuat Aturan Pengisian Form atau Inputan Untuk Jumlah Keluar Barang
+            $this->form_validation->set_rules('JumlahKeluar', 'Jumlah Keluar Barang', 'required|trim', [
+                'required' => 'Jumlah Keluar Barang Tidak Boleh Kosong!'
+            ]);
+
+            // Membuat Aturan Pengisian Form atau Inputan Untuk Tanggal Keluar Barang
+            $this->form_validation->set_rules('TanggalKeluar', 'Tanggal Keluar Barang', 'required|trim', [
+                'required' => 'Tanggal Keluar Barang Tidak Boleh Kosong!'
+            ]);
+
+            if ($this->form_validation->run() == false) {
+                // Melakukan Load View Halaman Tambah Barang Keluar Perusahaan Untuk Karyawan
+                $this->load->view('templates/karyawan_header', $data);
+                $this->load->view('karyawan/barang_keluar/tambah_barang_keluar', $data);
+                $this->load->view('templates/users_footer');
+            } else {
+                $IdBarangKeluar = $this->barang_keluar->kodeBarangKeluar();
+                $IdUser         = $this->session->userdata('IdUser');
+                $IdPerusahaan   = $this->session->userdata('IdPerusahaan');
+                $Barang         = $this->input->post('IdBarang');
+                $HargaKeluar    = $this->input->post('HargaKeluar', true);
+                $TanggalKeluar  = $this->input->post('TanggalKeluar', true);
+                $JumlahKeluar   = $this->input->post('JumlahKeluar', true);
+                $IdBarang       = decrypt_url($Barang);
+
+                $data = array(
+                    'IdBarangKeluar' => $IdBarangKeluar,
+                    'IdUser'         => $IdUser,
+                    'IdPerusahaan'   => $IdPerusahaan,
+                    'IdBarang'       => $IdBarang,
+                    'HargaKeluar'    => $HargaKeluar,
+                    'TanggalKeluar'  => $TanggalKeluar,
+                    'JumlahKeluar'   => $JumlahKeluar,
+                    'TotalKeluar'    => $HargaKeluar * $JumlahKeluar
+                );
+
+                $this->barang_keluar->tambahBarangKeluar($data, 'tb_barang_keluar');
+                $this->session->set_flashdata('success', 'Barang Keluar Berhasil Dihapus');
+                redirect('karyawan/barang_keluar');
+            }
+        } else {
+            // Jika Session User Level Bukan Karyawan Maka Akan Diarahkan Ke Halaman Error 403
+            $this->load->view('error');
+        }
+    }
+
+    // Fungsi Untuk Mendapatkan ID Barang (Harga Barang)
+    public function getBarang($id)
+    {
+        $id     = decrypt_url($id);
+        $barang = $this->db->where('IdBarang', $id)->get('tb_barang')->row();
+        echo json_encode($barang);
+    }
+
+    // Fungsi Untuk Menampilkan Detail Barang Keluar Perusahaan
+    public function detail_barang_keluar($id)
+    {
+        // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Karyawan
+        if ($this->session->userdata('Level') == "Karyawan") {
+
+            $id                           = decrypt_url($id);
+            $data['title']                = 'Detail Barang Keluar';
+            $data['detail_barang_keluar'] = $this->barang_keluar->detailBarangKeluar($id)->result();
+            $data['user']                 = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+
+            if ($id == NULL) {
+                // Jika ID Barang Keluar Tidak Ditemukan Akan Diarahkan Ke Halaman Error 404
+                redirect('error');
+            } else {
+                // Melakukan Load View Halaman Detail Barang Keluar Perusahaan Untuk Karyawan
+                $this->load->view('templates/karyawan_header', $data);
+                $this->load->view('karyawan/barang_keluar/detail_barang_keluar', $data);
+                $this->load->view('templates/users_footer');
+            }
+        } else {
+            // Jika Session User Level Bukan Karyawan Maka Akan Diarahkan Ke Halaman Error 403
+            $this->load->view('error');
+        }
+    }
+    // -------------------------------------------------------- AKHIR FUNGSI UNTUK BARANG KELUAR -------------------------------------------------------- //
+
+    // -------------------------------------------------------- AWAL FUNGSI UNTUK KRITIK & SARAN -------------------------------------------------------- //
+    // Fungsi Untuk Memberi Kritik & Saran Kepada Penyedia Layanan
     public function kritik_saran()
     {
+        // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Karyawan
         if ($this->session->userdata('Level') == "Karyawan") {
-            $data['title'] = 'Kritik & Saran';
-            $data['user'] = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
 
-            $this->form_validation->set_rules('Pesan', 'Isi Pesan', 'required|trim', [
+            $data['title'] = 'Kritik & Saran';
+            $data['user']  = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+
+            // Membuat Aturan Pengisian Form atau Inputan Untuk Isi Kritik & Saran
+            $this->form_validation->set_rules('Pesan', 'Isi Kritik & Saran', 'required|trim', [
                 'required' => 'Pesan Tidak Boleh Kosong!'
             ]);
 
             if ($this->form_validation->run() == false) {
+                // Melakukan Load View Halaman Kirim Kritik & Saran Untuk Karyawan
                 $this->load->view('templates/karyawan_header', $data);
                 $this->load->view('karyawan/kritik_saran', $data);
                 $this->load->view('templates/users_footer');
             } else {
-                $IdUser = $this->session->userdata('IdUser');
+                $IdUser       = $this->session->userdata('IdUser');
                 $IdPerusahaan = $this->session->userdata('IdPerusahaan');
-                $Pesan = $this->input->post('Pesan', true);
-                $Tanggal = time();
+                $Pesan        = $this->input->post('Pesan', true);
+                $Tanggal      = time();
 
                 $data = [
-                    'IdUser' => $IdUser,
+                    'IdUser'       => $IdUser,
                     'IdPerusahaan' => $IdPerusahaan,
-                    'Pesan' => $Pesan,
-                    'Tanggal' => $Tanggal
+                    'Pesan'        => $Pesan,
+                    'Tanggal'      => $Tanggal
                 ];
 
                 $this->kritik_saran->kirimKritikSaran($data, 'tb_kritik_saran');
-                $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Kritik & Saran Berhasil Dikirim</div>');
+                $this->session->set_flashdata('success', 'Kritik & Saran Berhasil Dikirim');
                 redirect('karyawan/kritik_saran');
             }
         } else {
+            // Jika Session User Level Bukan Karyawan Maka Akan Diarahkan Ke Halaman Error 403
             $this->load->view('error');
         }
     }
-    //---------------------------- AKHIR FUNGSI UNTUK KRITIK & SARAN ----------------------------//
-
+    // -------------------------------------------------------- AKHIR FUNGSI UNTUK KRITIK & SARAN --------------------------------------------------------//
 }

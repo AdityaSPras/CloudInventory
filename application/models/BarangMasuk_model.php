@@ -31,12 +31,12 @@ class BarangMasuk_model extends CI_Model
     public function jumlahBarangMasuk()
     {
         $harian = date('Y-m-d');
-        $user   = $this->session->userdata('IdPerusahaan');
+        $user   = $this->session->userdata('Email');
 
         $this->db->select('*');
         $this->db->from('tb_barang_masuk as tbm');
         $this->db->join('tb_user as tu', 'tu.IdPerusahaan = tbm.IdPerusahaan', 'left');
-        $this->db->where('tbm.IdPerusahaan', $user);
+        $this->db->where('tu.Email', $user);
         $this->db->like('TanggalMasuk', $harian);
 
         $query = $this->db->get();

@@ -940,7 +940,7 @@ class Admin extends CI_Controller
             $data['jumlah_satuan']   = $this->satuan->dataSatuan()->num_rows();
 
             // Membuat Aturan Pengisian Form atau Inputan Untuk Nama Barang
-            $this->form_validation->set_rules('NamaBarang', 'Nama Barang', 'required|trim', [
+            $this->form_validation->set_rules('NamaBarang', 'Nama Barang Barang', 'required|trim', [
                 'required' => 'Nama Barang Tidak Boleh Kosong!'
             ]);
 
@@ -1212,7 +1212,7 @@ class Admin extends CI_Controller
             $data['jumlah_supplier'] = $this->supplier->dataSupplier()->num_rows();
 
             // Membuat Aturan Pengisian Form atau Inputan Untuk Nama Barang Masuk
-            $this->form_validation->set_rules('IdBarang', 'Nama Barang', 'required|trim', [
+            $this->form_validation->set_rules('IdBarang', 'Nama Barang Masuk', 'required|trim', [
                 'required' => 'Nama Barang Tidak Boleh Kosong!'
             ]);
 
@@ -1375,7 +1375,7 @@ class Admin extends CI_Controller
             $data['jumlah_barang']   = $this->barang->dataBarang()->num_rows();
 
             // Membuat Aturan Pengisian Form atau Inputan Untuk Nama Barang Keluar
-            $this->form_validation->set_rules('IdBarang', 'Nama Barang', 'required|trim', [
+            $this->form_validation->set_rules('IdBarang', 'Nama Barang Keluar', 'required|trim', [
                 'required' => 'Nama Barang Tidak Boleh Kosong!'
             ]);
 
@@ -1430,7 +1430,7 @@ class Admin extends CI_Controller
         }
     }
 
-    // Fungsi Untuk Mendapatkan Id Barang (Harga Barang)
+    // Fungsi Untuk Mendapatkan ID Barang (Harga Barang)
     public function getBarang($id)
     {
         $id     = decrypt_url($id);

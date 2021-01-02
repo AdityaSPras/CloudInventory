@@ -9,7 +9,7 @@
                     <h6 class="m-0 font-weight-bold text-primary text-center">( <?= $perusahaan['NamaPerusahaan']; ?> )</h6>
                 </div>
                 <div class="card-body p-4">
-                    <form action="<?= base_url('admin/tambah_barang_keluar'); ?>" method="POST" id="formBarangKeluar">
+                    <form action="<?= base_url('karyawan/tambah_barang_keluar'); ?>" method="POST" id="formBarangKeluar">
                         <div class="form-group">
                             <label>Tanggal Keluar</label>
                             <input class="form-control" name="TanggalKeluar" type="date">
@@ -51,7 +51,7 @@
                             <?= form_error('JumlahKeluar', '<small class="text-danger">', '</small>'); ?>
                         </div>
                         <div class="form-group text-center">
-                            <a href="<?= base_url('admin/barang_keluar'); ?>" class="btn btn-warning btn-md btn-icon-split mb-2">
+                            <a href="<?= base_url('karyawan/barang_keluar'); ?>" class="btn btn-warning btn-md btn-icon-split mb-2">
                                 <span class="icon text-white"><i class="fas fa-arrow-left"></i></span>
                                 <span class="text text-white">Kembali</span>
                             </a>
@@ -76,7 +76,7 @@
     $(document).ready(function() {
         $("#getBarang").change(function() {
             var sts = this.value;
-            var url = '<?php echo site_url('admin/getBarang'); ?>/' + sts;
+            var url = '<?php echo site_url('karyawan/getBarang'); ?>/' + sts;
             $.ajax({
                 url: url,
                 data: $('#formBarangKeluar').serialize(),
