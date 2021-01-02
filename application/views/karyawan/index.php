@@ -11,7 +11,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Barang</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $total_barang ?></div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $jumlah_barang ?></div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-boxes fa-2x text-success"></i>
@@ -28,7 +28,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Barang Masuk (Hari Ini)</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $total_barang_masuk ?></div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $jumlah_barang_masuk ?></div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-truck-loading fa-2x text-warning"></i>
@@ -45,7 +45,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Barang Keluar (Hari Ini)</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $total_barang_keluar ?></div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $jumlah_barang_keluar ?></div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-box-open fa-2x text-danger"></i>

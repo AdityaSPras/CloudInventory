@@ -20,31 +20,38 @@ class Karyawan extends CI_Controller
         $this->load->model('Kritik_saran_model', 'kritik_saran');
     }
 
+    // -------------------------------------------------------- AWAL FUNGSI UNTUK HALAMAN UTAMA KARYAWAN -------------------------------------------------------- //
+    // Fungsi Menampilkan Halaman Utama
     public function index()
     {
+        // Melakukan Cek Session Level User Apakah Benar Yang Mengakses Fungsi Ini Sebagai Karyawan
         if ($this->session->userdata('Level') == "Karyawan") {
-            $data['title'] = 'Halaman Utama';
-            $data['user'] = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
-            $data['profil'] = $this->profil->dataProfil()->row_array();
-            $data['total_barang'] = $this->barang->daftarBarang()->num_rows();
-            $data['total_barang_masuk'] = $this->barang_masuk->totalBarangMasuk()->num_rows();
-            $data['total_barang_keluar'] = $this->barang_keluar->totalBarangKeluar()->num_rows();
 
+            $data['title']                = 'Halaman Utama';
+            $data['user']                 = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['profil']               = $this->profil->dataProfil()->row_array();
+            $data['jumlah_barang']        = $this->barang->jumlahBarang();
+            $data['jumlah_barang_masuk']  = $this->barang_masuk->jumlahBarangMasuk()->num_rows();
+            $data['jumlah_barang_keluar'] = $this->barang_keluar->jumlahBarangKeluar()->num_rows();
+
+            // Melakukan Load View Halaman Utama Untuk Karyawan
             $this->load->view('templates/karyawan_header', $data);
             $this->load->view('karyawan/index', $data);
             $this->load->view('templates/users_footer');
         } else {
+            // Jika Session Level User Bukan Karyawan Maka Akan Diarahkan Ke Halaman Error 403
             $this->load->view('error');
         }
     }
+    // -------------------------------------------------------- AKHIR FUNGSI UNTUK HALAMAN UTAMA KARYAWAN -------------------------------------------------------- //
 
-    //---------------------------- AWAL FUNGSI UNTUK PROFIL ----------------------------//
+    // -------------------------------------------------------- AWAL FUNGSI UNTUK PROFIL -------------------------------------------------------- //
     public function profil()
     {
         if ($this->session->userdata('Level') == "Karyawan") {
 
-            $data['title'] = 'Profil Saya';
-            $data['user'] = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['title']  = 'Profil Saya';
+            $data['user']   = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
             $data['profil'] = $this->profil->dataProfil()->row_array();
 
             $this->load->view('templates/karyawan_header', $data);
