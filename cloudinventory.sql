@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 29, 2020 at 06:53 PM
+-- Generation Time: Jan 02, 2021 at 06:52 AM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 7.4.13
 
@@ -74,13 +74,6 @@ CREATE TABLE `tb_barang_keluar` (
   `TotalKeluar` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `tb_barang_keluar`
---
-
-INSERT INTO `tb_barang_keluar` (`IdBarangKeluar`, `IdUser`, `IdPerusahaan`, `IdBarang`, `HargaKeluar`, `TanggalKeluar`, `JumlahKeluar`, `TotalKeluar`) VALUES
-('ID-BRK-0001', 'ID-ADM-002', 'ID-PRH-001', 'ID-BRG-0001', 121, '2020-12-30', 212, 25652);
-
 -- --------------------------------------------------------
 
 --
@@ -93,18 +86,10 @@ CREATE TABLE `tb_barang_masuk` (
   `IdPerusahaan` varchar(15) NOT NULL,
   `IdBarang` varchar(15) NOT NULL,
   `IdSupplier` varchar(15) NOT NULL,
-  `HargaBeli` int(11) NOT NULL,
+  `HargaMasuk` int(11) NOT NULL,
   `TanggalMasuk` date NOT NULL,
-  `JumlahMasuk` varchar(30) NOT NULL,
-  `TotalMasuk` int(11) NOT NULL
+  `JumlahMasuk` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `tb_barang_masuk`
---
-
-INSERT INTO `tb_barang_masuk` (`IdBarangMasuk`, `IdUser`, `IdPerusahaan`, `IdBarang`, `IdSupplier`, `HargaBeli`, `TanggalMasuk`, `JumlahMasuk`, `TotalMasuk`) VALUES
-('ID-BRM-0001', 'ID-ADM-002', 'ID-PRH-001', 'ID-BRG-0001', 'ID-SPL-0001', 12, '2020-12-30', '12', 144);
 
 -- --------------------------------------------------------
 
@@ -155,7 +140,7 @@ CREATE TABLE `tb_paket` (
 
 INSERT INTO `tb_paket` (`IdPaket`, `Nama`, `JumlahBarang`, `JumlahKaryawan`, `Harga`) VALUES
 (1, 'Gratis', 15, 2, 0),
-(2, 'Premium', 150, 5, 30000),
+(2, 'Premium', 250, 5, 30000),
 (3, 'Enterprise', 500, 10, 50000);
 
 -- --------------------------------------------------------
@@ -274,8 +259,9 @@ CREATE TABLE `tb_user` (
 --
 
 INSERT INTO `tb_user` (`IdUser`, `IdPerusahaan`, `NamaLengkap`, `Alamat`, `JenisKelamin`, `Foto`, `NomorTelepon`, `Email`, `Password`, `Level`, `Status`, `TanggalDibuat`) VALUES
-('1', '', 'Cloud Inventory', 'Jl. Raya Puputan No.86, Denpasar Timur', NULL, 'Icon1.png', '+62 851 5617 5274', 'admin@cloud.com', '$2y$10$FA6m.yVX3bYks1E5bUQvRuLKNuh3IFMjluvfXX4ZKNhy29drkgZYC', 'Super Admin', 'Aktif', 1608269508),
-('ID-ADM-002', 'ID-PRH-001', 'Lilis Yuningsih', 'Jl. Jayagiri No.8A, Denpasar Timur', 'Perempuan', 'LIS1.png', '+62 812 3627 9999', 'lilis@stikom-bali.ac.id', '$2y$10$njt9x5a7R1cA9q7MhmtPY.R9iOafpxJobT19a2pyTKTfV5UbzGqn6', 'Admin', 'Aktif', 1608272261);
+('1', '', 'Cloud Inventory', 'Jl. Raya Puputan No.86, Denpasar Timur', NULL, 'Icon.png', '+62 851 5617 5274', 'admin@cloud.com', '$2y$10$5ZWuMuzjufEDXo3Uno5AVe0MXefJ4sO4P7Rfpk3DhFFn7eqO9X.5K', 'Super Admin', 'Aktif', 1608269508),
+('ID-ADM-002', 'ID-PRH-001', 'Lilis Yuningsih', 'Jl. Jayagiri No.8A, Denpasar Timur', 'Perempuan', 'LIS1.png', '+62 812 3627 9999', 'lilis@stikom-bali.ac.id', '$2y$10$njt9x5a7R1cA9q7MhmtPY.R9iOafpxJobT19a2pyTKTfV5UbzGqn6', 'Admin', 'Aktif', 1608272261),
+('ID-KRY-003', 'ID-PRH-001', 'Aditya Suryo Prastomo', 'Jl. Gunung Lebah No.32, Denpasar Barat', 'Laki-Laki', 'user_default1.png', '+62 857 4564 6074', 'adityaspras@gmail.com', '$2y$10$ZHmaBoViNrGXDPEbPOV0JukVk2wiHTsBOCiN7is1xX2OL/Rh5hYIS', 'Karyawan', 'Aktif', 1608272261);
 
 --
 -- Indexes for dumped tables
@@ -367,7 +353,7 @@ ALTER TABLE `tb_user`
 -- AUTO_INCREMENT for table `tb_kritik_saran`
 --
 ALTER TABLE `tb_kritik_saran`
-  MODIFY `IdKritikSaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `IdKritikSaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `tb_paket`
