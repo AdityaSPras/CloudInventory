@@ -1,13 +1,7 @@
 <!-- Begin Page Content -->
 <div class="container-fluid">
 
-    <!-- Awal Pesan -->
-    <div class="row">
-        <div class="col-md-12 text-center">
-            <?= $this->session->flashdata('message'); ?>
-        </div>
-    </div>
-    <!-- Akhir Pesan -->
+    <div class="success-flash-karyawan" data-flashdata="<?= $this->session->flashdata('success'); ?>"></div>
 
     <div class="row">
         <div class="col-sm-12">
@@ -29,24 +23,42 @@
                                         <td width="70%"><?= $user['NamaLengkap']; ?></td>
                                     </tr>
                                     <tr>
-                                        <th>Jenis Kelamin</th>
-                                        <th>:</th>
-                                        <td><?= $user['JenisKelamin']; ?></td>
-                                    </tr>
-                                    <tr>
                                         <th>Email</th>
                                         <th>:</th>
                                         <td><?= $user['Email']; ?></td>
                                     </tr>
                                     <tr>
+                                        <th>Jenis Kelamin</th>
+                                        <th>:</th>
+                                        <td>
+                                            <?php if ($user['JenisKelamin'] == '') : ?>
+                                                <i> (Kosong) </i>
+                                            <?php else : ?>
+                                                <?= $user['JenisKelamin']; ?>
+                                            <?php endif; ?>
+                                        </td>
+                                    </tr>
+                                    <tr>
                                         <th>Nomor Telepon</th>
                                         <th>:</th>
-                                        <td><?= $user['NomorTelepon']; ?></td>
+                                        <td>
+                                            <?php if ($user['NomorTelepon'] == '') : ?>
+                                                <i> (Kosong) </i>
+                                            <?php else : ?>
+                                                <?= $user['NomorTelepon']; ?>
+                                            <?php endif; ?>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th>Alamat</th>
                                         <th>:</th>
-                                        <td><?= $user['Alamat']; ?></td>
+                                        <td>
+                                            <?php if ($user['Alamat'] == '') : ?>
+                                                <i> (Kosong) </i>
+                                            <?php else : ?>
+                                                <?= $user['Alamat']; ?>
+                                            <?php endif; ?>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th>Status</th>

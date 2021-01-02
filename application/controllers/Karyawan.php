@@ -123,7 +123,7 @@ class Karyawan extends CI_Controller
                         $new_image = $this->upload->data('file_name');
                         $this->db->set('Foto', $new_image);
                     } else {
-                        $this->session->set_flashdata('error', 'Upload Foto Gagal!');
+                        $this->session->set_flashdata('error', 'Upload Foto Gagal, Silahkan Coba Lagi!');
                         redirect('karyawan/ubah_profil');
                     }
                 }

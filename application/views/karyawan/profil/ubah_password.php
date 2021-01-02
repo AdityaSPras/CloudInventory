@@ -1,13 +1,8 @@
 <!-- Begin Page Content -->
 <div class="container-fluid">
 
-    <!-- Awal Pesan -->
-    <div class="row">
-        <div class="col-md-12 text-center">
-            <?= $this->session->flashdata('message'); ?>
-        </div>
-    </div>
-    <!-- Akhir Pesan -->
+    <div class="warning-flash-admin" data-flashdata="<?= $this->session->flashdata('warning'); ?>"></div>
+    <div class="error-flash-admin" data-flashdata="<?= $this->session->flashdata('error'); ?>"></div>
 
     <div class="row">
         <div class="col-lg-12">

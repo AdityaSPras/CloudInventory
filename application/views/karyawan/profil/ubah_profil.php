@@ -1,6 +1,8 @@
 <!-- Begin Page Content -->
 <div class="container-fluid">
 
+    <div class="error-flash-admin" data-flashdata="<?= $this->session->flashdata('error'); ?>"></div>
+
     <!-- Page Heading -->
     <div class="col-sm-12">
         <div class="card shadow mb-1">
@@ -34,9 +36,11 @@
                         <div class="form-group">
                             <label>Jenis Kelamin</label>
                             <select class="form-control" id="jeniskelamin" name="JenisKelamin">
+                                <option value="" <?= ($user['JenisKelamin'] == '') ? 'selected' : '' ?>>-- Pilih Jenis Kelamin --</option>
                                 <option value="Laki-Laki" <?= ($user['JenisKelamin'] == 'Laki-Laki') ? 'selected' : '' ?>>Laki-Laki</option>
                                 <option value="Perempuan" <?= ($user['JenisKelamin'] == 'Perempuan') ? 'selected' : '' ?>>Perempuan</option>
                             </select>
+                            <?= form_error('JenisKelamin', '<small class="text-danger">', '</small>'); ?>
                         </div>
                         <div class="form-group">
                             <label>Nomor Telepon</label>
@@ -74,7 +78,7 @@
                     <span class="text-danger">*Kosongkan Jika Tidak Ingin Merubah!</span>
                     <div class="form-group">
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="foto" name="Foto" accept=".png,.jpeg,.jpg">
+                            <input type="file" class="custom-file-input" name="Foto" id="GetFile" onchange="VerifyFileNameAndFileSize()" accept=".png,.jpeg,.jpg">
                             <label class="custom-file-label" for="foto">Pilih Foto</label>
                         </div>
                     </div>

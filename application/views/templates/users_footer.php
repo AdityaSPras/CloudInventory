@@ -49,7 +49,7 @@
 <script src="<?= base_url('assets'); ?>/sbadmin2/js/sb-admin-2.min.js"></script>
 
 <!-- Sweet Alert 2-->
-<script src="<?= base_url(); ?>assets/sweetalert2/dist/sweetalert2.all.min.js"></script>
+<script src="<?= base_url('assets'); ?>/sweetalert2/dist/sweetalert2.all.min.js"></script>
 
 <!-- Page level plugins -->
 <script src="<?= base_url('assets'); ?>/datatables/jquery.dataTables.min.js"></script>
@@ -59,6 +59,7 @@
 <script src="<?= base_url('assets'); ?>/js/my_script.js"></script>
 <script src="<?= base_url('assets'); ?>/js/super_admin.js"></script>
 <script src="<?= base_url('assets'); ?>/js/admin.js"></script>
+<script src="<?= base_url('assets'); ?>/js/karyawan.js"></script>
 
 <!-- Pagination Tabel -->
 <script>
