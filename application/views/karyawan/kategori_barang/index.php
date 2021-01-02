@@ -3,7 +3,7 @@
 
     <div class="col-lg-12 mb-4" id="container">
 
-        <?= $this->session->flashdata('message'); ?>
+        <div class="success-flash-karyawan" data-flashdata="<?= $this->session->flashdata('success'); ?>"></div>
 
         <!-- Illustrations -->
         <div class="card shadow mb-2">
@@ -32,19 +32,19 @@
                         </thead>
                         <tbody>
                             <?php $no = 1;
-                            foreach ($kategori as $data) { ?>
+                            foreach ($daftar_kategori as $data) { ?>
                                 <tr>
                                     <th class="text-center"><?= $no++ ?>.</th>
                                     <td class="text-center"><?= $data->NamaKategori ?></td>
                                     <td class="text-center">
                                         <?php if ($data->Keterangan == '') : ?>
-                                            <i> (Tanpa Keterangan) </i>
+                                            <i> (Kosong) </i>
                                         <?php else : ?>
                                             <?= $data->Keterangan ?>
                                         <?php endif; ?>
                                     </td>
                                     <td class="text-center">
-                                        <a href="#" class="btn btn-circle btn-warning btn-sm">
+                                        <a href="#" data-toggle="modal" data-target="#ubahKategori<?= encrypt_url($data->IdKategori) ?>" class="btn btn-circle btn-warning btn-sm">
                                             <i class="fas fa-pen"></i>
                                         </a>
                                     </td>
@@ -63,3 +63,48 @@
 
 </div>
 <!-- End of Main Content -->
+
+<!-- Awal Modal Ubah Kategori Barang -->
+<?php $no = 0;
+foreach ($daftar_kategori as $data) : $no++; ?>
+    <div class="modal fade" id="ubahKategori<?= encrypt_url($data->IdKategori) ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <form action="<?= base_url() ?>karyawan/ubah_kategori" name="formKaryawanUbahKategori" method="POST" onsubmit="return validasiKaryawanUbahKategori()">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary">
+                        <h5 class="modal-title text-white font-weight-bold" id="exampleModalLabel">Ubah Kategori Barang</h5>
+                        <button class="close text-white" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Nama Kategori Barang</label>
+                            <input type="hidden" name="IdKategori" class="form-control" value="<?= encrypt_url($data->IdKategori) ?>">
+                            <input type="text" name="NamaKategori" id="NamaKategori" class="form-control" value="<?= $data->NamaKategori ?>">
+                        </div>
+                        <div class="form-group">
+                            <label>Keterangan</label>
+                            <textarea class="form-control" name="Keterangan" rows="3"><?= $data->Keterangan ?></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-warning btn-icon-split">
+                            <span class="icon text-white-50">
+                                <i class="fas fa-save"></i>
+                            </span>
+                            <span class="text text-white">Simpan</span>
+                        </button>
+                        <button type="button" class="btn btn-danger btn-icon-split" data-dismiss="modal">
+                            <span class="icon text-white-50">
+                                <i class="fas fa-times"></i>
+                            </span>
+                            <span class="text text-white">Batal</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+<?php endforeach; ?>
+<!-- Akhir Modal Ubah Kategori Barang -->

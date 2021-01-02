@@ -6,7 +6,7 @@
         <div class="success-flash-admin" data-flashdata="<?= $this->session->flashdata('success'); ?>"></div>
 
         <!-- Illustrations -->
-        <div class=" card shadow mb-2">
+        <div class="card shadow mb-2">
             <div class="card-header py-3">
                 <h4 class="m-0 font-weight-bold text-primary text-center">Daftar <?= $title; ?></h4>
                 <h6 class="m-0 font-weight-bold text-primary text-center">( <?= $perusahaan['NamaPerusahaan']; ?> )</h6>

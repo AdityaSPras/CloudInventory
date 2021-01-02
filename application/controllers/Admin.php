@@ -589,13 +589,17 @@ class Admin extends CI_Controller
     // Fungsi Untuk Ubah Kategori Barang Perusahaan
     public function ubah_kategori()
     {
-        $IdKategori            = $this->input->post('IdKategori');
-        $NamaKategori          = $this->input->post('NamaKategori', true);
-        $Keterangan            = $this->input->post('Keterangan', true);
+        $IdKategori      = $this->input->post('IdKategori');
+        $IdUser          = $this->session->userdata('IdUser');
+        $NamaKategori    = $this->input->post('NamaKategori', true);
+        $Keterangan      = $this->input->post('Keterangan', true);
+        $TanggalKategori = time();
 
         $data = array(
-            'NamaKategori'          => $NamaKategori,
-            'Keterangan'            => $Keterangan
+            'IdUser'          => $IdUser,
+            'NamaKategori'    => $NamaKategori,
+            'Keterangan'      => $Keterangan,
+            'TanggalKategori' => $TanggalKategori
         );
 
         $id    = decrypt_url($IdKategori);
@@ -651,7 +655,7 @@ class Admin extends CI_Controller
             $data['perusahaan'] = $this->profil->dataProfil()->row_array();
 
             // Membuat Aturan Pengisian Form atau Inputan Untuk Nama Satuan Barang
-            $this->form_validation->set_rules('NamaSatuan', 'Nama Kategori', 'required|trim', [
+            $this->form_validation->set_rules('NamaSatuan', 'Nama Satuan Barang', 'required|trim', [
                 'required' => 'Nama Satuan Barang Tidak Boleh Kosong!'
             ]);
 
@@ -716,13 +720,17 @@ class Admin extends CI_Controller
     // Fungsi Untuk Ubah Satuan Barang Perusahaan
     public function ubah_satuan()
     {
-        $IdSatuan            = $this->input->post('IdSatuan');
-        $NamaSatuan          = $this->input->post('NamaSatuan', true);
-        $Keterangan          = $this->input->post('Keterangan', true);
+        $IdUser        = $this->session->userdata('IdUser');
+        $IdSatuan      = $this->input->post('IdSatuan');
+        $NamaSatuan    = $this->input->post('NamaSatuan', true);
+        $Keterangan    = $this->input->post('Keterangan', true);
+        $TanggalSatuan = time();
 
         $data = array(
-            'NamaSatuan'          => $NamaSatuan,
-            'Keterangan'          => $Keterangan
+            'IdUser'        => $IdUser,
+            'NamaSatuan'    => $NamaSatuan,
+            'Keterangan'    => $Keterangan,
+            'TanggalSatuan' => $TanggalSatuan
         );
 
         $id    = decrypt_url($IdSatuan);
@@ -778,12 +786,12 @@ class Admin extends CI_Controller
             $data['perusahaan'] = $this->profil->dataProfil()->row_array();
 
             // Membuat Aturan Pengisian Form atau Inputan Untuk Nama Supplier Barang
-            $this->form_validation->set_rules('NamaSupplier', 'Nama Supplier', 'required|trim', [
+            $this->form_validation->set_rules('NamaSupplier', 'Nama Supplier Barang', 'required|trim', [
                 'required' => 'Nama Supplier Tidak Boleh Kosong!'
             ]);
 
             // Membuat Aturan Pengisian Form atau Inputan Untuk Alamat Supplier Barang
-            $this->form_validation->set_rules('AlamatSupplier', 'Alamat Supplier', 'required|trim', [
+            $this->form_validation->set_rules('AlamatSupplier', 'Alamat Supplier Barang', 'required|trim', [
                 'required' => 'Alamat Supplier Tidak Boleh Kosong!'
             ]);
 
@@ -854,19 +862,23 @@ class Admin extends CI_Controller
     // Fungsi Untuk Ubah Supplier Barang Perusahaan
     public function ubah_supplier()
     {
-        $IdSupplier            = $this->input->post('IdSupplier');
-        $NamaSupplier          = $this->input->post('NamaSupplier', true);
-        $AlamatSupplier        = $this->input->post('AlamatSupplier', true);
-        $NomorTeleponSupplier  = $this->input->post('NomorTeleponSupplier', true);
-        $EmailSupplier         = $this->input->post('EmailSupplier', true);
-        $Keterangan            = $this->input->post('Keterangan', true);
+        $IdUser               = $this->session->userdata('IdUser');
+        $IdSupplier           = $this->input->post('IdSupplier');
+        $NamaSupplier         = $this->input->post('NamaSupplier', true);
+        $AlamatSupplier       = $this->input->post('AlamatSupplier', true);
+        $NomorTeleponSupplier = $this->input->post('NomorTeleponSupplier', true);
+        $EmailSupplier        = $this->input->post('EmailSupplier', true);
+        $Keterangan           = $this->input->post('Keterangan', true);
+        $TanggalSupplier      = time();
 
         $data = array(
-            'NamaSupplier'          => $NamaSupplier,
-            'AlamatSupplier'        => $AlamatSupplier,
-            'NomorTeleponSupplier'  => $NomorTeleponSupplier,
-            'EmailSupplier'         => htmlspecialchars($EmailSupplier),
-            'Keterangan'            => $Keterangan
+            'IdUser'               => $IdUser,
+            'NamaSupplier'         => $NamaSupplier,
+            'AlamatSupplier'       => $AlamatSupplier,
+            'NomorTeleponSupplier' => $NomorTeleponSupplier,
+            'EmailSupplier'        => htmlspecialchars($EmailSupplier),
+            'Keterangan'           => $Keterangan,
+            'TanggalSupplier'      => $TanggalSupplier
         );
 
         $id    = decrypt_url($IdSupplier);

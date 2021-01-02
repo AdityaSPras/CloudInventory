@@ -26,14 +26,14 @@
                                                 <?= $data->Keterangan ?>
                                             <?php endif; ?></p>
                                         <hr class="mt-0">
-                                        <p class="mb-0"><b>Dibuat Oleh</b>
+                                        <p class="mb-0"><b>Dibuat/Diubah Oleh</b>
                                             <br><?php if ($data->NamaLengkap == '') : ?>
                                                 <span class="badge rounded-pill bg-danger text-white">User Telah Terhapus!</span>
                                             <?php else : ?>
                                                 <?= $data->NamaLengkap ?>
                                             <?php endif; ?></p>
                                         <hr class="mt-0">
-                                        <p class="mb-0"><b>Tanggal Dibuat</b>
+                                        <p class="mb-0"><b>Tanggal Dibuat/Diubah</b>
                                             <br> <?= tgl_indo(date('Y-m-d', $data->TanggalSatuan)); ?></p>
                                         <hr class="mt-0">
                                     </div>

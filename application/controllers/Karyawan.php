@@ -230,192 +230,330 @@ class Karyawan extends CI_Controller
     }
     // -------------------------------------------------------- AKHIR FUNGSI UNTUK PROFIL -------------------------------------------------------- //
 
-    //---------------------------- AWAL FUNGSI UNTUK KATEGORI BARANG ----------------------------//
+    // -------------------------------------------------------- AWAL FUNGSI UNTUK KATEGORI BARANG -------------------------------------------------------- //
+    // Fungsi Untuk Menampilkan Daftar Kategori Barang Perusahaan
     public function kategori()
     {
+        // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Karyawan
         if ($this->session->userdata('Level') == "Karyawan") {
-            $data['title'] = 'Kategori Barang';
-            $data['user'] = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
-            $data['perusahaan'] = $this->profil->dataProfil()->row_array();
-            $data['kategori'] = $this->kategori->daftarKategori()->result();
 
+            $data['title']           = 'Kategori Barang';
+            $data['user']            = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['perusahaan']      = $this->profil->dataProfil()->row_array();
+            $data['daftar_kategori'] = $this->kategori->dataKategori()->result();
+
+            // Melakukan Load View Halaman Daftar Barang Perusahaan Untuk Karyawan
             $this->load->view('templates/karyawan_header', $data);
             $this->load->view('karyawan/kategori_barang/index', $data);
             $this->load->view('templates/users_footer');
         } else {
+            // Jika Session User Level Bukan Karyawan Maka Akan Diarahkan Ke Halaman Error 403
             $this->load->view('error');
         }
     }
 
+    // Fungsi Untuk Tambah Kategori Barang Perusahaan
     public function tambah_kategori()
     {
+        // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Karyawan
         if ($this->session->userdata('Level') == "Karyawan") {
-            $data['title'] = 'Tambah Kategori Barang';
-            $data['user'] = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+
+            $data['title']      = 'Tambah Kategori Barang';
+            $data['user']       = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
             $data['perusahaan'] = $this->profil->dataProfil()->row_array();
 
-            $this->form_validation->set_rules('NamaKategori', 'Nama Kategori', 'required|trim', [
+            // Membuat Aturan Pengisian Form atau Inputan Untuk Nama Kategori Barang
+            $this->form_validation->set_rules('NamaKategori', 'Nama Kategori Barang', 'required|trim', [
                 'required' => 'Nama Kategori Barang Tidak Boleh Kosong!'
             ]);
 
             if ($this->form_validation->run() == false) {
+                // Melakukan Load View Halaman Tambah Kategori Barang Perusahaan Untuk Karyawan
                 $this->load->view('templates/karyawan_header', $data);
                 $this->load->view('karyawan/kategori_barang/tambah_kategori', $data);
                 $this->load->view('templates/users_footer');
             } else {
-                $idkategori = $this->kategori->kodeKategori();
-                $iduser = $this->session->userdata('IdUser');
-                $idperusahaan = $this->session->userdata('IdPerusahaan');
-                $nama = $this->input->post('NamaKategori');
-                $keterangan = $this->input->post('Keterangan');
-                $tanggal = time();
+                $IdKategori      = $this->kategori->kodeKategori();
+                $IdUser          = $this->session->userdata('IdUser');
+                $IdPerusahaan    = $this->session->userdata('IdPerusahaan');
+                $NamaKategori    = $this->input->post('NamaKategori', true);
+                $Keterangan      = $this->input->post('Keterangan', true);
+                $TanggalKategori = time();
 
                 $data = [
-                    'IdKategori' => $idkategori,
-                    'IdUser' => $iduser,
-                    'IdPerusahaan' => $idperusahaan,
-                    'NamaKategori' => $nama,
-                    'Keterangan' => $keterangan,
-                    'TanggalDibuat' => $tanggal
+                    'IdKategori'      => $IdKategori,
+                    'IdUser'          => $IdUser,
+                    'IdPerusahaan'    => $IdPerusahaan,
+                    'NamaKategori'    => $NamaKategori,
+                    'Keterangan'      => $Keterangan,
+                    'TanggalKategori' => $TanggalKategori
                 ];
 
                 $this->kategori->tambahKategori($data, 'tb_kategori');
-                $this->session->set_flashdata('message', '<div class="alert alert-success text-center" role="alert">Kategori Barang Berhasil Ditambah</div>');
+                $this->session->set_flashdata('success', 'Kategori Berhasil Ditambah');
                 redirect('karyawan/kategori');
             }
         } else {
+            // Jika Session User Level Bukan Admin Maka Akan Diarahkan Ke Halaman Error 403
             $this->load->view('error');
         }
     }
-    //---------------------------- AKHIR FUNGSI UNTUK KATEGORI BARANG ----------------------------//
 
-    //---------------------------- AWAL FUNGSI UNTUK SATUAN BARANG ----------------------------//
+    // Fungsi Untuk Ubah Kategori Barang Perusahaan
+    public function ubah_kategori()
+    {
+        $IdKategori      = $this->input->post('IdKategori');
+        $IdUser          = $this->session->userdata('IdUser');
+        $NamaKategori    = $this->input->post('NamaKategori', true);
+        $Keterangan      = $this->input->post('Keterangan', true);
+        $TanggalKategori = time();
+
+        $data = array(
+            'IdUser'          => $IdUser,
+            'NamaKategori'    => $NamaKategori,
+            'Keterangan'      => $Keterangan,
+            'TanggalKategori' => $TanggalKategori
+        );
+
+        $id    = decrypt_url($IdKategori);
+        $where = array('IdKategori' => $id);
+
+        $this->kategori->ubahKategori($where, $data, 'tb_kategori');
+        $this->session->set_flashdata('success', 'Kategori Berhasil Diubah');
+        redirect('karyawan/kategori');
+    }
+    // -------------------------------------------------------- AKHIR FUNGSI UNTUK KATEGORI BARANG -------------------------------------------------------- //
+
+    // -------------------------------------------------------- AWAL FUNGSI UNTUK SATUAN BARANG -------------------------------------------------------- //
+    // Fungsi Untuk Menampilkan Daftar Satuan Barang Perusahaan
     public function satuan()
     {
+        // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Karyawan
         if ($this->session->userdata('Level') == "Karyawan") {
-            $data['title'] = 'Satuan Barang';
-            $data['user'] = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
-            $data['perusahaan'] = $this->profil->dataProfil()->row_array();
-            $data['satuan'] = $this->satuan->daftarSatuan()->result();
 
+            $data['title']         = 'Satuan Barang';
+            $data['user']          = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['perusahaan']    = $this->profil->dataProfil()->row_array();
+            $data['daftar_satuan'] = $this->satuan->dataSatuan()->result();
+
+            // Melakukan Load View Halaman Daftar Satuan Barang Perusahaan Untuk Karyawan
             $this->load->view('templates/karyawan_header', $data);
             $this->load->view('karyawan/satuan_barang/index', $data);
             $this->load->view('templates/users_footer');
         } else {
+            // Jika Session User Level Bukan Karyawan Maka Akan Diarahkan Ke Halaman Error 403
             $this->load->view('error');
         }
     }
 
+    // Fungsi Untuk Tambah Satuan Barang Perusahaan
     public function tambah_satuan()
     {
+        // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Karyawan
         if ($this->session->userdata('Level') == "Karyawan") {
-            $data['title'] = 'Tambah Satuan Barang';
-            $data['user'] = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+
+            $data['title']      = 'Tambah Satuan Barang';
+            $data['user']       = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
             $data['perusahaan'] = $this->profil->dataProfil()->row_array();
 
-            $this->form_validation->set_rules('NamaSatuan', 'Nama Kategori', 'required|trim', [
+            // Membuat Aturan Pengisian Form atau Inputan Untuk Nama Satuan Barang
+            $this->form_validation->set_rules('NamaSatuan', 'Nama Satuan Barang', 'required|trim', [
                 'required' => 'Nama Satuan Barang Tidak Boleh Kosong!'
             ]);
 
             if ($this->form_validation->run() == false) {
+                // Melakukan Load View Halaman Tambah Satuan Barang Perusahaan Untuk Karyawan
                 $this->load->view('templates/karyawan_header', $data);
                 $this->load->view('karyawan/satuan_barang/tambah_satuan', $data);
                 $this->load->view('templates/users_footer');
             } else {
-                $idsatuan = $this->satuan->kodeSatuan();
-                $iduser = $this->session->userdata('IdUser');
-                $idperusahaan = $this->session->userdata('IdPerusahaan');
-                $nama = $this->input->post('NamaSatuan');
-                $keterangan = $this->input->post('Keterangan');
-                $tanggal = time();
+                $IdSatuan      = $this->satuan->kodeSatuan();
+                $IdUser        = $this->session->userdata('IdUser');
+                $IdPerusahaan  = $this->session->userdata('IdPerusahaan');
+                $NamaSatuan    = $this->input->post('NamaSatuan', true);
+                $Keterangan    = $this->input->post('Keterangan', true);
+                $TanggalSatuan = time();
 
                 $data = [
-                    'IdSatuan' => $idsatuan,
-                    'IdUser' => $iduser,
-                    'IdPerusahaan' => $idperusahaan,
-                    'NamaSatuan' => $nama,
-                    'Keterangan' => $keterangan,
-                    'TanggalDibuat' => $tanggal
+                    'IdSatuan'      => $IdSatuan,
+                    'IdUser'        => $IdUser,
+                    'IdPerusahaan'  => $IdPerusahaan,
+                    'NamaSatuan'    => $NamaSatuan,
+                    'Keterangan'    => $Keterangan,
+                    'TanggalSatuan' => $TanggalSatuan
                 ];
 
                 $this->satuan->tambahSatuan($data, 'tb_satuan');
-                $this->session->set_flashdata('message', '<div class="alert alert-success text-center" role="alert">Satuan Barang Berhasil Ditambah</div>');
+                $this->session->set_flashdata('success', 'Satuan Berhasil Ditambah');
                 redirect('karyawan/satuan');
             }
         } else {
+            // Jika Session User Level Bukan Karyawan Maka Akan Diarahkan Ke Halaman Error 403
             $this->load->view('error');
         }
     }
-    //---------------------------- AKHIR FUNGSI UNTUK SATUAN BARANG ----------------------------//
 
-    //---------------------------- AWAL FUNGSI UNTUK SUPPLIER BARANG ----------------------------//
+    // Fungsi Untuk Ubah Satuan Barang Perusahaan
+    public function ubah_satuan()
+    {
+        $IdUser        = $this->session->userdata('IdUser');
+        $IdSatuan      = $this->input->post('IdSatuan');
+        $NamaSatuan    = $this->input->post('NamaSatuan', true);
+        $Keterangan    = $this->input->post('Keterangan', true);
+        $TanggalSatuan = time();
+
+        $data = array(
+            'IdUser'        => $IdUser,
+            'NamaSatuan'    => $NamaSatuan,
+            'Keterangan'    => $Keterangan,
+            'TanggalSatuan' => $TanggalSatuan
+        );
+
+        $id    = decrypt_url($IdSatuan);
+        $where = array('IdSatuan' => $id);
+
+        $this->satuan->ubahSatuan($where, $data, 'tb_satuan');
+        $this->session->set_flashdata('success', 'Satuan Berhasil Diubah');
+        redirect('karyawan/satuan');
+    }
+    // -------------------------------------------------------- AKHIR FUNGSI UNTUK SATUAN BARANG -------------------------------------------------------- //
+
+    // -------------------------------------------------------- AWAL FUNGSI UNTUK SUPPLIER BARANG -------------------------------------------------------- //
+    // Fungsi Untuk Menampilkan Daftar Supplier Barang Perusahaan
     public function supplier()
     {
+        // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Karyawan
         if ($this->session->userdata('Level') == "Karyawan") {
-            $data['title'] = 'Supplier Barang';
-            $data['user'] = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
-            $data['perusahaan'] = $this->profil->dataProfil()->row_array();
-            $data['supplier'] = $this->supplier->daftarSupplier()->result();
 
+            $data['title']           = 'Supplier Barang';
+            $data['user']            = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['perusahaan']      = $this->profil->dataProfil()->row_array();
+            $data['daftar_supplier'] = $this->supplier->dataSupplier()->result();
+
+            // Melakukan Load View Halaman Daftar Supplier Barang Perusahaan Untuk Karyawan
             $this->load->view('templates/karyawan_header', $data);
             $this->load->view('karyawan/supplier_barang/index', $data);
             $this->load->view('templates/users_footer');
         } else {
+            // Jika Session User Level Bukan Karyawan Maka Akan Diarahkan Ke Halaman Error 403
             $this->load->view('error');
         }
     }
 
+    // Fungsi Untuk Tambah Supplier Barang Perusahaan
     public function tambah_supplier()
     {
+        // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Admin
         if ($this->session->userdata('Level') == "Karyawan") {
-            $data['title'] = 'Tambah Supplier Barang';
-            $data['user'] = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+
+            $data['title']      = 'Tambah Supplier Barang';
+            $data['user']       = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
             $data['perusahaan'] = $this->profil->dataProfil()->row_array();
 
+            // Membuat Aturan Pengisian Form atau Inputan Untuk Nama Supplier Barang
             $this->form_validation->set_rules('NamaSupplier', 'Nama Supplier', 'required|trim', [
                 'required' => 'Nama Supplier Tidak Boleh Kosong!'
             ]);
 
-            $this->form_validation->set_rules('AlamatSupplier', 'Alamat Supplier', 'required|trim', [
+            // Membuat Aturan Pengisian Form atau Inputan Untuk Alamat Supplier Barang
+            $this->form_validation->set_rules('AlamatSupplier', 'Alamat Supplier Barang', 'required|trim', [
                 'required' => 'Alamat Supplier Tidak Boleh Kosong!'
             ]);
 
             if ($this->form_validation->run() == false) {
+                // Melakukan Load View Halaman Tambah Supplier Barang Perusahaan Untuk Karyawan
                 $this->load->view('templates/karyawan_header', $data);
                 $this->load->view('karyawan/supplier_barang/tambah_supplier', $data);
                 $this->load->view('templates/users_footer');
             } else {
-                $idsupplier = $this->supplier->kodeSupplier();
-                $iduser = $this->session->userdata('IdUser');
-                $idperusahaan = $this->session->userdata('IdPerusahaan');
-                $nama = $this->input->post('NamaSupplier');
-                $alamat = $this->input->post('AlamatSupplier');
-                $telepon = $this->input->post('NomorTeleponSupplier');
-                $email = $this->input->post('EmailSupplier');
-                $keterangan = $this->input->post('Keterangan');
-                $tanggal = time();
+                $IdSupplier           = $this->supplier->kodeSupplier();
+                $IdUser               = $this->session->userdata('IdUser');
+                $IdPerusahaan         = $this->session->userdata('IdPerusahaan');
+                $NamaSupplier         = $this->input->post('NamaSupplier', true);
+                $AlamatSupplier       = $this->input->post('AlamatSupplier', true);
+                $NomorTeleponSupplier = $this->input->post('NomorTeleponSupplier', true);
+                $EmailSupplier        = $this->input->post('EmailSupplier', true);
+                $Keterangan           = $this->input->post('Keterangan', true);
+                $TanggalSupplier      = time();
 
                 $data = [
-                    'IdSupplier' => $idsupplier,
-                    'IdUser' => $iduser,
-                    'IdPerusahaan' => $idperusahaan,
-                    'NamaSupplier' => $nama,
-                    'AlamatSupplier' => $alamat,
-                    'NomorTeleponSupplier' => $telepon,
-                    'EmailSupplier' => $email,
-                    'Keterangan' => $keterangan,
-                    'TanggalDibuat' => $tanggal
+                    'IdSupplier'           => $IdSupplier,
+                    'IdUser'               => $IdUser,
+                    'IdPerusahaan'         => $IdPerusahaan,
+                    'NamaSupplier'         => $NamaSupplier,
+                    'AlamatSupplier'       => $AlamatSupplier,
+                    'NomorTeleponSupplier' => $NomorTeleponSupplier,
+                    'EmailSupplier'        => htmlspecialchars($EmailSupplier),
+                    'Keterangan'           => $Keterangan,
+                    'TanggalSupplier'      => $TanggalSupplier
                 ];
 
                 $this->supplier->tambahSupplier($data, 'tb_supplier');
-                $this->session->set_flashdata('message', '<div class="alert alert-success text-center" role="alert">Supplier Barang Berhasil Ditambah</div>');
+                $this->session->set_flashdata('success', 'Supplier Berhasil Ditambah');
                 redirect('karyawan/supplier');
             }
         } else {
+            // Jika Session User Level Bukan Karyawan Maka Akan Diarahkan Ke Halaman Error 403
             $this->load->view('error');
         }
     }
-    //---------------------------- AKHIR FUNGSI UNTUK SUPPLIER BARANG ----------------------------//
+
+    // Fungsi Untuk Menampilkan Detail Supplier Barang Perusahaan
+    public function detail_supplier($id)
+    {
+        // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Karyawan
+        if ($this->session->userdata('Level') == "Karyawan") {
+
+            $id                      = decrypt_url($id);
+            $data['title']           = 'Detail Supplier Barang';
+            $data['detail_supplier'] = $this->supplier->detailSupplier($id)->result();
+            $data['user']            = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+
+            if ($id == NULL) {
+                // Jika ID Supplier Tidak Ditemukan Akan Diarahkan Ke Halaman Error 404
+                redirect('error');
+            } else {
+                // Melakukan Load View Halaman Detail Supplier Barang Perusahaan Untuk Karyawan
+                $this->load->view('templates/karyawan_header', $data);
+                $this->load->view('karyawan/supplier_barang/detail_supplier', $data);
+                $this->load->view('templates/users_footer');
+            }
+        } else {
+            // Jika Session User Level Bukan Karyawan Maka Akan Diarahkan Ke Halaman Error 403
+            $this->load->view('error');
+        }
+    }
+
+    // Fungsi Untuk Ubah Supplier Barang Perusahaan
+    public function ubah_supplier()
+    {
+        $IdUser               = $this->session->userdata('IdUser');
+        $IdSupplier           = $this->input->post('IdSupplier');
+        $NamaSupplier         = $this->input->post('NamaSupplier', true);
+        $AlamatSupplier       = $this->input->post('AlamatSupplier', true);
+        $NomorTeleponSupplier = $this->input->post('NomorTeleponSupplier', true);
+        $EmailSupplier        = $this->input->post('EmailSupplier', true);
+        $Keterangan           = $this->input->post('Keterangan', true);
+        $TanggalSupplier      = time();
+
+        $data = array(
+            'IdUser'               => $IdUser,
+            'NamaSupplier'         => $NamaSupplier,
+            'AlamatSupplier'       => $AlamatSupplier,
+            'NomorTeleponSupplier' => $NomorTeleponSupplier,
+            'EmailSupplier'        => htmlspecialchars($EmailSupplier),
+            'Keterangan'           => $Keterangan,
+            'TanggalSupplier'      => $TanggalSupplier
+        );
+
+        $id    = decrypt_url($IdSupplier);
+        $where = array('IdSupplier' => $id);
+
+        $this->supplier->ubahSupplier($where, $data, 'tb_supplier');
+        $this->session->set_flashdata('success', 'Supplier Berhasil Diubah');
+        redirect('karyawan/supplier');
+    }
+    // -------------------------------------------------------- AKHIR FUNGSI UNTUK SUPPLIER BARANG -------------------------------------------------------- //
 
     //---------------------------- AWAL FUNGSI UNTUK BARANG ----------------------------//
     public function barang()
