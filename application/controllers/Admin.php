@@ -116,8 +116,8 @@ class Admin extends CI_Controller
 
                 if ($upload_image) {
                     $config['allowed_types'] = 'png|PNG|jpg|JPG|jpeg|JPEG';
-                    $config['max_size'] = '2048';
-                    $config['upload_path'] = './assets/img/users/';
+                    $config['max_size']      = '2048';
+                    $config['upload_path']   = './assets/img/users/';
 
                     $this->load->library('upload', $config);
 
@@ -166,15 +166,15 @@ class Admin extends CI_Controller
 
             // Membuat Aturan Pengisian Form atau Inputan Untuk Password Baru
             $this->form_validation->set_rules('PasswordBaru', 'Password Baru', 'required|trim|min_length[8]|matches[KonfirmasiPassword]', [
-                'required' => 'Password Baru Tidak Boleh Kosong!',
-                'matches' => 'Password Tidak Sama!',
+                'required'   => 'Password Baru Tidak Boleh Kosong!',
+                'matches'    => 'Password Tidak Sama!',
                 'min_length' => 'Password Baru Minimal 8 Karakter!'
             ]);
 
             // Membuat Aturan Pengisian Form atau Inputan Untuk Konfirmasi Password
             $this->form_validation->set_rules('KonfirmasiPassword', 'Konfirmasi Password', 'required|trim|min_length[8]|matches[PasswordBaru]', [
-                'required' => 'Konfirmasi Password Tidak Boleh Kosong!',
-                'matches' => 'Password Tidak Sama!',
+                'required'   => 'Konfirmasi Password Tidak Boleh Kosong!',
+                'matches'    => 'Password Tidak Sama!',
                 'min_length' => 'Konfirmasi Password Minimal 8 Karakter!'
             ]);
 
