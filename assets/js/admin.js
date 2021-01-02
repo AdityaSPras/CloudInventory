@@ -1,0 +1,220 @@
+const successAdmin = $('.success-flash-admin').data('flashdata');
+const warningAdmin = $('.warning-flash-admin').data('flashdata');
+const errorAdmin = $('.error-flash-admin').data('flashdata');
+
+if (successAdmin) {
+    Swal.fire({
+        icon: 'success',
+        title: successAdmin,
+        showConfirmButton: true,
+      })
+}
+
+if (warningAdmin) {
+  Swal.fire({
+      icon: 'warning',
+      title: warningAdmin,
+      showConfirmButton: true,
+    })
+}
+
+if (errorAdmin) {
+  Swal.fire({
+      icon: 'error',
+      title: errorAdmin,
+      showConfirmButton: true,
+    })
+}
+
+function hapus_karyawan(id) {
+  var base_url = $('#hapus_karyawan').val();
+
+  Swal.fire({
+    title: 'Apakah Anda Yakin Ingin Menghapus Data Ini?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Hapus Data!',
+    confirmButtonColor: '#4e73df',
+    cancelButtonText: 'Batal',
+    cancelButtonColor: '#d33',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      document.location.href = base_url + "hapus_karyawan/" + id;
+    }
+  })
+}
+
+function hapus_kategori(id) {
+  var base_url = $('#hapus_kategori').val();
+
+  Swal.fire({
+    title: 'Apakah Anda Yakin Ingin Menghapus Data Ini?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Hapus Data!',
+    confirmButtonColor: '#4e73df',
+    cancelButtonText: 'Batal',
+    cancelButtonColor: '#d33',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      document.location.href = base_url + "hapus_kategori/" + id;
+    }
+  })
+}
+
+function hapus_satuan(id) {
+  var base_url = $('#hapus_satuan').val();
+
+  Swal.fire({
+    title: 'Apakah Anda Yakin Ingin Menghapus Data Ini?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Hapus Data!',
+    confirmButtonColor: '#4e73df',
+    cancelButtonText: 'Batal',
+    cancelButtonColor: '#d33',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      document.location.href = base_url + "hapus_satuan/" + id;
+    }
+  })
+}
+
+function hapus_supplier(id) {
+  var base_url = $('#hapus_supplier').val();
+
+  Swal.fire({
+    title: 'Apakah Anda Yakin Ingin Menghapus Data Ini?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Hapus Data!',
+    confirmButtonColor: '#4e73df',
+    cancelButtonText: 'Batal',
+    cancelButtonColor: '#d33',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      document.location.href = base_url + "hapus_supplier/" + id;
+    }
+  })
+}
+
+function hapus_barang(id) {
+  var base_url = $('#hapus_barang').val();
+
+  Swal.fire({
+    title: 'Apakah Anda Yakin Ingin Menghapus Data Ini?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Hapus Data!',
+    confirmButtonColor: '#4e73df',
+    cancelButtonText: 'Batal',
+    cancelButtonColor: '#d33',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      document.location.href = base_url + "hapus_barang/" + id;
+    }
+  })
+}
+
+function hapus_barang_masuk(id) {
+  var base_url = $('#hapus_barang_masuk').val();
+
+  Swal.fire({
+    title: 'Apakah Anda Yakin Ingin Menghapus Data Ini?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Hapus Data!',
+    confirmButtonColor: '#4e73df',
+    cancelButtonText: 'Batal',
+    cancelButtonColor: '#d33',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      document.location.href = base_url + "hapus_barang_masuk/" + id;
+    }
+  })
+}
+
+function hapus_barang_keluar(id) {
+  var base_url = $('#hapus_barang_keluar').val();
+
+  Swal.fire({
+    title: 'Apakah Anda Yakin Ingin Menghapus Data Ini?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Hapus Data!',
+    confirmButtonColor: '#4e73df',
+    cancelButtonText: 'Batal',
+    cancelButtonColor: '#d33',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      document.location.href = base_url + "hapus_barang_keluar/" + id;
+    }
+  })
+}
+
+function validasiAdminUbahKategori() {
+  var NamaKategori = document.forms["formAdminUbahKategori"]["NamaKategori"].value;
+  
+  if (NamaKategori == '') {
+    validasi('Nama Kategori Barang Tidak Boleh Kosong!', 'warning');
+    return false;
+  }
+}
+
+function validasiAdminUbahSatuan() {
+  var NamaSatuan = document.forms["formAdminUbahSatuan"]["NamaSatuan"].value;
+  
+  if (NamaSatuan == '') {
+    validasi('Nama Satuan Barang Tidak Boleh Kosong!', 'warning');
+    return false;
+  }
+}
+
+function validasiAdminUbahSupplier() {
+  var NamaSupplier = document.forms["formAdminUbahSupplier"]["NamaSupplier"].value;
+  var AlamatSupplier = document.forms["formAdminUbahSupplier"]["AlamatSupplier"].value;
+  
+  if (NamaSupplier == '') {
+    validasi('Nama Supplier Barang Tidak Boleh Kosong!', 'warning');
+    return false;
+  } else if (AlamatSupplier == '') {
+    validasi('Alamat Supplier Tidak Boleh Kosong!', 'warning');
+    return false;
+  }
+}
+
+function validasiAdminUbahBarangMasuk() {
+  var TanggalMasuk = document.forms["formAdminUbahBarangMasuk"]["TanggalMasuk"].value;
+  var IdSupplier = document.forms["formAdminUbahBarangMasuk"]["IdSupplier"].value;
+  var HargaMasuk = document.forms["formAdminUbahBarangMasuk"]["HargaMasuk"].value;
+  var JumlahMasuk = document.forms["formAdminUbahBarangMasuk"]["JumlahMasuk"].value;
+  
+
+if (TanggalMasuk == '') {
+  validasi('Tanggal Masuk Tidak Boleh Kosong!', 'warning');
+  return false;
+} else if (IdSupplier == '') {
+  validasi('Nama Supplier Belum Dipilih!', 'warning');
+  return false;
+} else if (HargaMasuk == '') {
+  validasi('Total Harga Masuk Tidak Boleh Kosong!', 'warning');
+  return false;
+} else if (JumlahMasuk == '') {
+  validasi('Jumlah Masuk Satuan Tidak Boleh Kosong!', 'warning');
+  return false;
+  }
+}
+
+function validasiAdminUbahBarangKeluar() {
+  var TanggalKeluar = document.forms["formAdminUbahBarangKeluar"]["TanggalKeluar"].value;
+  var JumlahKeluar = document.forms["formAdminUbahBarangKeluar"]["JumlahKeluar"].value;
+  
+
+if (TanggalKeluar == '') {
+  validasi('Tanggal Keluar Tidak Boleh Kosong!', 'warning');
+  return false;
+} else if (JumlahKeluar == '') {
+  validasi('Jumlah Keluar Tidak Boleh Kosong!', 'warning');
+  return false;
+  }
+}
