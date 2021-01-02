@@ -38,16 +38,6 @@
                                         <td><?= $user['Alamat']; ?></td>
                                     </tr>
                                     <tr>
-                                        <th>Level</th>
-                                        <th>:</th>
-                                        <td><?= $user['Level']; ?></td>
-                                    </tr>
-                                    <tr>
-                                        <th>Status</th>
-                                        <th>:</th>
-                                        <td><?= $user['Status']; ?></td>
-                                    </tr>
-                                    <tr>
                                         <th>Dibuat</th>
                                         <th>:</th>
                                         <td><?= tgl_indo(date('Y-m-d', $user['TanggalDibuat'])); ?></td>

@@ -39,7 +39,7 @@
 </div>
 
 <!-- Bootstrap core JavaScript-->
-<script src="<?= base_url('assets'); ?>/jquery/jquery-3.5.1.min.js"></script>
+<script src="<?= base_url('assets'); ?>/jquery/jquery.min.js"></script>
 <script src="<?= base_url('assets'); ?>/bootstrap-4.5.3-dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- Core plugin JavaScript-->

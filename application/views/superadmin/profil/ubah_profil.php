@@ -61,7 +61,7 @@
                     <div class="card bg-info text-white shadow">
                         <div class="card-body">
                             Format Foto:
-                            <div class="text-white-45 small">.png .jpeg .jpg</div>
+                            <div class="text-white-45 small">.png .jpeg .jpg<br>(Maks. 2MB)</div>
                         </div>
                     </div>
                     <div class="text-center mb-4 mt-4">
