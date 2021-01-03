@@ -1152,6 +1152,50 @@ class Admin extends CI_Controller
         redirect('admin/barang');
     }
 
+    public function laporan_barang()
+    {
+        // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Admin
+        if ($this->session->userdata('Level') == "Admin") {
+
+            $data['title']         = 'Laporan Barang';
+            $data['user']          = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['perusahaan']    = $this->profil->dataProfil()->row_array();
+            $data['daftar_barang'] = $this->barang->dataBarang()->result();
+            $data['jumlah_barang'] = $this->barang->jumlahBarang();
+            $data['status_paket']  = $this->profil->statusPaket()->row_array();
+
+
+            // Melakukan Load View Halaman Laporan Barang Masuk Perusahaan Untuk Admin
+            $this->load->view('templates/admin_header', $data);
+            $this->load->view('admin/barang/laporan_barang', $data);
+            $this->load->view('templates/users_footer');
+        } else {
+            // Jika Session User Level Bukan Admin Maka Akan Diarahkan Ke Halaman Error 403
+            $this->load->view('error');
+        }
+    }
+
+    public function cetak_barang()
+    {
+        $data['title']         = 'Laporan Barang';
+        $data['user']          = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+        $data['perusahaan']    = $this->profil->dataProfil()->row_array();
+        $data['daftar_barang'] = $this->barang->dataBarang()->result();
+        $data['jumlah_barang'] = $this->barang->jumlahBarang();
+        $data['status_paket']  = $this->profil->statusPaket()->row_array();
+
+        $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => 'A4-L']);
+        $html = $this->load->view('admin/barang/cetak_barang', $data, true);
+
+        $mpdf->WriteHTML($html);
+        date_default_timezone_set('Asia/Jakarta');
+
+        $Tanggal  = date('dMY_his');
+        $namaFile = 'Laporan Barang ' . $Tanggal . '.pdf';
+
+        $mpdf->Output($namaFile, 'D');
+    }
+
     // Fungsi Untuk Hapus Barang Perusahaan
     public function hapus_barang($id)
     {
@@ -1330,6 +1374,50 @@ class Admin extends CI_Controller
         redirect('admin/barang_masuk');
     }
 
+    public function laporan_barang_masuk()
+    {
+        // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Admin
+        if ($this->session->userdata('Level') == "Admin") {
+
+            $data['title']               = 'Laporan Barang Masuk';
+            $data['user']                = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['perusahaan']          = $this->profil->dataProfil()->row_array();
+            $data['daftar_barang_masuk'] = $this->barang_masuk->daftarBarangMasuk()->result();
+            $data['data_supplier']       = $this->supplier->dataSupplier()->result();
+            $data['jumlah_supplier']     = $this->supplier->dataSupplier()->num_rows();
+
+
+            // Melakukan Load View Halaman Laporan Barang Masuk Perusahaan Untuk Admin
+            $this->load->view('templates/admin_header', $data);
+            $this->load->view('admin/barang_masuk/laporan_barang_masuk', $data);
+            $this->load->view('templates/users_footer');
+        } else {
+            // Jika Session User Level Bukan Admin Maka Akan Diarahkan Ke Halaman Error 403
+            $this->load->view('error');
+        }
+    }
+
+    public function cetak_barang_masuk()
+    {
+        $data['title']               = 'Laporan Barang Masuk';
+        $data['user']                = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+        $data['perusahaan']          = $this->profil->dataProfil()->row_array();
+        $data['daftar_barang_masuk'] = $this->barang_masuk->daftarBarangMasuk()->result();
+        $data['data_supplier']       = $this->supplier->dataSupplier()->result();
+        $data['jumlah_supplier']     = $this->supplier->dataSupplier()->num_rows();
+
+        $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => 'A4-L']);
+        $html = $this->load->view('admin/barang_masuk/cetak_barang_masuk', $data, true);
+
+        $mpdf->WriteHTML($html);
+        date_default_timezone_set('Asia/Jakarta');
+
+        $Tanggal  = date('dMY_his');
+        $namaFile = 'Laporan Barang Masuk ' . $Tanggal . '.pdf';
+
+        $mpdf->Output($namaFile, 'D');
+    }
+
     // Fungsi Untuk Hapus Barang Masuk Perusahaan
     public function hapus_barang_masuk($id)
     {
@@ -1492,6 +1580,45 @@ class Admin extends CI_Controller
         $this->barang_keluar->ubahBarangKeluar($where, $data, 'tb_barang_keluar');
         $this->session->set_flashdata('success', 'Barang Keluar Berhasil Diubah');
         redirect('admin/barang_keluar');
+    }
+
+    public function laporan_barang_keluar()
+    {
+        // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Admin
+        if ($this->session->userdata('Level') == "Admin") {
+
+            $data['title']                = 'Laporan Barang Keluar';
+            $data['user']                 = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['perusahaan']           = $this->profil->dataProfil()->row_array();
+            $data['daftar_barang_keluar'] = $this->barang_keluar->daftarBarangKeluar()->result();
+
+            // Melakukan Load View Halaman Laporan Barang Keluar Perusahaan Untuk Admin
+            $this->load->view('templates/admin_header', $data);
+            $this->load->view('admin/barang_keluar/laporan_barang_keluar', $data);
+            $this->load->view('templates/users_footer');
+        } else {
+            // Jika Session User Level Bukan Admin Maka Akan Diarahkan Ke Halaman Error 403
+            $this->load->view('error');
+        }
+    }
+
+    public function cetak_barang_keluar()
+    {
+        $data['title']                = 'Laporan Barang Keluar';
+        $data['user']                 = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+        $data['perusahaan']           = $this->profil->dataProfil()->row_array();
+        $data['daftar_barang_keluar'] = $this->barang_keluar->daftarBarangKeluar()->result();
+
+        $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => 'A4-L']);
+        $html = $this->load->view('admin/barang_keluar/cetak_barang_keluar', $data, true);
+
+        $mpdf->WriteHTML($html);
+        date_default_timezone_set('Asia/Jakarta');
+
+        $Tanggal  = date('dMY_his');
+        $namaFile = 'Laporan Barang Keluar ' . $Tanggal . '.pdf';
+
+        $mpdf->Output($namaFile, 'D');
     }
 
     // Fungsi Untuk Hapus Barang Keluar Perusahaan

@@ -108,42 +108,62 @@
                                 <span>Barang Keluar</span></a>
                             </li>
 
-                            <!-- Status Paket -->
-                            <?php if ($title == 'Status Paket') : ?>
+                            <!-- Laporan -->
+                            <?php if ($title == 'Laporan Barang' or $title == 'Laporan Barang Masuk' or $title == 'Laporan Barang Keluar') : ?>
                                 <li class="nav-item active">
                                 <?php else : ?>
                                 <li class="nav-item">
                                 <?php endif; ?>
-                                <a class="nav-link" href="<?= base_url('admin/status_paket'); ?>">
-                                    <i class="fas fa-fw fa-shield-alt"></i>
-                                    <span>Status Paket</span></a>
+                                <a class="nav-link" href="#" data-toggle="collapse" data-target="#Laporan" aria-expanded="true" aria-controls="Laporan">
+                                    <i class="fas fa-fw fa-file-alt"></i>
+                                    <span>Laporan</span>
+                                </a>
+                                <div id="Laporan" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                                    <div class="bg-white py-2 collapse-inner rounded">
+                                        <h6 class="collapse-header">Laporan</h6>
+                                        <a class="collapse-item" href="<?= base_url('admin/laporan_barang'); ?>"><b>Laporan Barang</b></a>
+                                        <a class="collapse-item" href="<?= base_url('admin/laporan_barang_masuk'); ?>"><b>Laporan Barang Masuk</b></a>
+                                        <a class="collapse-item" href="<?= base_url('admin/laporan_barang_keluar'); ?>"><b>Laporan Barang Keluar</b></a>
+                                    </div>
+                                </div>
                                 </li>
 
-                                <!-- Kritik & Saran -->
-                                <?php if ($title == 'Kritik & Saran') : ?>
+                                <!-- Status Paket -->
+                                <?php if ($title == 'Status Paket') : ?>
                                     <li class="nav-item active">
                                     <?php else : ?>
                                     <li class="nav-item">
                                     <?php endif; ?>
-                                    <a class="nav-link" href="<?= base_url('admin/kritik_saran'); ?>">
-                                        <i class="fas fa-fw fa-grin"></i>
-                                        <span>Kritik & Saran</span></a>
+                                    <a class="nav-link" href="<?= base_url('admin/status_paket'); ?>">
+                                        <i class="fas fa-fw fa-shield-alt"></i>
+                                        <span>Status Paket</span></a>
                                     </li>
 
-                                    <!-- Keluar -->
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="<?= base_url('auth/logout'); ?>">
-                                            <i class="fas fa-fw fa-sign-out-alt"></i>
-                                            <span>Keluar</span></a>
-                                    </li>
+                                    <!-- Kritik & Saran -->
+                                    <?php if ($title == 'Kritik & Saran') : ?>
+                                        <li class="nav-item active">
+                                        <?php else : ?>
+                                        <li class="nav-item">
+                                        <?php endif; ?>
+                                        <a class="nav-link" href="<?= base_url('admin/kritik_saran'); ?>">
+                                            <i class="fas fa-fw fa-grin"></i>
+                                            <span>Kritik & Saran</span></a>
+                                        </li>
 
-                                    <!-- Divider -->
-                                    <hr class="sidebar-divider d-none d-md-block">
+                                        <!-- Keluar -->
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="<?= base_url('auth/logout'); ?>">
+                                                <i class="fas fa-fw fa-sign-out-alt"></i>
+                                                <span>Keluar</span></a>
+                                        </li>
 
-                                    <!-- Sidebar Toggler (Sidebar) -->
-                                    <div class="text-center d-none d-md-inline">
-                                        <button class="rounded-circle border-0" id="sidebarToggle"></button>
-                                    </div>
+                                        <!-- Divider -->
+                                        <hr class="sidebar-divider d-none d-md-block">
+
+                                        <!-- Sidebar Toggler (Sidebar) -->
+                                        <div class="text-center d-none d-md-inline">
+                                            <button class="rounded-circle border-0" id="sidebarToggle"></button>
+                                        </div>
 
         </ul>
         <!-- End of Sidebar -->
