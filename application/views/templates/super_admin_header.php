@@ -78,37 +78,41 @@
                     </li>
 
                     <!-- Pembayaran & Aktivasi -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <i class="fas fa-fw fa-receipt"></i>
-                            <span>Pembayaran & Aktivasi</span></a>
-                    </li>
-
-                    <!-- Kritik & Saran -->
-                    <?php if ($title == 'Kritik & Saran' or $title == 'Detail Kritik & Saran') : ?>
+                    <?php if ($title == 'Pembayaran') : ?>
                         <li class="nav-item active">
                         <?php else : ?>
                         <li class="nav-item">
                         <?php endif; ?>
-                        <a class="nav-link" href="<?= base_url('superadmin/kritik_saran'); ?>">
-                            <i class="fas fa-fw fa-grin"></i>
-                            <span>Kritik & Saran</span></a>
+                        <a class="nav-link" href="<?= base_url('superadmin/daftar_pembayaran'); ?>">
+                            <i class="fas fa-fw fa-receipt"></i>
+                            <span>Pembayaran & Aktivasi</span></a>
                         </li>
 
-                        <!-- Keluar -->
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= base_url('auth/logout'); ?>">
-                                <i class="fas fa-fw fa-sign-out-alt"></i>
-                                <span>Keluar</span></a>
-                        </li>
+                        <!-- Kritik & Saran -->
+                        <?php if ($title == 'Kritik & Saran' or $title == 'Detail Kritik & Saran') : ?>
+                            <li class="nav-item active">
+                            <?php else : ?>
+                            <li class="nav-item">
+                            <?php endif; ?>
+                            <a class="nav-link" href="<?= base_url('superadmin/kritik_saran'); ?>">
+                                <i class="fas fa-fw fa-grin"></i>
+                                <span>Kritik & Saran</span></a>
+                            </li>
 
-                        <!-- Divider -->
-                        <hr class="sidebar-divider d-none d-md-block">
+                            <!-- Keluar -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="<?= base_url('auth/logout'); ?>">
+                                    <i class="fas fa-fw fa-sign-out-alt"></i>
+                                    <span>Keluar</span></a>
+                            </li>
 
-                        <!-- Sidebar Toggler (Sidebar) -->
-                        <div class="text-center d-none d-md-inline">
-                            <button class="rounded-circle border-0" id="sidebarToggle"></button>
-                        </div>
+                            <!-- Divider -->
+                            <hr class="sidebar-divider d-none d-md-block">
+
+                            <!-- Sidebar Toggler (Sidebar) -->
+                            <div class="text-center d-none d-md-inline">
+                                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+                            </div>
 
         </ul>
         <!-- End of Sidebar -->

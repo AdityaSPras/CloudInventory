@@ -290,6 +290,26 @@ class Superadmin extends CI_Controller
     }
     // -------------------------------------------------------- AKHIR FUNGSI UNTUK PERUSAHAAN -------------------------------------------------------- //
 
+    // Fungsi Menampilkan Daftar Pembayaran Paket
+    public function daftar_pembayaran()
+    {
+        // Melakukan Cek Session Level User Apakah Benar Yang Mengakses Fungsi Ini Sebagai Super Admin
+        if ($this->session->userdata('Level') == "Super Admin") {
+
+            $data['title']             = 'Pembayaran';
+            $data['daftar_pembayaran'] = $this->pembayaran->daftarPembayaran()->result();
+            $data['user']              = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+
+            // Melakukan Load View Halaman Daftar Pembayaran Untuk Super Admin
+            $this->load->view('templates/super_admin_header', $data);
+            $this->load->view('superadmin/pembayaran/index', $data);
+            $this->load->view('templates/users_footer');
+        } else {
+            // Jika Session Level User Bukan Super Admin Maka Akan Diarahkan Ke Halaman Error 403
+            $this->load->view('error');
+        }
+    }
+
     // -------------------------------------------------------- AWAL FUNGSI UNTUK KRITIK & SARAN -------------------------------------------------------- //
     // Fungsi Menampilkan Daftar Kritik & Saran
     public function kritik_saran()
