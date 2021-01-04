@@ -19,93 +19,104 @@
             <?php else : ?>
                 <?php foreach ($ubah_barang as $data) : ?>
                     <div class="col-sm-8 mb-4">
-                        <?= form_open_multipart('admin/proses_ubah_barang'); ?> <div class="card shadow mb-4">
-                            <div class="card-body py-3">
-                                <h6 class="m-0 font-weight-bold text-primary text-center">Form Barang</h6>
-                            </div>
-                            <div class="card-body">
-                                <div class="col-sm-12">
-                                    <div class="form-group">
-                                        <label>Nama Barang</label>
-                                        <input class="form-control" name="IdBarang" type="hidden" value="<?= encrypt_url($data->IdBarang) ?>">
-                                        <input class="form-control" name="NamaBarang" type="text" value="<?= $data->NamaBarang ?>">
-                                        <?= form_error('NamaBarang', '<small class="text-danger">', '</small>'); ?>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Stok Awal Barang</label>
-                                        <input class="form-control" name="Stok" type="number" value="<?= $data->Stok ?>">
-                                        <?= form_error('Stok', '<small class="text-danger">', '</small>'); ?>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Stok Minimum Barang</label>
-                                        <input class="form-control" name="StokMinimum" type="number" value="<?= $data->StokMinimum ?>">
-                                        <?= form_error('StokMinimum', '<small class="text-danger">', '</small>'); ?>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Harga Jual Satuan</label>
-                                        <input class="form-control" name="HargaJual" type="number" value="<?= $data->HargaJual ?>">
-                                        <?= form_error('HargaJual', '<small class="text-danger">', '</small>'); ?>
-                                    </div>
-
-                                    <?php if ($jumlah_kategori > 0) : ?>
-                                        <div class="form-group">
-                                            <label>Kategori Barang</label>
-                                            <select name="IdKategori" class="form-control">
-                                                <?php foreach ($data_kategori as $kategori) : ?>
-                                                    <?php if ($data->IdKategori == $kategori->IdKategori) : ?>
-                                                        <option value="<?= encrypt_url($kategori->IdKategori) ?>" selected><?= $kategori->NamaKategori ?></option>
-                                                    <?php else : ?>
-                                                        <option value="<?= encrypt_url($kategori->IdKategori) ?>"><?= $kategori->NamaKategori ?></option>
-                                                    <?php endif; ?>
-                                                <?php endforeach ?>
-                                            </select>
-                                            <?= form_error('IdKategori', '<small class="text-danger">', '</small>'); ?>
-                                        </div>
-                                    <?php else : ?>
-                                        <div class="form-group">
-                                            <label>Kategori Barang</label>
-                                            <input type="hidden" name="IdKategori">
-                                            <div class="d-sm-flex justify-content-between">
-                                                <span class="text-danger"><i>(Belum Ada Data Kategori Barang!)</i></span>
-                                                <a href="<?= base_url() ?>admin/kategori" class="btn btn-sm btn-primary btn-icon-split">
-                                                    <span class="icon text-white">
-                                                        <i class="fas fa-plus"></i>
-                                                    </span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    <?php endif; ?>
-
-                                    <?php if ($jumlah_satuan > 0) : ?>
-                                        <div class="form-group"><label>Satuan Barang</label>
-                                            <select name="IdSatuan" class="form-control">
-                                                <?php foreach ($data_satuan as $satuan) : ?>
-                                                    <?php if ($data->IdSatuan == $satuan->IdSatuan) : ?>
-                                                        <option value="<?= encrypt_url($satuan->IdSatuan) ?>" selected><?= $satuan->NamaSatuan ?></option>
-                                                    <?php else : ?>
-                                                        <option value="<?= encrypt_url($satuan->IdSatuan) ?>"><?= $satuan->NamaSatuan ?></option>
-                                                    <?php endif; ?>
-                                                <?php endforeach ?>
-                                            </select>
-                                            <?= form_error('IdSatuan', '<small class="text-danger">', '</small>'); ?>
-                                        </div>
-                                    <?php else : ?>
-                                        <div class="form-group"><label>Satuan Barang</label>
-                                            <input type="hidden" name="IdSatuan">
-                                            <div class="d-sm-flex justify-content-between">
-                                                <span class="text-danger"><i>(Belum Ada Data Satuan Barang!)</i></span>
-                                                <a href="<?= base_url() ?>admin/satuan" class="btn btn-sm btn-primary btn-icon-split">
-                                                    <span class="icon text-white">
-                                                        <i class="fas fa-plus"></i>
-                                                    </span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    <?php endif; ?>
+                        <form action="<?= base_url() ?>admin/proses_ubah_barang" name="formAdminUbahBarang" method="POST" enctype="multipart/form-data" onsubmit="return validasiAdminUbahBarang()">
+                            <div class="card shadow mb-4">
+                                <div class="card-body py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary text-center">Form Barang</h6>
                                 </div>
-                                <br>
+                                <div class="card-body">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label>Nama Barang</label>
+                                            <input class="form-control" name="IdBarang" type="hidden" value="<?= encrypt_url($data->IdBarang) ?>">
+                                            <input class="form-control" name="NamaBarang" type="text" value="<?= $data->NamaBarang ?>">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Stok Awal</label>
+                                            <input class="form-control" name="Stok" type="number" value="<?= $data->Stok ?>">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Total Stok</label>
+                                            <?php
+                                            $data1 = $this->db->select_sum('JumlahMasuk')->from('tb_barang_masuk')->where('IdBarang', $data->IdBarang)->get();
+                                            $data2 = $this->db->select_sum('JumlahKeluar')->from('tb_barang_keluar')->where('IdBarang', $data->IdBarang)->get();
+
+
+                                            $bm = $data1->row();
+                                            $bk = $data2->row();
+                                            $total_stok = intval($data->Stok) + (intval($bm->JumlahMasuk) - intval($bk->JumlahKeluar));
+                                            ?>
+
+                                            <input class="form-control" value="<?= $total_stok ?>" readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Stok Minimum Barang</label>
+                                            <input class="form-control" name="StokMinimum" type="number" value="<?= $data->StokMinimum ?>">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Harga Jual Satuan</label>
+                                            <input class="form-control" name="HargaJual" type="number" value="<?= $data->HargaJual ?>">
+                                        </div>
+
+                                        <?php if ($jumlah_kategori > 0) : ?>
+                                            <div class="form-group">
+                                                <label>Kategori Barang</label>
+                                                <select name="IdKategori" class="form-control">
+                                                    <?php foreach ($data_kategori as $kategori) : ?>
+                                                        <?php if ($data->IdKategori == $kategori->IdKategori) : ?>
+                                                            <option value="">-- Pilih Kategori Barang --</option>
+                                                            <option value="<?= encrypt_url($kategori->IdKategori) ?>" selected><?= $kategori->NamaKategori ?></option>
+                                                        <?php else : ?>
+                                                            <option value="<?= encrypt_url($kategori->IdKategori) ?>"><?= $kategori->NamaKategori ?></option>
+                                                        <?php endif; ?>
+                                                    <?php endforeach ?>
+                                                </select>
+                                            </div>
+                                        <?php else : ?>
+                                            <div class="form-group">
+                                                <label>Kategori Barang</label>
+                                                <input type="hidden" name="IdKategori">
+                                                <div class="d-sm-flex justify-content-between">
+                                                    <span class="text-danger"><i>(Belum Ada Data Kategori Barang!)</i></span>
+                                                    <a href="<?= base_url() ?>admin/kategori" class="btn btn-sm btn-primary btn-icon-split">
+                                                        <span class="icon text-white">
+                                                            <i class="fas fa-plus"></i>
+                                                        </span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        <?php endif; ?>
+
+                                        <?php if ($jumlah_satuan > 0) : ?>
+                                            <div class="form-group"><label>Satuan Barang</label>
+                                                <select name="IdSatuan" class="form-control">
+                                                    <?php foreach ($data_satuan as $satuan) : ?>
+                                                        <?php if ($data->IdSatuan == $satuan->IdSatuan) : ?>
+                                                            <option value="">-- Pilih Satuan Barang --</option>
+                                                            <option value="<?= encrypt_url($satuan->IdSatuan) ?>" selected><?= $satuan->NamaSatuan ?></option>
+                                                        <?php else : ?>
+                                                            <option value="<?= encrypt_url($satuan->IdSatuan) ?>"><?= $satuan->NamaSatuan ?></option>
+                                                        <?php endif; ?>
+                                                    <?php endforeach ?>
+                                                </select>
+                                            </div>
+                                        <?php else : ?>
+                                            <div class="form-group"><label>Satuan Barang</label>
+                                                <input type="hidden" name="IdSatuan">
+                                                <div class="d-sm-flex justify-content-between">
+                                                    <span class="text-danger"><i>(Belum Ada Data Satuan Barang!)</i></span>
+                                                    <a href="<?= base_url() ?>admin/satuan" class="btn btn-sm btn-primary btn-icon-split">
+                                                        <span class="icon text-white">
+                                                            <i class="fas fa-plus"></i>
+                                                        </span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        <?php endif; ?>
+                                    </div>
+                                    <br>
+                                </div>
                             </div>
-                        </div>
                     </div>
 
                     <div class="col-sm-4">

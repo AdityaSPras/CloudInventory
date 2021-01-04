@@ -56,3 +56,32 @@ function validasiKaryawanUbahSupplier() {
     return false;
   }
 }
+
+function validasiKaryawanUbahBarang() {
+  var NamaBarang = document.forms["formKaryawanUbahBarang"]["NamaBarang"].value;
+  var Stok = document.forms["formKaryawanUbahBarang"]["Stok"].value;
+  var StokMinimum = document.forms["formKaryawanUbahBarang"]["StokMinimum"].value;
+  var HargaJual = document.forms["formKaryawanUbahBarang"]["HargaJual"].value;
+  var IdKategori = document.forms["formKaryawanUbahBarang"]["IdKategori"].value;
+  var IdSatuan = document.forms["formKaryawanUbahBarang"]["IdSatuan"].value;
+  
+  if (NamaBarang == '') {
+    validasi('Nama Barang Tidak Boleh Kosong!', 'warning');
+    return false;
+  } else if (Stok == '') {
+    validasi('Stok Awal Tidak Boleh Kosong!', 'warning');
+    return false;
+  } else if (StokMinimum == '') {
+    validasi('Stok Minimum Barang Tidak Boleh Kosong!', 'warning');
+    return false;
+  } else if (HargaJual == '') {
+    validasi('Harga Jual Satuan Tidak Boleh Kosong!', 'warning');
+    return false;
+  } else if (IdKategori == '') {
+    validasi('Kategori Barang Belum Dipilih!', 'warning');
+    return false;
+  } else if (IdSatuan == '') {
+    validasi('Satuan Barang Belum Dipilih!', 'warning');
+    return false;
+  }
+}

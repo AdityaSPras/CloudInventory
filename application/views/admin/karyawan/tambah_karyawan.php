@@ -1,7 +1,7 @@
 <!-- Begin Page Content -->
 <div class="container-fluid">
 
-    <div class="success-flash-admin" data-flashdata="<?= $this->session->flashdata('error'); ?>"></div>
+    <div class="success-flash-admin" data-flashdata="<?= $this->session->flashdata('success'); ?>"></div>
 
     <!-- Page Heading -->
     <div class="col-sm-12">

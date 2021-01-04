@@ -63,7 +63,7 @@
                                         <a href="<?= base_url("admin/detail_karyawan/" . encrypt_url($data->IdUser) . "") ?>" class="btn btn-circle btn-info btn-sm mb-1">
                                             <i class="fas fa-info"></i>
                                         </a>
-                                        <a href="#" class="btn btn-circle btn-warning btn-sm mb-1">
+                                        <a href="<?= base_url("admin/ubah_karyawan/" . encrypt_url($data->IdUser) . "") ?>" class="btn btn-circle btn-warning btn-sm mb-1">
                                             <i class="fas fa-pen"></i>
                                         </a>
                                         <a href="#" onclick="hapus_karyawan('<?= encrypt_url($data->IdUser) ?>')" id="hapus_karyawan" class="btn btn-circle btn-danger btn-sm mb-1">

@@ -65,7 +65,7 @@
                 </li>
 
                 <!-- Data Master -->
-                <?php if ($title == 'Karyawan' or $title == 'Tambah Karyawan' or $title == 'Tambah Karyawan' or $title == 'Detail Karyawan' or $title == 'Kategori Barang' or $title == 'Tambah Kategori Barang' or $title == 'Detail Kategori Barang' or $title == 'Satuan Barang' or $title == 'Tambah Satuan Barang' or $title == 'Detail Satuan Barang' or $title == 'Supplier Barang' or $title == 'Tambah Supplier Barang' or $title == 'Detail Supplier Barang' or $title == 'Barang' or $title == 'Tambah Barang' or $title == 'Detail Barang') : ?>
+                <?php if ($title == 'Karyawan' or $title == 'Tambah Karyawan' or $title == 'Tambah Karyawan' or $title == 'Detail Karyawan' or $title == 'Kategori Barang' or $title == 'Tambah Kategori Barang' or $title == 'Detail Kategori Barang' or $title == 'Satuan Barang' or $title == 'Tambah Satuan Barang' or $title == 'Detail Satuan Barang' or $title == 'Supplier Barang' or $title == 'Tambah Supplier Barang' or $title == 'Detail Supplier Barang' or $title == 'Barang' or $title == 'Tambah Barang' or $title == 'Detail Barang' or $title == 'Ubah Barang') : ?>
                     <li class="nav-item active">
                     <?php else : ?>
                     <li class="nav-item">
@@ -129,7 +129,7 @@
                                 </li>
 
                                 <!-- Status Paket -->
-                                <?php if ($title == 'Status Paket') : ?>
+                                <?php if ($title == 'Status Paket' or $title == 'Pembayaran Paket') : ?>
                                     <li class="nav-item active">
                                     <?php else : ?>
                                     <li class="nav-item">

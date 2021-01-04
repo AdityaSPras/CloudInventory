@@ -63,6 +63,17 @@ class Users_model extends CI_Model
         return $query;
     }
 
+    public function getIdKaryawan($where, $table)
+    {
+        return $this->db->get_where($table, $where);
+    }
+
+    public function ubahKaryawan($where, $data, $table)
+    {
+        $this->db->where($where);
+        $this->db->update($table, $data);
+    }
+
     // Fungsi Untuk Menampilkan Detail Karyawan Perusahaan Berdasarkan Level User Karyawan (tb_user)
     public function detailKaryawan($where)
     {

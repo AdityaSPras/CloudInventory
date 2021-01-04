@@ -20,6 +20,7 @@ class Admin extends CI_Controller
         $this->load->model('Users_model', 'users');
         $this->load->model('BarangMasuk_model', 'barang_masuk');
         $this->load->model('BarangKeluar_model', 'barang_keluar');
+        $this->load->model('Pembayaran_model', 'pembayaran');
     }
 
     // -------------------------------------------------------- AWAL FUNGSI UNTUK HALAMAN UTAMA ADMIN -------------------------------------------------------- //
@@ -469,6 +470,97 @@ class Admin extends CI_Controller
             // Jika Session User Level Bukan Admin Maka Akan Diarahkan Ke Halaman Error 403
             $this->load->view('error');
         }
+    }
+
+    public function ubah_karyawan($id)
+    {
+        // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Admin
+        if ($this->session->userdata('Level') == "Admin") {
+            $data['title']           = 'Karyawan';
+            $data['user']            = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['perusahaan']      = $this->profil->dataProfil()->row_array();
+            $data['daftar_karyawan'] = $this->users->dataKaryawan()->result();
+            $data['jumlah_karyawan'] = $this->users->dataKaryawan()->num_rows();
+            $data['status_paket']    = $this->profil->statusPaket()->row_array();
+            $id                      = decrypt_url($id);
+            $where                   = array('IdUser' => $id);
+            $data['ubah_karyawan']   = $this->users->getIdKaryawan($where, 'tb_user')->result();
+
+            if ($id == NULL) {
+                // Jika ID User Tidak Ditemukan Akan Diarahkan Ke Halaman Error 404
+                redirect('error');
+            } else {
+                // Melakukan Load View Halaman Ubah Karyawan Perusahaan Untuk Admin
+                $this->load->view('templates/admin_header', $data);
+                $this->load->view('admin/karyawan/ubah_karyawan', $data);
+                $this->load->view('templates/users_footer');
+            }
+        } else {
+            // Jika Session User Level Bukan Admin Maka Akan Diarahkan Ke Halaman Error 403
+            $this->load->view('error');
+        }
+    }
+
+    public function proses_ubah_karyawan()
+    {
+        $config['allowed_types'] = 'png|PNG|jpg|JPG|jpeg|JPEG';
+        $config['max_size']      = '2048';
+        $config['upload_path']   = './assets/img/users/';
+
+        $namaFile = $_FILES['Foto']['name'];
+
+        $this->load->library('upload', $config);
+
+        $IdUser       = $this->input->post('IdUser');
+        $NamaLengkap  = $this->input->post('NamaLengkap', true);
+        $Alamat       = $this->input->post('Alamat', true);
+        $JenisKelamin = $this->input->post('JenisKelamin', true);
+        $NomorTelepon = $this->input->post('NomorTelepon', true);
+        $Email        = $this->input->post('Email', true);
+        $Password     = $this->input->post('PasswordBaru');
+        $PasswordLama = $this->input->post('PasswordLama');
+        $Status       = $this->input->post('Status', true);
+        $FotoLama     = $this->input->post('FotoLama');
+
+        if ($Password == '') {
+            $PasswordUpdate = $PasswordLama;
+        } else {
+            $PasswordUpdate = password_hash(($Password), PASSWORD_DEFAULT);
+        }
+
+        if ($namaFile == '') {
+            $FotoBaru = $FotoLama;
+        } else {
+            if (!$this->upload->do_upload('Foto')) {
+                $this->session->set_flashdata('error', 'Upload Foto Gagal, Silahkan Coba Lagi!');
+                redirect('admin/ubah_karyawan/' . $IdUser);
+            } else {
+                $data      = array('Foto' => $this->upload->data());
+                $nama_file = $data['Foto']['file_name'];
+                $FotoBaru     = str_replace(" ", "_", $nama_file);
+                if ($FotoLama !== 'user_default.png') {
+                    unlink('./assets/img/users/' . $FotoLama . '');
+                }
+            }
+        }
+
+        $data = array(
+            'NamaLengkap'  => htmlspecialchars($NamaLengkap),
+            'Alamat'       => $Alamat,
+            'JenisKelamin' => $JenisKelamin,
+            'Foto'         => $FotoBaru,
+            'NomorTelepon' => $NomorTelepon,
+            'Email'        => htmlspecialchars($Email),
+            'Password'     => $PasswordUpdate,
+            'Status'       => $Status
+        );
+
+        $id    = decrypt_url($IdUser);
+        $where = array('IdUser' => $id);
+
+        $this->users->ubahKaryawan($where, $data, 'tb_user');
+        $this->session->set_flashdata('success', 'Karyawan Berhasil Diubah');
+        redirect('admin/karyawan');
     }
 
     // Fungsi Untuk Hapus Karyawan Perusahaan
@@ -1069,15 +1161,13 @@ class Admin extends CI_Controller
             $data['title']           = 'Ubah Barang';
             $data['user']            = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
             $data['perusahaan']      = $this->profil->dataProfil()->row_array();
-            $id                      = decrypt_url($id);
-            $where                   = array('IdBarang' => $id);
-            // $data['detail_barang']   = $this->barang->detailBarang($id)->row();
-            // $data['ubah_barang']     = $this->barang->getBarang($where, 'tb_barang')->result();
-            $data['detail_barang']   = $this->barang->getBarang(array('IdBarang' => $id))->row();
             $data['data_kategori']   = $this->kategori->dataKategori()->result();
             $data['data_satuan']     = $this->satuan->dataSatuan()->result();
             $data['jumlah_kategori'] = $this->kategori->dataKategori()->num_rows();
             $data['jumlah_satuan']   = $this->satuan->dataSatuan()->num_rows();
+            $id                      = decrypt_url($id);
+            $where                   = array('IdBarang' => $id);
+            $data['ubah_barang']     = $this->barang->getIdBarang($where, 'tb_barang')->result();
 
             if ($id == NULL) {
                 // Jika ID Barang Tidak Ditemukan Akan Diarahkan Ke Halaman Error 404
@@ -1120,7 +1210,7 @@ class Admin extends CI_Controller
             $GambarBaru = $FotoLama;
         } else {
             if (!$this->upload->do_upload('Gambar')) {
-                $error = $this->session->set_flashdata('error', 'Upload Gambar Gagal!');
+                $error = $this->session->set_flashdata('error', 'Upload Gambar Gagal, Silahkan Coba Lagi!');
                 redirect('admin/ubah_barang/' . $IdBarang);
             } else {
                 $data       = array('Gambar' => $this->upload->data());
@@ -1654,6 +1744,27 @@ class Admin extends CI_Controller
         }
     }
     // -------------------------------------------------------- AKHIR FUNGSI UNTUK STATUS PAKET -------------------------------------------------------- //
+
+
+    public function riwayat_pembayaran()
+    {
+        // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Admin
+        if ($this->session->userdata('Level') == "Admin") {
+
+            $data['title']               = 'Pembayaran Paket';
+            $data['user']                = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['perusahaan']          = $this->profil->dataProfil()->row_array();
+            $data['riwayat_pembayaran']  = $this->pembayaran->riwayatPembayaran()->result();
+
+            // Melakukan Load View Halaman Riwayat Pembayaran Paket Perusahaan Untuk Admin
+            $this->load->view('templates/admin_header', $data);
+            $this->load->view('admin/status_paket/pembayaran', $data);
+            $this->load->view('templates/users_footer');
+        } else {
+            // Jika Session User Level Bukan Admin Maka Akan Diarahkan Ke Halaman Error 403
+            $this->load->view('error');
+        }
+    }
 
     // -------------------------------------------------------- AWAL FUNGSI UNTUK KRITIK & SARAN -------------------------------------------------------- //
     // Fungsi Untuk Memberi Kritik & Saran Kepada Penyedia Layanan

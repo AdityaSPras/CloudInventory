@@ -48,8 +48,8 @@
                         <a href="<?= base_url('admin/pilih_paket'); ?>" class="btn btn-warning btn-md mb-2 disabled">
                             <span class="text text-white">Pilih Paket Lain</span>
                         </a>
-                        <a href="<?= base_url('admin/riwayat_paket'); ?>" class="btn btn-info btn-md mb-2 disabled">
-                            <span class="text text-white">Riwayat Pembelian Paket</span>
+                        <a href="<?= base_url('admin/riwayat_pembayaran'); ?>" class="btn btn-info btn-md mb-2">
+                            <span class="text text-white">Riwayat Pembayaran Paket</span>
                         </a>
                     </div>
                 </div>

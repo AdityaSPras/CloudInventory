@@ -77,11 +77,8 @@ class Barang_model extends CI_Model
         return $query;
     }
 
-    public function getBarang($where, $table)
+    public function getIdBarang($where, $table)
     {
-        $user = $this->session->userdata('IdPerusahaan');
-        $this->db->where('IdPerusahaan', $user)->get('tb_perusahaan')->row();
-
         return $this->db->get_where($table, $where);
     }
 
@@ -89,6 +86,14 @@ class Barang_model extends CI_Model
     {
         $this->db->where($where);
         $this->db->update($table, $data);
+    }
+
+    public function getBarang($where, $table)
+    {
+        $user = $this->session->userdata('IdPerusahaan');
+        $this->db->where('IdPerusahaan', $user)->get('tb_perusahaan')->row();
+
+        return $this->db->get_where($table, $where);
     }
 
     // Fungsi Untuk Mendapatkan Gambar Barang Perusahaan

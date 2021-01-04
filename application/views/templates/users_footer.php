@@ -142,6 +142,22 @@
     });
 </script>
 
+<!-- Tampilkan & Sembunyikan Password -->
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#show-pass5").click(function() {
+            $("#icon5").toggleClass('fa-eye-slash');
+
+            var input = $("#passwordbaru");
+            if (input.attr("type") === "password") {
+                input.attr("type", "text");
+            } else {
+                input.attr("type", "password");
+            }
+        });
+    });
+</script>
+
 </body>
 
 </html>

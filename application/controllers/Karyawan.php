@@ -33,6 +33,12 @@ class Karyawan extends CI_Controller
             $data['jumlah_barang']        = $this->barang->jumlahBarang();
             $data['jumlah_barang_masuk']  = $this->barang_masuk->jumlahBarangMasuk()->num_rows();
             $data['jumlah_barang_keluar'] = $this->barang_keluar->jumlahBarangKeluar()->num_rows();
+            $data['status_paket']         = $this->profil->statusPaket()->row_array();
+            $data['jumlah_barang_masuk']  = $this->barang_masuk->jumlahBarangMasuk()->num_rows();
+            $data['jumlah_barang_keluar'] = $this->barang_keluar->jumlahBarangKeluar()->num_rows();
+            $data['total_pengeluaran']    = $this->barang_masuk->totalBarangMasuk();
+            $data['total_pemasukan']      = $this->barang_keluar->totalBarangKeluar();
+            $data['hari_ini']             = date('Y-m-d');
 
             // Melakukan Load View Halaman Utama Untuk Karyawan
             $this->load->view('templates/karyawan_header', $data);
@@ -712,6 +718,96 @@ class Karyawan extends CI_Controller
             // Jika Session User Level Bukan Karyawan Maka Akan Diarahkan Ke Halaman Error 403
             $this->load->view('error');
         }
+    }
+
+    // Fungsi Untuk Ubah Barang Perusahaan
+    public function ubah_barang($id)
+    {
+        // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Karyawan
+        if ($this->session->userdata('Level') == "Karyawan") {
+
+            $data['title']           = 'Ubah Barang';
+            $data['user']            = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['perusahaan']      = $this->profil->dataProfil()->row_array();
+            $data['data_kategori']   = $this->kategori->dataKategori()->result();
+            $data['data_satuan']     = $this->satuan->dataSatuan()->result();
+            $data['jumlah_kategori'] = $this->kategori->dataKategori()->num_rows();
+            $data['jumlah_satuan']   = $this->satuan->dataSatuan()->num_rows();
+            $id                      = decrypt_url($id);
+            $where                   = array('IdBarang' => $id);
+            $data['ubah_barang']     = $this->barang->getIdBarang($where, 'tb_barang')->result();
+
+            if ($id == NULL) {
+                // Jika ID Barang Tidak Ditemukan Akan Diarahkan Ke Halaman Error 404
+                redirect('error');
+            } else {
+                // Melakukan Load View Halaman Daftar Barang Perusahaan Untuk Karyawan
+                $this->load->view('templates/karyawan_header', $data);
+                $this->load->view('karyawan/barang/ubah_barang', $data);
+                $this->load->view('templates/users_footer');
+            }
+        } else {
+            // Jika Session User Level Bukan Karyawan Maka Akan Diarahkan Ke Halaman Error 403
+            $this->load->view('error');
+        }
+    }
+
+    public function proses_ubah_barang()
+    {
+        $config['upload_path']   = './assets/img/items/';
+        $config['allowed_types'] = 'png|PNG|jpg|JPG|jpeg|JPEG';
+        $config['max_size']      = '2048';
+
+        $NamaFile = $_FILES['Gambar']['name'];
+        $error    = $_FILES['Gambar']['error'];
+
+        $this->load->library('upload', $config);
+
+        $IdBarang     = $this->input->post('IdBarang');
+        $Kategori     = $this->input->post('IdKategori');
+        $Satuan       = $this->input->post('IdSatuan');
+        $NamaBarang   = $this->input->post('NamaBarang');
+        $HargaJual    = $this->input->post('HargaJual');
+        $Stok         = $this->input->post('Stok');
+        $StokMinimum  = $this->input->post('StokMinimum');
+        $FotoLama     = $this->input->post('FotoLama');
+        $IdKategori   = decrypt_url($Kategori);
+        $IdSatuan     = decrypt_url($Satuan);
+
+        if ($NamaFile == '') {
+            $GambarBaru = $FotoLama;
+        } else {
+            if (!$this->upload->do_upload('Gambar')) {
+                $error = $this->session->set_flashdata('error', 'Upload Gambar Gagal, Silahkan Coba Lagi!');
+                redirect('karyawan/ubah_barang/' . $IdBarang);
+            } else {
+                $data       = array('Gambar' => $this->upload->data());
+                $Nama_File  = $data['Gambar']['file_name'];
+                $GambarBaru = str_replace(" ", "_", $Nama_File);
+
+                if ($FotoLama == 'items_default.png') {
+                } else {
+                    unlink('./assets/img/items/' . $FotoLama . '');
+                }
+            }
+        }
+
+        $data = array(
+            'IdKategori'  => $IdKategori,
+            'IdSatuan'    => $IdSatuan,
+            'NamaBarang'  => $NamaBarang,
+            'Gambar'      => $GambarBaru,
+            'HargaJual'   => $HargaJual,
+            'Stok'        => $Stok,
+            'StokMinimum' => $StokMinimum
+        );
+
+        $id    = decrypt_url($IdBarang);
+        $where = array('IdBarang' => $id);
+
+        $this->barang->ubahBarang($where, $data, 'tb_barang');
+        $this->session->set_flashdata('success', 'Barang Berhasil Diubah');
+        redirect('karyawan/barang');
     }
     // -------------------------------------------------------- AKHIR FUNGSI UNTUK BARANG -------------------------------------------------------- //
 
