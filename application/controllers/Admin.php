@@ -1743,8 +1743,30 @@ class Admin extends CI_Controller
             $this->load->view('error');
         }
     }
-    // -------------------------------------------------------- AKHIR FUNGSI UNTUK STATUS PAKET -------------------------------------------------------- //
 
+    public function ubah_paket()
+    {
+        // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Admin
+        if ($this->session->userdata('Level') == "Admin") {
+            $data['title']                = 'Ubah Paket Perusahaan';
+            $data['user']                 = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['perusahaan']           = $this->profil->dataProfil()->row_array();
+            $data['status_paket']         = $this->profil->statusPaket()->row_array();
+            $data['data_paket']           = $this->paket->dataPaket()->result();
+            $data['jumlah_paket']         = $this->paket->dataPaket()->num_rows();
+            $data['paket_satu']           = $this->paket->paketSatu()->row_array();
+            $data['paket_dua']            = $this->paket->paketDua()->row_array();
+            $data['paket_tiga']           = $this->paket->paketTiga()->row_array();
+
+            // Melakukan Load View Halaman Pilih Paket Layanan Perusahaan Untuk Admin
+            $this->load->view('templates/admin_header', $data);
+            $this->load->view('admin/status_paket/paket', $data);
+            $this->load->view('templates/users_footer');
+        } else {
+            // Jika Session User Level Bukan Admin Maka Akan Diarahkan Ke Halaman Error 403
+            $this->load->view('error');
+        }
+    }
 
     public function riwayat_pembayaran()
     {
@@ -1765,6 +1787,7 @@ class Admin extends CI_Controller
             $this->load->view('error');
         }
     }
+    // -------------------------------------------------------- AKHIR FUNGSI UNTUK STATUS PAKET -------------------------------------------------------- //
 
     // -------------------------------------------------------- AWAL FUNGSI UNTUK KRITIK & SARAN -------------------------------------------------------- //
     // Fungsi Untuk Memberi Kritik & Saran Kepada Penyedia Layanan

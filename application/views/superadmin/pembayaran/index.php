@@ -20,6 +20,7 @@
                                 <th class="text-center">Nama Paket</th>
                                 <th class="text-center">Lama Berlangganan</th>
                                 <th class="text-center">Total Bayar</th>
+                                <th class="text-center">Pembayaran</th>
                                 <th class="text-center">Status</th>
                                 <th class="text-center">Aksi</th>
                             </tr>
@@ -33,15 +34,22 @@
                                     <td class="text-center"><?= $data->Nama ?></td>
                                     <td class="text-center"><?= $data->SubBayar ?> Bulan</td>
                                     <td class="text-center"><?= rupiah($data->TotalBayar) ?></td>
+                                    <td class="text-center">
+                                        <?php if ($data->BuktiPembayaran == '') : ?>
+                                            <span class="badge rounded-pill bg-danger text-white">Belum Dibayar</span>
+                                        <?php else : ?>
+                                            <span class="badge rounded-pill bg-success text-white">Sudah Dibayar</span>
+                                        <?php endif; ?>
+                                    </td>
                                     <?php if ($data->StatusPembayaran == 'Pending') { ?>
                                         <td class="btn-warning text-center btn-sm">Belum Dikonfirmasi</td>
                                     <?php } elseif ($data->StatusPembayaran == 'Diterima') { ?>
                                         <td class="btn-success text-center btn-sm">Sudah Dikonfirmasi</td>
                                     <?php } ?>
                                     <td class="text-center">
-                                        <a href="#" class="btn btn-info btn-sm mb-1">Detail</a>
+                                        <a href="<?= base_url("superadmin/detail_pembayaran/" . encrypt_url($data->IdPembayaran) . "") ?>" class="btn btn-info btn-sm mb-1">Detail</a>
                                         <?php if ($data->StatusPembayaran == "Pending") : ?>
-                                            <a href="#" class="btn btn-danger btn-sm mb-1">Konfirmasi</a>
+                                            <a href="<?= base_url("superadmin/konfirmasi_pembayaran/" . $data->IdPembayaran . "/" . $data->IdPerusahaan . "/" . $data->IdPaket . "/" . $data->IdUser); ?>" class="btn btn-danger btn-sm mb-1">Konfirmasi</a>
                                         <?php else : ?>
                                         <?php endif; ?>
                                     </td>

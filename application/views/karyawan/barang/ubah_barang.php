@@ -64,7 +64,6 @@
                                                 <select name="IdKategori" class="form-control">
                                                     <?php foreach ($data_kategori as $kategori) : ?>
                                                         <?php if ($data->IdKategori == $kategori->IdKategori) : ?>
-                                                            <option value="">-- Pilih Kategori Barang --</option>
                                                             <option value="<?= encrypt_url($kategori->IdKategori) ?>" selected><?= $kategori->NamaKategori ?></option>
                                                         <?php else : ?>
                                                             <option value="<?= encrypt_url($kategori->IdKategori) ?>"><?= $kategori->NamaKategori ?></option>
@@ -92,7 +91,6 @@
                                                 <select name="IdSatuan" class="form-control">
                                                     <?php foreach ($data_satuan as $satuan) : ?>
                                                         <?php if ($data->IdSatuan == $satuan->IdSatuan) : ?>
-                                                            <option value="">-- Pilih Satuan Barang --</option>
                                                             <option value="<?= encrypt_url($satuan->IdSatuan) ?>" selected><?= $satuan->NamaSatuan ?></option>
                                                         <?php else : ?>
                                                             <option value="<?= encrypt_url($satuan->IdSatuan) ?>"><?= $satuan->NamaSatuan ?></option>

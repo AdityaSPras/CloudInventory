@@ -21,6 +21,29 @@ class Perusahaan_model extends CI_Model
         return $KodePerusahaan;
     }
 
+    // Fungsi Untuk Membuat ID Aktivasi Paket Dengan Format (ID-AKT-XXX)
+    public function kodeAktivasi()
+    {
+        $this->db->select('RIGHT(tb_aktivasi.IdAktivasi,3) as Kode', FALSE);
+        $this->db->order_by('IdAktivasi', 'DESC');
+        $this->db->limit(1);
+        $query = $this->db->get('tb_aktivasi');
+        if ($query->num_rows() <> 0) {
+            $data = $query->row();
+            $Kode = intval($data->Kode) + 1;
+        } else {
+            $Kode = 1;
+        }
+        $KodeMax      = str_pad($Kode, 3, "0", STR_PAD_LEFT);
+        $KodeAktivasi = "ID-AKT-" . $KodeMax;
+        return $KodeAktivasi;
+    }
+
+    public function statusPaket($data, $table)
+    {
+        $this->db->insert($table, $data);
+    }
+
     // Fungsi Untuk Menampilkan Daftar Perusahaan Dengan Menggabungkan 3 Tabel (tb_perusahaan, tb_user, dan tb_paket)
     public function dataPerusahaan()
     {

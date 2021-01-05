@@ -290,6 +290,7 @@ class Superadmin extends CI_Controller
     }
     // -------------------------------------------------------- AKHIR FUNGSI UNTUK PERUSAHAAN -------------------------------------------------------- //
 
+    // -------------------------------------------------------- AWAL FUNGSI UNTUK PEMBAYARAN & AKTIVASI -------------------------------------------------------- //
     // Fungsi Menampilkan Daftar Pembayaran Paket
     public function daftar_pembayaran()
     {
@@ -309,6 +310,76 @@ class Superadmin extends CI_Controller
             $this->load->view('error');
         }
     }
+
+    // Fungsi Menampilkan Detail Pembayaran
+    public function detail_pembayaran($IdPembayaran)
+    {
+        // Melakukan Cek Session Level User Apakah Benar Yang Mengakses Fungsi Ini Sebagai Super Admin
+        if ($this->session->userdata('Level') == "Super Admin") {
+
+            $IdPembayaran              = decrypt_url($IdPembayaran);
+            $data['title']             = 'Detail Pembayaran';
+            $data['detail_pembayaran'] = $this->pembayaran->detailPembayaran($IdPembayaran)->result();
+            $data['user']              = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+
+            if ($IdPembayaran == NULL) {
+                redirect('error');
+            } else {
+                // Melakukan Load View Halaman Detail Pembayaran Untuk Super Admin
+                $this->load->view('templates/super_admin_header', $data);
+                $this->load->view('superadmin/pembayaran/detail_pembayaran', $data);
+                $this->load->view('templates/users_footer');
+            }
+        } else {
+            // Jika Session Level User Bukan Super Admin Maka Akan Diarahkan Ke Halaman Error 403
+            $this->load->view('error');
+        }
+    }
+
+    // Fungsi Untuk Tombol Konfirmasi Pembayaran
+    public function konfirmasi_pembayaran($IdPembayaran, $IdPerusahaan, $IdPaket, $IdUser)
+    {
+        $this->pembayaran_perusahaan($IdPerusahaan, $IdPaket);
+        $this->status_pembayaran($IdPembayaran);
+        $this->status_aktivasi($IdPembayaran, $IdUser, $IdPerusahaan, $IdPaket);
+
+        $this->session->set_flashdata('success', 'Pembayaran Berhasil Dikonfirmasi');
+        redirect('superadmin/daftar_pembayaran');
+    }
+
+    // Fungsi Untuk Mengubah ID Paket Perusahaan
+    public function pembayaran_perusahaan($IdPerusahaan, $IdPaket)
+    {
+        $this->db->set('IdPaket', $IdPaket);
+        $this->db->where('IdPerusahaan', $IdPerusahaan);
+        $this->db->update('tb_perusahaan');
+    }
+
+    // Fungsi Untuk Mengubah Status Pembayaran Menjadi Diterima
+    public function status_pembayaran($IdPembayaran)
+    {
+        $this->db->set('StatusPembayaran', "Diterima");
+        $this->db->where('IdPembayaran', $IdPembayaran);
+        $this->db->update('tb_pembayaran');
+    }
+
+    // Fungsi Untuk Membuat Status Aktivasi Paket Perusahaan
+    public function status_aktivasi($IdPembayaran, $IdUser, $IdPerusahaan, $IdPaket)
+    {
+        $IdAktivasi        = $this->perusahaan->kodeAktivasi();
+
+        $data = [
+            'IdAktivasi'   => $IdAktivasi,
+            'IdUser'       => $IdUser,
+            'IdPerusahaan' => $IdPerusahaan,
+            'IdPembayaran' => $IdPembayaran,
+            'IdPaket'      => $IdPaket,
+            'AwalAktif'    => date("Y-m-d")
+        ];
+
+        $this->perusahaan->statusPaket($data, 'tb_aktivasi');
+    }
+    // -------------------------------------------------------- AKHIR FUNGSI UNTUK PEMBAYARAN & AKTIVASI -------------------------------------------------------- //
 
     // -------------------------------------------------------- AWAL FUNGSI UNTUK KRITIK & SARAN -------------------------------------------------------- //
     // Fungsi Menampilkan Daftar Kritik & Saran

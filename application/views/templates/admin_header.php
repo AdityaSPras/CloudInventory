@@ -129,7 +129,7 @@
                                 </li>
 
                                 <!-- Status Paket -->
-                                <?php if ($title == 'Status Paket' or $title == 'Pembayaran Paket') : ?>
+                                <?php if ($title == 'Status Paket' or $title == 'Pembayaran Paket' or $title == 'Ubah Paket Perusahaan') : ?>
                                     <li class="nav-item active">
                                     <?php else : ?>
                                     <li class="nav-item">

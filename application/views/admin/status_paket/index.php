@@ -21,16 +21,20 @@
                                         <span><?= $status_paket['Nama']; ?></span>
                                     <?php } elseif ($status_paket['IdPaket'] == 3) { ?>
                                         <span><?= $status_paket['Nama']; ?></span>
-                                    <?php } ?></p>
+                                    <?php } ?>
+                                </p>
                                 <hr class="mt-0">
                                 <p class="mb-0"><b>Batas Kuota Karyawan</b>
-                                    <br><?= $status_paket['JumlahKaryawan']; ?> Data</p>
+                                    <br><?= $status_paket['JumlahKaryawan']; ?> Data
+                                </p>
                                 <hr class="mt-0">
                                 <p class="mb-0"><b>Batas Kuota Barang</b>
-                                    <br><?= $status_paket['JumlahBarang']; ?> Data</p>
+                                    <br><?= $status_paket['JumlahBarang']; ?> Data
+                                </p>
                                 <hr class="mt-0">
                                 <p class="mb-0"><b>Biaya Bulanan</b>
-                                    <br><?= rupiah($status_paket['Harga']); ?></p>
+                                    <br><?= rupiah($status_paket['Harga']); ?>
+                                </p>
                                 <hr class="mt-0">
                                 <p class="mb-0"><b>Masa Berlaku Paket</b>
                                     <br><?php if ($status_paket['IdPaket'] == 1) { ?>
@@ -39,17 +43,18 @@
                                         <span>-</span>
                                     <?php } elseif ($status_paket['IdPaket'] == 3) { ?>
                                         <span>-</span>
-                                    <?php } ?></p>
+                                    <?php } ?>
+                                </p>
                                 <hr class="mt-0">
                             </div>
                         </div>
                     </div>
                     <div class="col-sm-12 text-center">
-                        <a href="<?= base_url('admin/pilih_paket'); ?>" class="btn btn-warning btn-md mb-2 disabled">
-                            <span class="text text-white">Pilih Paket Lain</span>
+                        <a href="<?= base_url('admin/ubah_paket'); ?>" class="btn btn-warning btn-md mb-2">
+                            <span class="text text-white">Ubah Paket</span>
                         </a>
                         <a href="<?= base_url('admin/riwayat_pembayaran'); ?>" class="btn btn-info btn-md mb-2">
-                            <span class="text text-white">Riwayat Pembayaran Paket</span>
+                            <span class="text text-white">Pembayaran Paket</span>
                         </a>
                     </div>
                 </div>
