@@ -65,7 +65,13 @@ class Users_model extends CI_Model
 
     public function getIdKaryawan($where, $table)
     {
-        return $this->db->get_where($table, $where);
+        $user       = $this->session->userdata('IdPerusahaan');
+
+        $this->db->where('IdPerusahaan', $user);
+
+        $query = $this->db->get_where($table, $where);
+
+        return $query;
     }
 
     public function ubahKaryawan($where, $data, $table)

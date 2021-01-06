@@ -598,6 +598,9 @@ class Karyawan extends CI_Controller
             $data['data_satuan']     = $this->satuan->dataSatuan()->result();
             $data['jumlah_kategori'] = $this->kategori->dataKategori()->num_rows();
             $data['jumlah_satuan']   = $this->satuan->dataSatuan()->num_rows();
+            $data['status_paket']    = $this->profil->statusPaket()->row_array();
+            $data['jumlah_barang']   = $this->barang->jumlahBarang();
+
 
             // Membuat Aturan Pengisian Form atau Inputan Untuk Nama Barang
             $this->form_validation->set_rules('NamaBarang', 'Nama Barang', 'required|trim', [

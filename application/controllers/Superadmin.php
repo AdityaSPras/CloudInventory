@@ -366,7 +366,9 @@ class Superadmin extends CI_Controller
     // Fungsi Untuk Membuat Status Aktivasi Paket Perusahaan
     public function status_aktivasi($IdPembayaran, $IdUser, $IdPerusahaan, $IdPaket)
     {
-        $IdAktivasi        = $this->perusahaan->kodeAktivasi();
+        $IdAktivasi  = $this->perusahaan->kodeAktivasi();
+        $AwalAktif   = date('Y-m-d');
+        $AkhirAktif  = $this->db->select('SubBayar')->from('tb_pembayaran')->where('IdPembayaran', $IdPembayaran)->get();
 
         $data = [
             'IdAktivasi'   => $IdAktivasi,
@@ -374,11 +376,13 @@ class Superadmin extends CI_Controller
             'IdPerusahaan' => $IdPerusahaan,
             'IdPembayaran' => $IdPembayaran,
             'IdPaket'      => $IdPaket,
-            'AwalAktif'    => date("Y-m-d")
+            'AwalAktif'    => $AwalAktif,
+            'AkhirAktif'   => date('Y-m-d', strtotime(+$AkhirAktif .  'month', strtotime($AwalAktif)))
         ];
 
         $this->perusahaan->statusPaket($data, 'tb_aktivasi');
     }
+
     // -------------------------------------------------------- AKHIR FUNGSI UNTUK PEMBAYARAN & AKTIVASI -------------------------------------------------------- //
 
     // -------------------------------------------------------- AWAL FUNGSI UNTUK KRITIK & SARAN -------------------------------------------------------- //

@@ -38,7 +38,7 @@
                                 <hr class="mt-0">
                                 <p class="mb-0"><b>Masa Berlaku Paket</b>
                                     <br><?php if ($status_paket['IdPaket'] == 1) { ?>
-                                        <span>Selamanya</span>
+                                        <span>-</span>
                                     <?php } elseif ($status_paket['IdPaket'] == 2) { ?>
                                         <span>-</span>
                                     <?php } elseif ($status_paket['IdPaket'] == 3) { ?>
@@ -50,9 +50,15 @@
                         </div>
                     </div>
                     <div class="col-sm-12 text-center">
-                        <a href="<?= base_url('admin/ubah_paket'); ?>" class="btn btn-warning btn-md mb-2">
+                        <a href="<?= base_url('admin/ubah_paket'); ?>" class="btn btn-danger btn-md mb-2">
                             <span class="text text-white">Ubah Paket</span>
                         </a>
+                        <?php if ($status_paket['IdPaket'] == 1) { ?>
+                        <?php } else { ?>
+                            <a href="<?= base_url('admin/ubah_paket'); ?>" class="btn btn-warning btn-md mb-2">
+                                <span class="text text-white">Perpanjang Paket</span>
+                            </a>
+                        <?php } ?>
                         <a href="<?= base_url('admin/riwayat_pembayaran'); ?>" class="btn btn-info btn-md mb-2">
                             <span class="text text-white">Pembayaran Paket</span>
                         </a>

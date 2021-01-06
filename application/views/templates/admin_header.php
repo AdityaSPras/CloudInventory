@@ -109,27 +109,31 @@
                             </li>
 
                             <!-- Laporan -->
-                            <?php if ($title == 'Laporan Barang' or $title == 'Laporan Barang Masuk' or $title == 'Laporan Barang Keluar') : ?>
-                                <li class="nav-item active">
-                                <?php else : ?>
-                                <li class="nav-item">
-                                <?php endif; ?>
-                                <a class="nav-link" href="#" data-toggle="collapse" data-target="#Laporan" aria-expanded="true" aria-controls="Laporan">
-                                    <i class="fas fa-fw fa-file-alt"></i>
-                                    <span>Laporan</span>
-                                </a>
-                                <div id="Laporan" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                                    <div class="bg-white py-2 collapse-inner rounded">
-                                        <h6 class="collapse-header">Laporan</h6>
-                                        <a class="collapse-item" href="<?= base_url('admin/laporan_barang'); ?>"><b>Laporan Barang</b></a>
-                                        <a class="collapse-item" href="<?= base_url('admin/laporan_barang_masuk'); ?>"><b>Laporan Barang Masuk</b></a>
-                                        <a class="collapse-item" href="<?= base_url('admin/laporan_barang_keluar'); ?>"><b>Laporan Barang Keluar</b></a>
+                            <?php if ($status_paket['IdPaket'] == 1) : ?>
+                            <?php else : ?>
+                                <?php if ($title == 'Laporan Barang' or $title == 'Laporan Barang Masuk' or $title == 'Laporan Barang Keluar') : ?>
+                                    <li class="nav-item active">
+                                    <?php else : ?>
+                                    <li class="nav-item">
+                                    <?php endif; ?>
+                                    <a class="nav-link" href="#" data-toggle="collapse" data-target="#Laporan" aria-expanded="true" aria-controls="Laporan">
+                                        <i class="fas fa-fw fa-file-alt"></i>
+                                        <span>Laporan</span>
+                                    </a>
+                                    <div id="Laporan" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                                        <div class="bg-white py-2 collapse-inner rounded">
+                                            <h6 class="collapse-header">Laporan</h6>
+                                            <a class="collapse-item" href="<?= base_url('admin/laporan_barang'); ?>"><b>Laporan Barang</b></a>
+                                            <a class="collapse-item" href="<?= base_url('admin/laporan_barang_masuk'); ?>"><b>Laporan Barang Masuk</b></a>
+                                            <a class="collapse-item" href="<?= base_url('admin/laporan_barang_keluar'); ?>"><b>Laporan Barang Keluar</b></a>
+                                        </div>
                                     </div>
-                                </div>
-                                </li>
+                                    </li>
+                                <?php endif; ?>
 
                                 <!-- Status Paket -->
-                                <?php if ($title == 'Status Paket' or $title == 'Pembayaran Paket' or $title == 'Ubah Paket Perusahaan') : ?>
+
+                                <?php if ($title == 'Status Paket' or $title == 'Pembayaran Paket' or $title == 'Ubah Paket') : ?>
                                     <li class="nav-item active">
                                     <?php else : ?>
                                     <li class="nav-item">
@@ -138,6 +142,7 @@
                                         <i class="fas fa-fw fa-shield-alt"></i>
                                         <span>Status Paket</span></a>
                                     </li>
+
 
                                     <!-- Kritik & Saran -->
                                     <?php if ($title == 'Kritik & Saran') : ?>

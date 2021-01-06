@@ -45,7 +45,7 @@
                                             <th>:</th>
                                             <td><?= rupiah($data->TotalBayar) ?></td>
                                         </tr>
-                                        <?php if ($data->BuktiPembayaran == '') : ?>
+                                        <?php if ($data->BuktiPembayaran == 'default_payment.PNG') : ?>
                                         <?php else : ?>
                                             <tr>
                                                 <th>Tanggal Pembayaran</th>
@@ -62,12 +62,15 @@
                                             <span class="icon text-white"><i class="fas fa-arrow-left"></i></span>
                                             <span class="text text-white">Kembali</span>
                                         </a>
-                                        <?php if ($data->StatusPembayaran == "Pending") : ?>
-                                            <a href="<?= base_url("superadmin/konfirmasi_pembayaran/" . $data->IdPembayaran . "/" . $data->IdPerusahaan . "/" . $data->IdPaket . "/" . $data->IdUser); ?>" class="btn btn-danger btn-md btn-icon-split mb-2">
-                                                <span class="icon text-white"><i class="fas fa-check-circle"></i></span>
-                                                <span class="text text-white">Konfirmasi</span>
-                                            </a>
+                                        <?php if ($data->BuktiPembayaran == 'default_payment.PNG') : ?>
                                         <?php else : ?>
+                                            <?php if ($data->StatusPembayaran == 'Diterima') : ?>
+                                            <?php else : ?>
+                                                <a href="<?= base_url("superadmin/konfirmasi_pembayaran/" . $data->IdPembayaran . "/" . $data->IdPerusahaan . "/" . $data->IdPaket . "/" . $data->IdUser); ?>" class="btn btn-danger btn-md btn-icon-split mb-2">
+                                                    <span class="icon text-white"><i class="fas fa-check-circle"></i></span>
+                                                    <span class="text text-white">Konfirmasi</span>
+                                                </a>
+                                            <?php endif; ?>
                                         <?php endif; ?>
                                     </div>
                                 </div>

@@ -10,6 +10,14 @@ class Paket_model extends CI_Model
         return $query;
     }
 
+    public function pilihPaket()
+    {
+        $this->db->not_like('IdPaket', '1');
+
+        $query = $this->db->get('tb_paket');
+        return $query;
+    }
+
     // Fungsi Untuk Menampilkan Paket Layanan Dengan IdPaket 1 (tb_paket)
     public function paketSatu()
     {

@@ -3,6 +3,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Pembayaran_model extends CI_Model
 {
+    public function pilihPembayaran($data, $table)
+    {
+        $this->db->insert($table, $data);
+    }
+
     // Fungsi Untuk Membuat ID Pembayaran Dengan Format (ID-PEM-XXX)
     public function kodePembayaran()
     {
@@ -27,6 +32,7 @@ class Pembayaran_model extends CI_Model
         $this->db->select('*');
         $this->db->from('tb_pembayaran');
         $this->db->where('StatusPembayaran', 'Pending');
+        $this->db->like('TanggalPembayaran', '');
         $query = $this->db->get();
         return $query;
     }
@@ -43,6 +49,22 @@ class Pembayaran_model extends CI_Model
         $this->db->join('tb_paket as tp', 'tp.IdPaket = tpe.IdPaket', 'left');
         $this->db->where('tpe.IdPerusahaan', $user);
         $this->db->order_by('TanggalPembayaran', 'DESC');
+
+        $query = $this->db->get();
+        return $query;
+    }
+
+    public function pembayaranTerakhir()
+    {
+        $user = $this->session->userdata('IdPerusahaan');
+
+        $this->db->select('*');
+        $this->db->from('tb_pembayaran as tpe');
+        $this->db->join('tb_user as tu', 'tu.IdUser = tpe.IdUser', 'left');
+        $this->db->join('tb_perusahaan as tph', 'tph.IdPerusahaan = tpe.IdPerusahaan', 'left');
+        $this->db->join('tb_paket as tp', 'tp.IdPaket = tpe.IdPaket', 'left');
+        $this->db->where('tpe.IdPerusahaan', $user);
+        $this->db->order_by('IdPembayaran', 'DESC');
 
         $query = $this->db->get();
         return $query;

@@ -59,9 +59,10 @@ class Admin extends CI_Controller
         // Melakukan Cek Session Level User Apakah Benar Yang Mengakses Fungsi Ini Sebagai Admin
         if ($this->session->userdata('Level') == "Admin") {
 
-            $data['title']  = 'Profil Saya';
-            $data['user']   = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
-            $data['profil'] = $this->profil->dataProfil()->row_array();
+            $data['title']        = 'Profil Saya';
+            $data['user']         = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['profil']       = $this->profil->dataProfil()->row_array();
+            $data['status_paket'] = $this->profil->statusPaket()->row_array();
 
             // Melakukan Load View Halaman Profil Untuk Admin
             $this->load->view('templates/admin_header', $data);
@@ -79,8 +80,9 @@ class Admin extends CI_Controller
         // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Admin
         if ($this->session->userdata('Level') == "Admin") {
 
-            $data['title'] = 'Ubah Profil';
-            $data['user']  = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['title']        = 'Ubah Profil';
+            $data['user']         = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['status_paket'] = $this->profil->statusPaket()->row_array();
 
             // Membuat Aturan Pengisian Form atau Inputan Untuk Nama Lengkap
             $this->form_validation->set_rules('NamaLengkap', 'Nama Lengkap Admin', 'required|trim', [
@@ -157,8 +159,9 @@ class Admin extends CI_Controller
         // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Admin
         if ($this->session->userdata('Level') == "Admin") {
 
-            $data['title'] = 'Ubah Password';
-            $data['user']  = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['title']        = 'Ubah Password';
+            $data['user']         = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['status_paket'] = $this->profil->statusPaket()->row_array();
 
             // Membuat Aturan Pengisian Form atau Inputan Untuk Password Lama
             $this->form_validation->set_rules('PasswordLama', 'Password Lama', 'required|trim', [
@@ -222,9 +225,10 @@ class Admin extends CI_Controller
         // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Admin
         if ($this->session->userdata('Level') == "Admin") {
 
-            $data['title']      = 'Profil Perusahaan';
-            $data['user']       = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
-            $data['perusahaan'] = $this->profil->dataProfil()->row_array();
+            $data['title']        = 'Profil Perusahaan';
+            $data['user']         = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['perusahaan']   = $this->profil->dataProfil()->row_array();
+            $data['status_paket'] = $this->profil->statusPaket()->row_array();
 
             // Melakukan Load View Halaman Profil Perusahaan Untuk Admin
             $this->load->view('templates/admin_header', $data);
@@ -242,9 +246,10 @@ class Admin extends CI_Controller
         // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Admin
         if ($this->session->userdata('Level') == "Admin") {
 
-            $data['title']      = 'Ubah Profil Perusahaan';
-            $data['user']       = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
-            $data['perusahaan'] = $this->profil->dataProfil()->row_array();
+            $data['title']        = 'Ubah Profil Perusahaan';
+            $data['user']         = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['perusahaan']   = $this->profil->dataProfil()->row_array();
+            $data['status_paket'] = $this->profil->statusPaket()->row_array();
 
             // Membuat Aturan Pengisian Form atau Inputan Untuk Nama Perusahaan
             $this->form_validation->set_rules('NamaPerusahaan', 'Nama Perusahaan', 'required|trim', [
@@ -285,6 +290,7 @@ class Admin extends CI_Controller
                 $NomorTeleponPerusahaan = $this->input->post('NomorTeleponPerusahaan', true);
                 $Fax                    = $this->input->post('Fax', true);
                 $EmailPerusahaan        = $this->input->post('EmailPerusahaan', true);
+                $data['status_paket']   = $this->profil->statusPaket()->row_array();
 
                 $upload_image = $_FILES['Logo']['name'];
 
@@ -355,9 +361,11 @@ class Admin extends CI_Controller
     {
         // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Admin
         if ($this->session->userdata('Level') == "Admin") {
-            $data['title']      = 'Tambah Karyawan';
-            $data['user']       = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
-            $data['perusahaan'] = $this->profil->dataProfil()->row_array();
+            $data['title']           = 'Tambah Karyawan';
+            $data['user']            = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['perusahaan']      = $this->profil->dataProfil()->row_array();
+            $data['status_paket']    = $this->profil->statusPaket()->row_array();
+            $data['jumlah_karyawan'] = $this->users->dataKaryawan()->num_rows();
 
             // Membuat Aturan Pengisian Form atau Inputan Untuk Nama Lengkap Karyawan
             $this->form_validation->set_rules('NamaLengkap', 'Nama Lengkap Karyawan', 'required|trim', [
@@ -456,6 +464,7 @@ class Admin extends CI_Controller
             $data['title']           = 'Detail Karyawan';
             $data['detail_karyawan'] = $this->users->detailKaryawan($id)->result();
             $data['user']            = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['status_paket']    = $this->profil->statusPaket()->row_array();
 
             if ($id == NULL) {
                 // Jika ID Karyawan Tidak Ditemukan Akan Diarahkan Ke Halaman Error 404
@@ -594,6 +603,7 @@ class Admin extends CI_Controller
             $data['user']            = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
             $data['perusahaan']      = $this->profil->dataProfil()->row_array();
             $data['daftar_kategori'] = $this->kategori->dataKategori()->result();
+            $data['status_paket']    = $this->profil->statusPaket()->row_array();
 
             // Melakukan Load View Halaman Daftar Barang Perusahaan Untuk Admin
             $this->load->view('templates/admin_header', $data);
@@ -611,9 +621,10 @@ class Admin extends CI_Controller
         // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Admin
         if ($this->session->userdata('Level') == "Admin") {
 
-            $data['title']      = 'Tambah Kategori Barang';
-            $data['user']       = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
-            $data['perusahaan'] = $this->profil->dataProfil()->row_array();
+            $data['title']        = 'Tambah Kategori Barang';
+            $data['user']         = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['perusahaan']   = $this->profil->dataProfil()->row_array();
+            $data['status_paket'] = $this->profil->statusPaket()->row_array();
 
             // Membuat Aturan Pengisian Form atau Inputan Untuk Nama Kategori Barang
             $this->form_validation->set_rules('NamaKategori', 'Nama Kategori Barang', 'required|trim', [
@@ -662,6 +673,7 @@ class Admin extends CI_Controller
             $data['title']           = 'Detail Kategori Barang';
             $data['detail_kategori'] = $this->kategori->detailKategori($id)->result();
             $data['user']            = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['status_paket']    = $this->profil->statusPaket()->row_array();
 
             if ($id == NULL) {
                 // Jika ID Kategori Tidak Ditemukan Akan Diarahkan Ke Halaman Error 404
@@ -725,6 +737,7 @@ class Admin extends CI_Controller
             $data['user']          = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
             $data['perusahaan']    = $this->profil->dataProfil()->row_array();
             $data['daftar_satuan'] = $this->satuan->dataSatuan()->result();
+            $data['status_paket']  = $this->profil->statusPaket()->row_array();
 
             // Melakukan Load View Halaman Daftar Satuan Barang Perusahaan Untuk Admin
             $this->load->view('templates/admin_header', $data);
@@ -742,9 +755,10 @@ class Admin extends CI_Controller
         // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Admin
         if ($this->session->userdata('Level') == "Admin") {
 
-            $data['title']      = 'Tambah Satuan Barang';
-            $data['user']       = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
-            $data['perusahaan'] = $this->profil->dataProfil()->row_array();
+            $data['title']        = 'Tambah Satuan Barang';
+            $data['user']         = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['perusahaan']   = $this->profil->dataProfil()->row_array();
+            $data['status_paket'] = $this->profil->statusPaket()->row_array();
 
             // Membuat Aturan Pengisian Form atau Inputan Untuk Nama Satuan Barang
             $this->form_validation->set_rules('NamaSatuan', 'Nama Satuan Barang', 'required|trim', [
@@ -793,6 +807,7 @@ class Admin extends CI_Controller
             $data['title']           = 'Detail Satuan Barang';
             $data['detail_satuan']   = $this->satuan->detailSatuan($id)->result();
             $data['user']            = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['status_paket']    = $this->profil->statusPaket()->row_array();
 
             if ($id == NULL) {
                 // Jika ID Satuan Tidak Ditemukan Akan Diarahkan Ke Halaman Error 404
@@ -856,6 +871,7 @@ class Admin extends CI_Controller
             $data['user']            = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
             $data['perusahaan']      = $this->profil->dataProfil()->row_array();
             $data['daftar_supplier'] = $this->supplier->dataSupplier()->result();
+            $data['status_paket']    = $this->profil->statusPaket()->row_array();
 
             // Melakukan Load View Halaman Daftar Supplier Barang Perusahaan Untuk Admin
             $this->load->view('templates/admin_header', $data);
@@ -873,9 +889,10 @@ class Admin extends CI_Controller
         // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Admin
         if ($this->session->userdata('Level') == "Admin") {
 
-            $data['title']      = 'Tambah Supplier Barang';
-            $data['user']       = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
-            $data['perusahaan'] = $this->profil->dataProfil()->row_array();
+            $data['title']        = 'Tambah Supplier Barang';
+            $data['user']         = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['perusahaan']   = $this->profil->dataProfil()->row_array();
+            $data['status_paket'] = $this->profil->statusPaket()->row_array();
 
             // Membuat Aturan Pengisian Form atau Inputan Untuk Nama Supplier Barang
             $this->form_validation->set_rules('NamaSupplier', 'Nama Supplier Barang', 'required|trim', [
@@ -935,6 +952,7 @@ class Admin extends CI_Controller
             $data['title']           = 'Detail Supplier Barang';
             $data['detail_supplier'] = $this->supplier->detailSupplier($id)->result();
             $data['user']            = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['status_paket']    = $this->profil->statusPaket()->row_array();
 
             if ($id == NULL) {
                 // Jika ID Supplier Tidak Ditemukan Akan Diarahkan Ke Halaman Error 404
@@ -1030,6 +1048,8 @@ class Admin extends CI_Controller
             $data['data_satuan']     = $this->satuan->dataSatuan()->result();
             $data['jumlah_kategori'] = $this->kategori->dataKategori()->num_rows();
             $data['jumlah_satuan']   = $this->satuan->dataSatuan()->num_rows();
+            $data['status_paket']    = $this->profil->statusPaket()->row_array();
+            $data['jumlah_barang']   = $this->barang->jumlahBarang();
 
             // Membuat Aturan Pengisian Form atau Inputan Untuk Nama Barang
             $this->form_validation->set_rules('NamaBarang', 'Nama Barang Barang', 'required|trim', [
@@ -1136,6 +1156,7 @@ class Admin extends CI_Controller
             $data['title']         = 'Detail Barang';
             $data['detail_barang'] = $this->barang->detailBarang($id)->result();
             $data['user']          = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['status_paket']  = $this->profil->statusPaket()->row_array();
 
             if ($id == NULL) {
                 // Jika ID Barang Tidak Ditemukan Akan Diarahkan Ke Halaman Error 404
@@ -1168,6 +1189,7 @@ class Admin extends CI_Controller
             $id                      = decrypt_url($id);
             $where                   = array('IdBarang' => $id);
             $data['ubah_barang']     = $this->barang->getIdBarang($where, 'tb_barang')->result();
+            $data['status_paket']    = $this->profil->statusPaket()->row_array();
 
             if ($id == NULL) {
                 // Jika ID Barang Tidak Ditemukan Akan Diarahkan Ke Halaman Error 404
@@ -1319,6 +1341,7 @@ class Admin extends CI_Controller
             $data['daftar_barang_masuk'] = $this->barang_masuk->daftarBarangMasuk()->result();
             $data['data_supplier']       = $this->supplier->dataSupplier()->result();
             $data['jumlah_supplier']     = $this->supplier->dataSupplier()->num_rows();
+            $data['status_paket']        = $this->profil->statusPaket()->row_array();
 
 
             // Melakukan Load View Halaman Daftar Barang Masuk Perusahaan Untuk Admin
@@ -1344,6 +1367,7 @@ class Admin extends CI_Controller
             $data['data_supplier']   = $this->supplier->dataSupplier()->result();
             $data['jumlah_barang']   = $this->barang->dataBarang()->num_rows();
             $data['jumlah_supplier'] = $this->supplier->dataSupplier()->num_rows();
+            $data['status_paket']    = $this->profil->statusPaket()->row_array();
 
             // Membuat Aturan Pengisian Form atau Inputan Untuk Nama Barang Masuk
             $this->form_validation->set_rules('IdBarang', 'Nama Barang Masuk', 'required|trim', [
@@ -1418,6 +1442,7 @@ class Admin extends CI_Controller
             $data['title']               = 'Detail Barang Masuk';
             $data['detail_barang_masuk'] = $this->barang_masuk->detailBarangMasuk($id)->result();
             $data['user']                = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['status_paket']        = $this->profil->statusPaket()->row_array();
 
             if ($id == NULL) {
                 // Jika ID Barang Masuk Tidak Ditemukan Akan Diarahkan Ke Halaman Error 404
@@ -1475,6 +1500,7 @@ class Admin extends CI_Controller
             $data['daftar_barang_masuk'] = $this->barang_masuk->daftarBarangMasuk()->result();
             $data['data_supplier']       = $this->supplier->dataSupplier()->result();
             $data['jumlah_supplier']     = $this->supplier->dataSupplier()->num_rows();
+            $data['status_paket']        = $this->profil->statusPaket()->row_array();
 
 
             // Melakukan Load View Halaman Laporan Barang Masuk Perusahaan Untuk Admin
@@ -1495,6 +1521,7 @@ class Admin extends CI_Controller
         $data['daftar_barang_masuk'] = $this->barang_masuk->daftarBarangMasuk()->result();
         $data['data_supplier']       = $this->supplier->dataSupplier()->result();
         $data['jumlah_supplier']     = $this->supplier->dataSupplier()->num_rows();
+        $data['status_paket']        = $this->profil->statusPaket()->row_array();
 
         $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => 'A4-L']);
         $html = $this->load->view('admin/barang_masuk/cetak_barang_masuk', $data, true);
@@ -1531,6 +1558,7 @@ class Admin extends CI_Controller
             $data['user']                 = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
             $data['perusahaan']           = $this->profil->dataProfil()->row_array();
             $data['daftar_barang_keluar'] = $this->barang_keluar->daftarBarangKeluar()->result();
+            $data['status_paket']         = $this->profil->statusPaket()->row_array();
 
             // Melakukan Load View Halaman Daftar Barang Keluar Perusahaan Untuk Admin
             $this->load->view('templates/admin_header', $data);
@@ -1553,6 +1581,7 @@ class Admin extends CI_Controller
             $data['perusahaan']      = $this->profil->dataProfil()->row_array();
             $data['data_barang']     = $this->barang->dataBarang()->result();
             $data['jumlah_barang']   = $this->barang->dataBarang()->num_rows();
+            $data['status_paket']    = $this->profil->statusPaket()->row_array();
 
             // Membuat Aturan Pengisian Form atau Inputan Untuk Nama Barang Keluar
             $this->form_validation->set_rules('IdBarang', 'Nama Barang Keluar', 'required|trim', [
@@ -1628,6 +1657,7 @@ class Admin extends CI_Controller
             $data['title']                = 'Detail Barang Keluar';
             $data['detail_barang_keluar'] = $this->barang_keluar->detailBarangKeluar($id)->result();
             $data['user']                 = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['status_paket']         = $this->profil->statusPaket()->row_array();
 
             if ($id == NULL) {
                 // Jika ID Barang Keluar Tidak Ditemukan Akan Diarahkan Ke Halaman Error 404
@@ -1681,6 +1711,7 @@ class Admin extends CI_Controller
             $data['user']                 = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
             $data['perusahaan']           = $this->profil->dataProfil()->row_array();
             $data['daftar_barang_keluar'] = $this->barang_keluar->daftarBarangKeluar()->result();
+            $data['status_paket']         = $this->profil->statusPaket()->row_array();
 
             // Melakukan Load View Halaman Laporan Barang Keluar Perusahaan Untuk Admin
             $this->load->view('templates/admin_header', $data);
@@ -1698,6 +1729,7 @@ class Admin extends CI_Controller
         $data['user']                 = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
         $data['perusahaan']           = $this->profil->dataProfil()->row_array();
         $data['daftar_barang_keluar'] = $this->barang_keluar->daftarBarangKeluar()->result();
+        $data['status_paket']         = $this->profil->statusPaket()->row_array();
 
         $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => 'A4-L']);
         $html = $this->load->view('admin/barang_keluar/cetak_barang_keluar', $data, true);
@@ -1744,23 +1776,88 @@ class Admin extends CI_Controller
         }
     }
 
+    // Fungsi Untuk Mendapatkan ID Paket (Harga Paket)
+    public function getPaket($id)
+    {
+        $id    = decrypt_url($id);
+        $paket = $this->db->where('IdPaket', $id)->get('tb_paket')->row();
+        echo json_encode($paket);
+    }
+
     public function ubah_paket()
     {
         // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Admin
         if ($this->session->userdata('Level') == "Admin") {
-            $data['title']                = 'Ubah Paket Perusahaan';
+            $data['title']                = 'Ubah Paket';
+            $data['user']                 = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['perusahaan']           = $this->profil->dataProfil()->row_array();
+            $data['status_paket']         = $this->profil->statusPaket()->row_array();
+            $data['data_paket']           = $this->paket->pilihPaket()->result();
+            $data['jumlah_paket']         = $this->paket->pilihPaket()->num_rows();
+            $data['paket_dua']            = $this->paket->paketDua()->row_array();
+            $data['paket_tiga']           = $this->paket->paketTiga()->row_array();
+
+            // Membuat Aturan Pengisian Form atau Inputan Untuk Lama Berlangganan
+            $this->form_validation->set_rules('IdPaket', 'Nama Paket', 'required|trim', [
+                'required'   => 'Paket Belum Dipilih!'
+            ]);
+
+            // Membuat Aturan Pengisian Form atau Inputan Untuk Lama Berlangganan
+            $this->form_validation->set_rules('SubBayar', 'Lama Berlangganan', 'required|trim', [
+                'required'   => 'Lama Berlangganan Tidak Boleh Kosong!'
+            ]);
+
+            if ($this->form_validation->run() == false) {
+                // Melakukan Load View Halaman Pilih Paket Layanan Perusahaan Untuk Admin
+                $this->load->view('templates/admin_header', $data);
+                $this->load->view('admin/status_paket/paket', $data);
+                $this->load->view('templates/users_footer');
+            } else {
+                $IdPembayaran = $this->pembayaran->kodePembayaran();
+                $IdUser       = $this->session->userdata('IdUser');
+                $IdPerusahaan = $this->session->userdata('IdPerusahaan');
+                $Paket        = $this->input->post('IdPaket');
+                $SubBayar     = $this->input->post('SubBayar', true);
+                $HargaBulanan = $this->input->post('HargaBulanan', true);
+                $IdPaket      = decrypt_url($Paket);
+
+                $data = [
+                    'IdPembayaran'       => $IdPembayaran,
+                    'IdUser'             => $IdUser,
+                    'IdPerusahaan'       => $IdPerusahaan,
+                    'IdPaket'            => $IdPaket,
+                    'SubBayar'           => $SubBayar,
+                    'HargaBulanan'       => $HargaBulanan,
+                    'TotalBayar'         => $SubBayar * $HargaBulanan,
+                    'BuktiPembayaran'    => 'default_payment.PNG',
+                    'TipePembayaran'     => 'Baru',
+                    'StatusPembayaran'   => 'Pending'
+                ];
+
+                $this->pembayaran->pilihPembayaran($data, 'tb_pembayaran');
+                $this->session->set_flashdata('success', 'Paket Berhasil Dipilih');
+                redirect('admin/pembayaran');
+            }
+        } else {
+            // Jika Session User Level Bukan Admin Maka Akan Diarahkan Ke Halaman Error 403
+            $this->load->view('error');
+        }
+    }
+
+    public function pembayaran()
+    {
+        // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Admin
+        if ($this->session->userdata('Level') == "Admin") {
+            $data['title']                = 'Pembayaran Paket';
             $data['user']                 = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
             $data['perusahaan']           = $this->profil->dataProfil()->row_array();
             $data['status_paket']         = $this->profil->statusPaket()->row_array();
             $data['data_paket']           = $this->paket->dataPaket()->result();
             $data['jumlah_paket']         = $this->paket->dataPaket()->num_rows();
-            $data['paket_satu']           = $this->paket->paketSatu()->row_array();
-            $data['paket_dua']            = $this->paket->paketDua()->row_array();
-            $data['paket_tiga']           = $this->paket->paketTiga()->row_array();
+            $data['pembayaran_terakhir']  = $this->pembayaran->pembayaranTerakhir()->row_array();
 
-            // Melakukan Load View Halaman Pilih Paket Layanan Perusahaan Untuk Admin
             $this->load->view('templates/admin_header', $data);
-            $this->load->view('admin/status_paket/paket', $data);
+            $this->load->view('admin/status_paket/pembayaran_paket', $data);
             $this->load->view('templates/users_footer');
         } else {
             // Jika Session User Level Bukan Admin Maka Akan Diarahkan Ke Halaman Error 403
@@ -1777,6 +1874,7 @@ class Admin extends CI_Controller
             $data['user']                = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
             $data['perusahaan']          = $this->profil->dataProfil()->row_array();
             $data['riwayat_pembayaran']  = $this->pembayaran->riwayatPembayaran()->result();
+            $data['status_paket']        = $this->profil->statusPaket()->row_array();
 
             // Melakukan Load View Halaman Riwayat Pembayaran Paket Perusahaan Untuk Admin
             $this->load->view('templates/admin_header', $data);
@@ -1796,8 +1894,9 @@ class Admin extends CI_Controller
         // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Admin
         if ($this->session->userdata('Level') == "Admin") {
 
-            $data['title'] = 'Kritik & Saran';
-            $data['user']  = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['title']        = 'Kritik & Saran';
+            $data['user']         = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['status_paket'] = $this->profil->statusPaket()->row_array();
 
             // Membuat Aturan Pengisian Form atau Inputan Untuk Isi Kritik & Saran
             $this->form_validation->set_rules('Pesan', 'Isi Kritik & Saran', 'required|trim', [
