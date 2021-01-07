@@ -60,11 +60,16 @@
                                     <span class="h6 text-xs text-gray-900">Aktif Hingga : ∞</span>
                                 <?php } elseif ($status_paket['IdPaket'] == 2) { ?>
                                     <span class="badge rounded-pill bg-success text-white"><?= $status_paket['Nama']; ?></span><br><br>
-                                    <span class="h6 text-xs text-gray-900">Aktif Hingga : </span>
-                                <?php } elseif ($status_paket['IdPaket'] == 3) { ?>
-                                    <span class="badge rounded-pill bg-warning text-white"><?= $status_paket['Nama']; ?></span><br><br>
-                                    <span class="h6 text-xs text-gray-900">Aktif Hingga : </span>
-                                <?php } ?></div>
+                                    <span class="h6 text-xs text-gray-900">Aktif Hingga : <?php if ($aktif_paket == NULL) { ?>-<?php } else { ?>
+                                        <?= tgl_indo($aktif_paket['AkhirAktif']); ?></span>
+                                <?php } ?>
+                            <?php } elseif ($status_paket['IdPaket'] == 3) { ?>
+                                <span class="badge rounded-pill bg-warning text-white"><?= $status_paket['Nama']; ?></span><br><br>
+                                <span class="h6 text-xs text-gray-900">Aktif Hingga : <?php if ($aktif_paket == NULL) { ?>-<?php } else { ?>
+                                    <?= tgl_indo($aktif_paket['AkhirAktif']); ?></span>
+                            <?php } ?>
+                        <?php } ?>
+                            </div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-shield-alt fa-2x text-info"></i>

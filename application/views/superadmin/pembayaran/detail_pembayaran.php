@@ -21,9 +21,9 @@
                                 <table class="table table-borderless table-sm">
                                     <tbody>
                                         <tr>
-                                            <th width="25%">Nama Perusahaan</th>
+                                            <th width="35%">Nama Perusahaan</th>
                                             <th width="5%">:</th>
-                                            <td width="70%"><?= $data->NamaPerusahaan ?></td>
+                                            <td width="60%"><?= $data->NamaPerusahaan ?></td>
                                         </tr>
                                         <tr>
                                             <th>Nama Admin</th>
@@ -47,6 +47,24 @@
                                         </tr>
                                         <?php if ($data->BuktiPembayaran == 'default_payment.PNG') : ?>
                                         <?php else : ?>
+                                            <tr>
+                                                <th>Nama Bank</th>
+                                                <th>:</th>
+                                                <td><?= $data->NamaBank ?>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>Nomor Rekening</th>
+                                                <th>:</th>
+                                                <td><?= $data->NomorRekening ?>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>Nama Pemilik Rekening</th>
+                                                <th>:</th>
+                                                <td><?= $data->NamaPemilikRekening ?>
+                                                </td>
+                                            </tr>
                                             <tr>
                                                 <th>Tanggal Pembayaran</th>
                                                 <th>:</th>

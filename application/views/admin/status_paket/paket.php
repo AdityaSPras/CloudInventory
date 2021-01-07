@@ -42,6 +42,17 @@
                                                 </tr>
                                                 <tr>
                                                     <td>
+                                                        <small class="text-dark font-weight-bold">Keterangan</small>
+                                                    </td>
+                                                    <td>
+                                                        <small class="text-dark font-weight-bold">:</small>
+                                                    </td>
+                                                    <td>
+                                                        <small class="text-dark font-weight-bold"><?= $paket_dua['Keterangan']; ?></small>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
                                                         <small class="text-dark font-weight-bold">Harga</small>
                                                     </td>
                                                     <td>
@@ -88,6 +99,17 @@
                                                 </tr>
                                                 <tr>
                                                     <td>
+                                                        <small class="text-dark font-weight-bold">Keterangan</small>
+                                                    </td>
+                                                    <td>
+                                                        <small class="text-dark font-weight-bold">:</small>
+                                                    </td>
+                                                    <td>
+                                                        <small class="text-dark font-weight-bold"><?= $paket_tiga['Keterangan']; ?></small>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
                                                         <small class="text-dark font-weight-bold">Harga</small>
                                                     </td>
                                                     <td>
@@ -119,8 +141,21 @@
                         </div>
                         <div class="form-group">
                             <label>Lama Berlangganan (Bulan)</label>
-                            <input class="form-control" name="SubBayar" type="number" min="1" max="12">
-                            <small class="text-dark text-xs">* Minimal 1 Bulan & Maksimal 12 Bulan</small><br>
+                            <select class="form-control" name="SubBayar">
+                                <option value="">-- Pilih Lama Berlangganan --</option>
+                                <option value='1'>1 Bulan</option>
+                                <option value='2'>2 Bulan</option>
+                                <option value='3'>3 Bulan</option>
+                                <option value='4'>4 Bulan</option>
+                                <option value='5'>5 Bulan</option>
+                                <option value='6'>6 Bulan</option>
+                                <option value='7'>7 Bulan</option>
+                                <option value='8'>8 Bulan</option>
+                                <option value='9'>9 Bulan</option>
+                                <option value='10'>10 Bulan</option>
+                                <option value='11'>11 Bulan</option>
+                                <option value='12'>12 Bulan</option>
+                            </select>
                             <?= form_error('SubBayar', '<small class="text-danger">', '</small>'); ?>
                         </div>
                         <div class="form-group text-center">

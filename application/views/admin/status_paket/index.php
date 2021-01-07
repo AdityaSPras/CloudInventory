@@ -38,11 +38,19 @@
                                 <hr class="mt-0">
                                 <p class="mb-0"><b>Masa Berlaku Paket</b>
                                     <br><?php if ($status_paket['IdPaket'] == 1) { ?>
-                                        <span>-</span>
+                                        <span>∞</span>
                                     <?php } elseif ($status_paket['IdPaket'] == 2) { ?>
-                                        <span>-</span>
+                                        <?php if ($aktif_paket == NULL) { ?>
+                                            <span>-</span>
+                                        <?php } else { ?>
+                                            <span><?= tgl_indo($aktif_paket['AkhirAktif']); ?></span>
+                                        <?php } ?>
                                     <?php } elseif ($status_paket['IdPaket'] == 3) { ?>
-                                        <span>-</span>
+                                        <?php if ($aktif_paket == NULL) { ?>
+                                            <span>-</span>
+                                        <?php } else { ?>
+                                            <span><?= tgl_indo($aktif_paket['AkhirAktif']); ?></span>
+                                        <?php } ?>
                                     <?php } ?>
                                 </p>
                                 <hr class="mt-0">

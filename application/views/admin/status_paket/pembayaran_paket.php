@@ -31,9 +31,9 @@
                                 <span class="icon text-white"><i class="fas fa-arrow-left"></i></span>
                                 <span class="text text-white">Kembali</span>
                             </a>
-                            <a href="#" class="btn btn-success btn-md btn-icon-split">
+                            <a href="<?= base_url('admin/riwayat_pembayaran'); ?>" class="btn btn-success btn-md btn-icon-split">
                                 <span class="icon text-white"><i class="fas fa-arrow-circle-up"></i></span>
-                                <span class="text text-white">Bayar Sekarang</span>
+                                <span class="text text-white">Bayar Paket</span>
                             </a>
                         </div>
                     </div>

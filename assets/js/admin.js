@@ -283,3 +283,24 @@ function validasiAdminUbahKaryawan() {
     }
   }
 }
+
+function validasiAdminBayarPaket() {
+  var NamaBank = document.forms["formAdminBayarPaket"]["NamaBank"].value;
+  var NomorRekening = document.forms["formAdminBayarPaket"]["NomorRekening"].value;
+  var NamaPemilikRekening = document.forms["formAdminBayarPaket"]["NamaPemilikRekening"].value;
+  var BuktiPembayaran = document.forms["formAdminBayarPaket"]["BuktiPembayaran"].value;
+  
+  if (NamaBank == '') {
+    validasi('Nama Bank Tidak Boleh Kosong!', 'warning');
+    return false;
+  } else if (NomorRekening == '') {
+    validasi('Nomor Rekening Tidak Boleh Kosong!', 'warning');
+    return false;
+  } else if (NamaPemilikRekening == '') {
+    validasi('Nama Pemilik Rekening Tidak Boleh Kosong!', 'warning');
+    return false;
+  } else if (BuktiPembayaran == '') {
+    validasi('Bukti Pembayaran Tidak Boleh Kosong!', 'warning');
+    return false;
+  } 
+}

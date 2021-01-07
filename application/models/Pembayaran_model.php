@@ -48,7 +48,7 @@ class Pembayaran_model extends CI_Model
         $this->db->join('tb_perusahaan as tph', 'tph.IdPerusahaan = tpe.IdPerusahaan', 'left');
         $this->db->join('tb_paket as tp', 'tp.IdPaket = tpe.IdPaket', 'left');
         $this->db->where('tpe.IdPerusahaan', $user);
-        $this->db->order_by('TanggalPembayaran', 'DESC');
+        $this->db->order_by('IdPembayaran', 'DESC');
 
         $query = $this->db->get();
         return $query;
@@ -68,6 +68,23 @@ class Pembayaran_model extends CI_Model
 
         $query = $this->db->get();
         return $query;
+    }
+
+    public function getIdPembayaran($where, $table)
+    {
+        $user       = $this->session->userdata('IdPerusahaan');
+
+        $this->db->where('IdPerusahaan', $user);
+
+        $query = $this->db->get_where($table, $where);
+
+        return $query;
+    }
+
+    public function bayarPaket($where, $data, $table)
+    {
+        $this->db->where($where);
+        $this->db->update($table, $data);
     }
 
     // Fungsi Untuk Menampilkan Daftar Pembayaran Paket Perusahaan Dengan Menggabungkan 4 Tabel Secara Left Join (tb_pembayaran, tb_user, tb_perusahaan, dan tb_paket)
@@ -95,6 +112,23 @@ class Pembayaran_model extends CI_Model
         $this->db->join('tb_paket as tp', 'tp.IdPaket = tpe.IdPaket', 'left');
 
         return $this->db->get();
+    }
+
+    public function detailBayar($where)
+    {
+        $user = $this->session->userdata('IdPerusahaan');
+
+        $this->db->select('*');
+        $this->db->from('tb_pembayaran as tpe');
+        $this->db->where('tpe.IdPembayaran', $where);
+        $this->db->where('tpe.IdPerusahaan', $user);
+        $this->db->join('tb_user as tu', 'tu.IdUser = tpe.IdUser', 'left');
+        $this->db->join('tb_perusahaan as tph', 'tph.IdPerusahaan = tpe.IdPerusahaan', 'left');
+        $this->db->join('tb_paket as tp', 'tp.IdPaket = tpe.IdPaket', 'left');
+        $this->db->join('tb_aktivasi as ta', 'ta.IdPembayaran = tpe.IdPembayaran', 'left');
+
+        $query = $this->db->get();
+        return $query;
     }
 
     public function statusKonfirmasi($data, $table)

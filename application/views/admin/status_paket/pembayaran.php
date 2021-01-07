@@ -1,6 +1,8 @@
     <!-- Begin Page Content -->
     <div class="container-fluid">
 
+        <div class="success-flash-admin" data-flashdata="<?= $this->session->flashdata('success'); ?>"></div>
+
         <div class="col-lg-12 mb-4" id="container">
 
             <!-- Illustrations -->
@@ -59,10 +61,10 @@
                                         <td class="text-center">
                                             <?php if ($data->BuktiPembayaran == 'default_payment.PNG') { ?>
                                             <?php } else { ?>
-                                                <a href="#" class="btn btn-info btn-sm mb-1">Detail</a>
+                                                <a href="<?= base_url("admin/detail_pembayaran/" . encrypt_url($data->IdPembayaran) . "") ?>" class="btn btn-info btn-sm mb-1">Detail</a>
                                             <?php } ?>
                                             <?php if ($data->BuktiPembayaran == 'default_payment.PNG') { ?>
-                                                <a href="#" class="btn btn-warning btn-sm mb-1">Bayar Sekarang</a>
+                                                <a href="<?= base_url("admin/bayar_paket/" . encrypt_url($data->IdPembayaran) . "") ?>" class="btn btn-warning btn-sm mb-1">Bayar Sekarang</a>
                                             <?php } else { ?>
                                             <?php } ?>
                                         </td>

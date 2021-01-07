@@ -208,8 +208,7 @@
                             <p class="price-value"><?= rupiah($paket_satu['Harga']); ?><span>/Bulan</span></p>
                         </div>
                         <ul class="description">
-                            <li><?= $paket_satu['JumlahBarang']; ?> Data Barang</li>
-                            <li><?= $paket_satu['JumlahKaryawan']; ?> Akun Karyawan</li>
+                            <li><?= $paket_satu['JumlahBarang']; ?> Data Barang<br><?= $paket_satu['JumlahKaryawan']; ?> Akun Karyawan<br><?= $paket_satu['Keterangan']; ?></li>
                         </ul>
                     </div>
                 </div>
@@ -222,8 +221,7 @@
                             <p class="price-value"><?= rupiah($paket_dua['Harga']); ?><span>/Bulan</span></p>
                         </div>
                         <ul class="description">
-                            <li><?= $paket_dua['JumlahBarang']; ?> Data Barang</li>
-                            <li><?= $paket_dua['JumlahKaryawan']; ?> Akun Karyawan</li>
+                            <li><?= $paket_dua['JumlahBarang']; ?> Data Barang<br><?= $paket_dua['JumlahKaryawan']; ?> Akun Karyawan<br><?= $paket_dua['Keterangan']; ?></li>
                         </ul>
                     </div>
                 </div>
@@ -236,8 +234,7 @@
                             <p class="price-value"><?= rupiah($paket_tiga['Harga']); ?><span>/Bulan</span></p>
                         </div>
                         <ul class="description">
-                            <li><?= $paket_tiga['JumlahBarang']; ?> Data Barang</li>
-                            <li><?= $paket_tiga['JumlahKaryawan']; ?> Akun Karyawan</li>
+                            <li><?= $paket_tiga['JumlahBarang']; ?> Data Barang<br><?= $paket_tiga['JumlahKaryawan']; ?> Akun Karyawan<br><?= $paket_tiga['Keterangan']; ?></li>
                         </ul>
                     </div>
                 </div>

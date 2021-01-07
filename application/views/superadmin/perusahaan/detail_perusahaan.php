@@ -76,12 +76,6 @@
                                                     <?php endif; ?>
                                                 </td>
                                             </tr>
-                                            <tr>
-                                                <th>Paket Perusahaan</th>
-                                                <th>:</th>
-                                                <td><?= $data->Nama ?>
-                                                </td>
-                                            </tr>
                                         </tbody>
                                     </table>
                                     <div class="row">

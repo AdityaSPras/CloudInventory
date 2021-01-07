@@ -15,12 +15,13 @@
                     <table id="pagination" class="table table-sm" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th width="5%" class="text-center">No</th>
-                                <th width="20%" class="text-center">Nama</th>
-                                <th width="15%" class="text-center">Limit Barang</th>
-                                <th width="20%" class="text-center">Limit Karyawan</th>
-                                <th width="20%" class="text-center">Harga</th>
-                                <th width="20%" class="text-center">Aksi</th>
+                                <th class="text-center">No</th>
+                                <th class="text-center">Nama</th>
+                                <th class="text-center">Limit Barang</th>
+                                <th class="text-center">Limit Karyawan</th>
+                                <th class="text-center">Keterangan</th>
+                                <th class="text-center">Harga</th>
+                                <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -31,6 +32,7 @@
                                     <td class="text-center"><?= $data['Nama']; ?></td>
                                     <td class="text-center"><?= $data['JumlahBarang']; ?></td>
                                     <td class="text-center"><?= $data['JumlahKaryawan']; ?></td>
+                                    <td class="text-center"><?= $data['Keterangan']; ?></td>
                                     <td class="text-center"><?= rupiah($data['Harga']) ?>/Bulan</td>
                                     <td class="text-center">
                                         <a href="#" data-toggle="modal" data-target="#ubahPaket<?= $data['IdPaket']; ?>" class="btn btn-circle btn-warning btn-sm">
@@ -79,6 +81,10 @@ foreach ($daftar_paket as $data) : $no++; ?>
                         <div class="form-group">
                             <label>Limit Karyawan</label>
                             <input type="number" name="JumlahKaryawan" id="JumlahKaryawan" class="form-control" value="<?= $data['JumlahKaryawan']; ?>">
+                        </div>
+                        <div class="form-group">
+                            <label>Keterangan</label>
+                            <input type="text" name="Keterangan" id="Keterangan" class="form-control" value="<?= $data['Keterangan']; ?>">
                         </div>
                         <div class="form-group">
                             <label>Harga Paket</label>

@@ -13,6 +13,7 @@ class Superadmin extends CI_Controller
         $this->load->model('Perusahaan_model', 'perusahaan');
         $this->load->model('Pembayaran_model', 'pembayaran');
         $this->load->model('Kritik_saran_model', 'kritik_saran');
+        $this->load->model('Profil_model', 'profil');
     }
 
     // -------------------------------------------------------- AWAL FUNGSI UNTUK HALAMAN UTAMA SUPER ADMIN -------------------------------------------------------- //
@@ -225,12 +226,14 @@ class Superadmin extends CI_Controller
         $Nama            = $this->input->post('Nama', true);
         $JumlahBarang    = $this->input->post('JumlahBarang', true);
         $JumlahKaryawan  = $this->input->post('JumlahKaryawan', true);
+        $Keterangan      = $this->input->post('Keterangan', true);
         $Harga           = $this->input->post('Harga', true);
 
         $data = array(
             'Nama'           => $Nama,
             'JumlahBarang'   => $JumlahBarang,
             'JumlahKaryawan' => $JumlahKaryawan,
+            'Keterangan'     => $Keterangan,
             'Harga'          => $Harga
         );
 
@@ -368,7 +371,7 @@ class Superadmin extends CI_Controller
     {
         $IdAktivasi  = $this->perusahaan->kodeAktivasi();
         $AwalAktif   = date('Y-m-d');
-        $AkhirAktif  = $this->db->select('SubBayar')->from('tb_pembayaran')->where('IdPembayaran', $IdPembayaran)->get();
+        $AkhirAktif  = $this->db->select('SubBayar')->from('tb_pembayaran')->where('IdPembayaran', $IdPembayaran)->get()->row_array();
 
         $data = [
             'IdAktivasi'   => $IdAktivasi,
@@ -377,7 +380,7 @@ class Superadmin extends CI_Controller
             'IdPembayaran' => $IdPembayaran,
             'IdPaket'      => $IdPaket,
             'AwalAktif'    => $AwalAktif,
-            'AkhirAktif'   => date('Y-m-d', strtotime(+$AkhirAktif .  'month', strtotime($AwalAktif)))
+            'AkhirAktif'   => date('Y-m-d', strtotime(+$AkhirAktif['SubBayar'] .  'month', strtotime($AwalAktif)))
         ];
 
         $this->perusahaan->statusPaket($data, 'tb_aktivasi');

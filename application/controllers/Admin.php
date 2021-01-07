@@ -39,6 +39,7 @@ class Admin extends CI_Controller
             $data['jumlah_barang_keluar'] = $this->barang_keluar->jumlahBarangKeluar()->num_rows();
             $data['total_pengeluaran']    = $this->barang_masuk->totalBarangMasuk();
             $data['total_pemasukan']      = $this->barang_keluar->totalBarangKeluar();
+            $data['aktif_paket']          = $this->profil->aktifPaket()->row_array();
             $data['hari_ini']             = date('Y-m-d');
 
             // Melakukan Load View Halaman Utama Untuk Admin
@@ -1761,10 +1762,11 @@ class Admin extends CI_Controller
     {
         // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Admin
         if ($this->session->userdata('Level') == "Admin") {
-            $data['title']                = 'Status Paket';
-            $data['user']                 = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
-            $data['perusahaan']           = $this->profil->dataProfil()->row_array();
-            $data['status_paket']         = $this->profil->statusPaket()->row_array();
+            $data['title']        = 'Status Paket';
+            $data['user']         = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['perusahaan']   = $this->profil->dataProfil()->row_array();
+            $data['status_paket'] = $this->profil->statusPaket()->row_array();
+            $data['aktif_paket']  = $this->profil->aktifPaket()->row_array();
 
             // Melakukan Load View Halaman Status Paket Layanan Perusahaan Untuk Admin
             $this->load->view('templates/admin_header', $data);
@@ -1804,7 +1806,7 @@ class Admin extends CI_Controller
 
             // Membuat Aturan Pengisian Form atau Inputan Untuk Lama Berlangganan
             $this->form_validation->set_rules('SubBayar', 'Lama Berlangganan', 'required|trim', [
-                'required'   => 'Lama Berlangganan Tidak Boleh Kosong!'
+                'required'   => 'Lama Berlangganan Belum Dipilih!'
             ]);
 
             if ($this->form_validation->run() == false) {
@@ -1880,6 +1882,114 @@ class Admin extends CI_Controller
             $this->load->view('templates/admin_header', $data);
             $this->load->view('admin/status_paket/pembayaran', $data);
             $this->load->view('templates/users_footer');
+        } else {
+            // Jika Session User Level Bukan Admin Maka Akan Diarahkan Ke Halaman Error 403
+            $this->load->view('error');
+        }
+    }
+
+    // Fungsi Untuk Ubah Barang Perusahaan
+    public function bayar_paket($id)
+    {
+        // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Admin
+        if ($this->session->userdata('Level') == "Admin") {
+
+            $data['title']           = 'Pembayaran Paket';
+            $data['user']            = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['perusahaan']      = $this->profil->dataProfil()->row_array();
+            $id                      = decrypt_url($id);
+            $where                   = array('IdPembayaran' => $id);
+            $data['bayar_paket']     = $this->pembayaran->getIdPembayaran($where, 'tb_pembayaran')->result();
+            $data['status_paket']    = $this->profil->statusPaket()->row_array();
+
+            if ($id == NULL) {
+                // Jika ID Pembayaran Tidak Ditemukan Akan Diarahkan Ke Halaman Error 404
+                redirect('error');
+            } else {
+                // Melakukan Load View Halaman Pembayaran Paket Perusahaan Untuk Admin
+                $this->load->view('templates/admin_header', $data);
+                $this->load->view('admin/status_paket/bayar_paket', $data);
+                $this->load->view('templates/users_footer');
+            }
+        } else {
+            // Jika Session User Level Bukan Admin Maka Akan Diarahkan Ke Halaman Error 403
+            $this->load->view('error');
+        }
+    }
+
+    public function proses_bayar_paket()
+    {
+        $config['upload_path']   = './assets/img/payments/';
+        $config['allowed_types'] = 'png|PNG|jpg|JPG|jpeg|JPEG';
+        $config['max_size']      = '2048';
+
+        $NamaFile = $_FILES['BuktiPembayaran']['name'];
+        $error    = $_FILES['BuktiPembayaran']['error'];
+
+        $this->load->library('upload', $config);
+
+        $IdPembayaran         = $this->input->post('IdPembayaran');
+        $NamaBank             = $this->input->post('NamaBank');
+        $NamaPemilikRekening  = $this->input->post('NamaPemilikRekening');
+        $NomorRekening        = $this->input->post('NomorRekening');
+        $TanggalPembayaran    = date('Y-m-d');
+        $Struk                = $this->input->post('Struk');
+
+        if ($NamaFile == '') {
+            $GambarBaru = $Struk;
+        } else {
+            if (!$this->upload->do_upload('BuktiPembayaran')) {
+                $error = $this->session->set_flashdata('error', 'Upload Bukti Pembayaran Gagal, Silahkan Coba Lagi!');
+                redirect('admin/bayar_paket/' . $IdPembayaran);
+            } else {
+                $data       = array('BuktiPembayaran' => $this->upload->data());
+                $Nama_File  = $data['BuktiPembayaran']['file_name'];
+                $GambarBaru = str_replace(" ", "_", $Nama_File);
+
+                if ($Struk == 'default_payment.PNG') {
+                } else {
+                    unlink('./assets/img/payments/' . $Struk . '');
+                }
+            }
+        }
+
+        $data = array(
+            'NamaBank'            => $NamaBank,
+            'NamaPemilikRekening' => $NamaPemilikRekening,
+            'NomorRekening'       => $NomorRekening,
+            'TanggalPembayaran'   => $TanggalPembayaran,
+            'BuktiPembayaran'     => $GambarBaru
+        );
+
+        $id    = decrypt_url($IdPembayaran);
+        $where = array('IdPembayaran' => $id);
+
+        $this->pembayaran->bayarPaket($where, $data, 'tb_pembayaran');
+        $this->session->set_flashdata('success', 'Pembayaran Anda Telah Berhasil');
+        redirect('admin/riwayat_pembayaran');
+    }
+
+    // Fungsi Untuk Menampilkan Detail Pembayaran Perusahaan
+    public function detail_pembayaran($id)
+    {
+        // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Admin
+        if ($this->session->userdata('Level') == "Admin") {
+
+            $id                        = decrypt_url($id);
+            $data['title']             = 'Detail Pembayaran';
+            $data['detail_pembayaran'] = $this->pembayaran->detailBayar($id)->result();
+            $data['user']              = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['status_paket']      = $this->profil->statusPaket()->row_array();
+
+            if ($id == NULL) {
+                // Jika ID Pembayaran Tidak Ditemukan Akan Diarahkan Ke Halaman Error 404
+                redirect('error');
+            } else {
+                // Melakukan Load View Halaman Detail Pembayaran Perusahaan Untuk Admin
+                $this->load->view('templates/admin_header', $data);
+                $this->load->view('admin/status_paket/detail_pembayaran', $data);
+                $this->load->view('templates/users_footer');
+            }
         } else {
             // Jika Session User Level Bukan Admin Maka Akan Diarahkan Ke Halaman Error 403
             $this->load->view('error');

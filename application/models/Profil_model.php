@@ -31,6 +31,22 @@ class Profil_model extends CI_Model
         return $query;
     }
 
+    // Fungsi Untuk Menampilkan Data Status Paket Perusahaan Dengan Menggabungkan 2 Tabel (tb_perusahaan dan tb_paket)
+    public function aktifPaket()
+    {
+        $user = $this->session->userdata('IdPerusahaan');
+
+        $this->db->select('*');
+        $this->db->from('tb_perusahaan as tph');
+        $this->db->join('tb_paket as tp', 'tp.IdPaket = tph.IdPaket');
+        $this->db->join('tb_aktivasi as ta', 'ta.IdPerusahaan = tph.IdPerusahaan');
+        $this->db->where('tph.IdPerusahaan', $user);
+        $this->db->order_by('ta.IdAktivasi', 'DESC');
+
+        $query = $this->db->get();
+        return $query;
+    }
+
     // Fungsi Untuk Menampilkan Kontak Layanan Dengan IdUser 1 (tb_user)
     public function kontakLayanan()
     {
