@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 02, 2021 at 06:52 AM
+-- Generation Time: Jan 09, 2021 at 08:02 PM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 7.4.13
 
@@ -88,7 +88,7 @@ CREATE TABLE `tb_barang_masuk` (
   `IdSupplier` varchar(15) NOT NULL,
   `HargaMasuk` int(11) NOT NULL,
   `TanggalMasuk` date NOT NULL,
-  `JumlahMasuk` varchar(30) NOT NULL
+  `JumlahMasuk` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -131,6 +131,7 @@ CREATE TABLE `tb_paket` (
   `Nama` varchar(25) NOT NULL,
   `JumlahBarang` int(11) NOT NULL,
   `JumlahKaryawan` int(11) NOT NULL,
+  `Keterangan` varchar(50) NOT NULL,
   `Harga` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -138,10 +139,10 @@ CREATE TABLE `tb_paket` (
 -- Dumping data for table `tb_paket`
 --
 
-INSERT INTO `tb_paket` (`IdPaket`, `Nama`, `JumlahBarang`, `JumlahKaryawan`, `Harga`) VALUES
-(1, 'Gratis', 15, 2, 0),
-(2, 'Premium', 250, 5, 30000),
-(3, 'Enterprise', 500, 10, 50000);
+INSERT INTO `tb_paket` (`IdPaket`, `Nama`, `JumlahBarang`, `JumlahKaryawan`, `Keterangan`, `Harga`) VALUES
+(1, 'Gratis', 15, 2, 'Tidak Dapat Cetak Laporan', 0),
+(2, 'Premium', 250, 5, 'Dapat Cetak Laporan', 30000),
+(3, 'Enterprise', 500, 10, 'Dapat Cetak Laporan', 50000);
 
 -- --------------------------------------------------------
 
@@ -155,11 +156,16 @@ CREATE TABLE `tb_pembayaran` (
   `IdPerusahaan` varchar(15) NOT NULL,
   `IdPaket` int(11) NOT NULL,
   `SubBayar` int(11) NOT NULL,
+  `HargaBulanan` int(11) NOT NULL,
   `TotalBayar` int(11) NOT NULL,
+  `NamaBank` varchar(30) DEFAULT NULL,
+  `NamaPemilikRekening` varchar(100) DEFAULT NULL,
+  `NomorRekening` varchar(50) DEFAULT NULL,
   `BuktiPembayaran` varchar(255) NOT NULL,
-  `TanggalPembayaran` datetime NOT NULL,
-  `TipePembayaran` int(11) NOT NULL,
-  `Status` enum('Belum Dikonfirmasi','Pembayaran Diterima','Pembayaran Ditolak') NOT NULL
+  `TanggalPembayaran` date DEFAULT NULL,
+  `TipePembayaran` enum('Baru','Perpanjang') NOT NULL,
+  `StatusPembayaran` enum('Pending','Diterima') NOT NULL,
+  `TanggalTransaksi` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -185,7 +191,8 @@ CREATE TABLE `tb_perusahaan` (
 --
 
 INSERT INTO `tb_perusahaan` (`IdPerusahaan`, `IdPaket`, `NamaPerusahaan`, `NamaPemilik`, `AlamatPerusahaan`, `NomorTeleponPerusahaan`, `Fax`, `EmailPerusahaan`, `Logo`) VALUES
-('ID-PRH-001', 1, 'PT. Datayasa Komputer', 'Lilis Yuningsih', 'Jl. Raya Puputan No.86, Denpasar Timur', '0361244445', '264773', 'info@datayasa.com', 'Datayasa_Komputer.png');
+('ID-PRH-001', 1, 'PT. Datayasa Komputer', 'Lilis Yuningsih', 'Jl. Raya Puputan No.86, Denpasar Timur', '0361244445', '264773', 'info@datayasa.com', 'Datayasa_Komputer.png'),
+('ID-PRH-002', 1, 'Karunia Multi Computer', 'Aditya Suryo Prastomo', 'Jl. Gunung Lebah, No. 32, Denpasar Barat', '085745646074', NULL, 'karuniamulticomputer@gmail.com', 'company_default.png');
 
 -- --------------------------------------------------------
 
@@ -259,9 +266,9 @@ CREATE TABLE `tb_user` (
 --
 
 INSERT INTO `tb_user` (`IdUser`, `IdPerusahaan`, `NamaLengkap`, `Alamat`, `JenisKelamin`, `Foto`, `NomorTelepon`, `Email`, `Password`, `Level`, `Status`, `TanggalDibuat`) VALUES
-('1', '', 'Cloud Inventory', 'Jl. Raya Puputan No.86, Denpasar Timur', NULL, 'Icon.png', '+62 851 5617 5274', 'admin@cloud.com', '$2y$10$5ZWuMuzjufEDXo3Uno5AVe0MXefJ4sO4P7Rfpk3DhFFn7eqO9X.5K', 'Super Admin', 'Aktif', 1608269508),
-('ID-ADM-002', 'ID-PRH-001', 'Lilis Yuningsih', 'Jl. Jayagiri No.8A, Denpasar Timur', 'Perempuan', 'LIS1.png', '+62 812 3627 9999', 'lilis@stikom-bali.ac.id', '$2y$10$njt9x5a7R1cA9q7MhmtPY.R9iOafpxJobT19a2pyTKTfV5UbzGqn6', 'Admin', 'Aktif', 1608272261),
-('ID-KRY-003', 'ID-PRH-001', 'Aditya Suryo Prastomo', 'Jl. Gunung Lebah No.32, Denpasar Barat', 'Laki-Laki', 'user_default1.png', '+62 857 4564 6074', 'adityaspras@gmail.com', '$2y$10$ZHmaBoViNrGXDPEbPOV0JukVk2wiHTsBOCiN7is1xX2OL/Rh5hYIS', 'Karyawan', 'Aktif', 1608272261);
+('1', '', 'Cloud Inventory', 'Jl. Raya Puputan No.86, Denpasar Timur', NULL, 'Icon.png', '+62 851 5617 5274', 'admin@cloud.com', '$2y$10$mOEii1TlodRK7PXGk4Lj9ecNBHy6xzn1s3S4tRbNaAMQrHAGe8aw.', 'Super Admin', 'Aktif', 1608269508),
+('ID-ADM-002', 'ID-PRH-001', 'Abdul Wahab', 'Denpasar', 'Laki-Laki', 'user_default.png', '+62 812 3627 9999', 'abdulwahab@gmail.com', '$2y$10$Wnok0IhBaTton/qqSsZEJeXZwk2FOBDYRHLnpoiAuuJCYQSUIrxXC', 'Admin', 'Aktif', 1608272261),
+('ID-ADM-003', 'ID-PRH-002', 'Aditya Suryo Prastomo', 'Jl. Gunung Lebah No.32, Denpasar Barat', 'Laki-Laki', 'Foto.png', '+62 857 4564 6074', 'adityaspras@gmail.com', '$2y$10$Sb8ZmzRERw8fSmVcgiwa7eWB53znwgks9ReWoQQH/zyCHAkjrpZdS', 'Admin', 'Aktif', 1608272261);
 
 --
 -- Indexes for dumped tables
@@ -353,7 +360,7 @@ ALTER TABLE `tb_user`
 -- AUTO_INCREMENT for table `tb_kritik_saran`
 --
 ALTER TABLE `tb_kritik_saran`
-  MODIFY `IdKritikSaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `IdKritikSaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `tb_paket`
@@ -365,7 +372,7 @@ ALTER TABLE `tb_paket`
 -- AUTO_INCREMENT for table `tb_token`
 --
 ALTER TABLE `tb_token`
-  MODIFY `IdToken` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `IdToken` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -44,14 +44,17 @@ class Admin extends CI_Controller
 
             $HariIni    = date("Y-m-d");
             $Perusahaan = $this->session->userdata('IdPerusahaan');
-            $AktifPaket = $this->db->select('*')->from('tb_perusahaan as tph')->join('tb_aktivasi as ta', 'ta.IdPerusahaan = tph.IdPerusahaan', 'left')->where('tph.IdPerusahaan', $Perusahaan)->order_by('ta.IdAktivasi', 'DESC')->get()->row_array();
+            $AktifPaket = $this->db->select('*')->from('tb_perusahaan as tph')->join('tb_paket as tp', 'tp.IdPaket = tph.IdPaket')->join('tb_aktivasi as ta', 'ta.IdPerusahaan = tph.IdPerusahaan', 'left')->where('tph.IdPerusahaan', $Perusahaan)->order_by('ta.IdAktivasi', 'DESC')->get()->row_array();
 
-            if ($AktifPaket['AkhirAktif'] <= $HariIni) {
-                $this->db->set('IdPaket', 1);
-                $this->db->where('IdPerusahaan', $Perusahaan);
-                $this->db->update('tb_perusahaan');
+            if ($AktifPaket['AkhirAktif'] == NULL) {
+            } else {
+                if ($AktifPaket['AkhirAktif'] <= $HariIni) {
+                    $this->db->set('IdPaket', 1);
+                    $this->db->where('IdPerusahaan', $Perusahaan);
+                    $this->db->update('tb_perusahaan');
 
-                $this->session->set_flashdata('warning', 'Anda Kembali Menggunakan Paket Gratis!');
+                    $this->session->set_flashdata('warning', 'Anda Kembali Menggunakan Paket Gratis!');
+                }
             }
 
             // Melakukan Load View Halaman Utama Untuk Admin
