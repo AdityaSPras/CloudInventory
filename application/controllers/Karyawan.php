@@ -40,6 +40,16 @@ class Karyawan extends CI_Controller
             $data['total_pemasukan']      = $this->barang_keluar->totalBarangKeluar();
             $data['hari_ini']             = date('Y-m-d');
 
+            $HariIni    = date("Y-m-d");
+            $Perusahaan = $this->session->userdata('IdPerusahaan');
+            $AktifPaket = $this->db->select('*')->from('tb_perusahaan as tph')->join('tb_aktivasi as ta', 'ta.IdPerusahaan = tph.IdPerusahaan', 'left')->where('tph.IdPerusahaan', $Perusahaan)->order_by('ta.IdAktivasi', 'DESC')->get()->row_array();
+
+            if ($AktifPaket['AkhirAktif'] <= $HariIni) {
+                $this->db->set('IdPaket', 1);
+                $this->db->where('IdPerusahaan', $Perusahaan);
+                $this->db->update('tb_perusahaan');
+            }
+
             // Melakukan Load View Halaman Utama Untuk Karyawan
             $this->load->view('templates/karyawan_header', $data);
             $this->load->view('karyawan/index', $data);

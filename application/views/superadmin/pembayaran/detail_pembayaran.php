@@ -45,8 +45,24 @@
                                             <th>:</th>
                                             <td><?= rupiah($data->TotalBayar) ?></td>
                                         </tr>
+                                        <tr>
+                                            <th>Jenis Pembayaran</th>
+                                            <th>:</th>
+                                            <td><?php if ($data->TipePembayaran == 'Baru') { ?>
+                                                    <span class="badge rounded-pill bg-primary text-white">Pembelian Baru</span>
+                                                <?php } elseif ($data->TipePembayaran == 'Perpanjang') { ?>
+                                                    <span class="badge rounded-pill bg-info text-white">Perpanjang Paket</span>
+                                                <?php } ?>
+                                            </td>
+                                        </tr>
                                         <?php if ($data->BuktiPembayaran == 'default_payment.PNG') : ?>
                                         <?php else : ?>
+                                            <tr>
+                                                <th>Tanggal Pembayaran</th>
+                                                <th>:</th>
+                                                <td><?= tgl_indo($data->TanggalPembayaran) ?>
+                                                </td>
+                                            </tr>
                                             <tr>
                                                 <th>Nama Bank</th>
                                                 <th>:</th>
@@ -65,12 +81,15 @@
                                                 <td><?= $data->NamaPemilikRekening ?>
                                                 </td>
                                             </tr>
-                                            <tr>
-                                                <th>Tanggal Pembayaran</th>
-                                                <th>:</th>
-                                                <td><?= tgl_indo($data->TanggalPembayaran) ?>
-                                                </td>
-                                            </tr>
+                                            <?php if ($data->StatusPembayaran == 'Diterima') : ?>
+                                                <tr>
+                                                    <th>Masa Aktif</th>
+                                                    <th>:</th>
+                                                    <td><?= tgl_indo($data->AwalAktif) ?> - <?= tgl_indo($data->AkhirAktif) ?>
+                                                    </td>
+                                                </tr>
+                                            <?php else : ?>
+                                            <?php endif; ?>
                                         <?php endif; ?>
                                     </tbody>
                                 </table>
@@ -84,10 +103,6 @@
                                         <?php else : ?>
                                             <?php if ($data->StatusPembayaran == 'Diterima') : ?>
                                             <?php else : ?>
-                                                <a href="<?= base_url("superadmin/konfirmasi_pembayaran/" . $data->IdPembayaran . "/" . $data->IdPerusahaan . "/" . $data->IdPaket . "/" . $data->IdUser); ?>" class="btn btn-danger btn-md btn-icon-split mb-2">
-                                                    <span class="icon text-white"><i class="fas fa-check-circle"></i></span>
-                                                    <span class="text text-white">Konfirmasi</span>
-                                                </a>
                                             <?php endif; ?>
                                         <?php endif; ?>
                                     </div>

@@ -1,6 +1,8 @@
 <!-- Begin Page Content -->
 <div class="container-fluid">
 
+    <div class="warning-flash-admin" data-flashdata="<?= $this->session->flashdata('warning'); ?>"></div>
+
     <!-- Content Row -->
     <div class="row">
 

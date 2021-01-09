@@ -20,6 +20,7 @@
                                 <th class="text-center">Nama Paket</th>
                                 <th class="text-center">Lama Berlangganan</th>
                                 <th class="text-center">Total Bayar</th>
+                                <th class="text-center">Jenis</th>
                                 <th class="text-center">Pembayaran</th>
                                 <th class="text-center">Status</th>
                                 <th class="text-center">Aksi</th>
@@ -35,6 +36,13 @@
                                     <td class="text-center"><?= $data->SubBayar ?> Bulan</td>
                                     <td class="text-center"><?= rupiah($data->TotalBayar) ?></td>
                                     <td class="text-center">
+                                        <?php if ($data->TipePembayaran == 'Baru') { ?>
+                                            <span class="badge rounded-pill bg-primary text-white">Baru</span>
+                                        <?php } elseif ($data->TipePembayaran == 'Perpanjang') { ?>
+                                            <span class="badge rounded-pill bg-info text-white">Perpanjang</span>
+                                        <?php } ?>
+                                    </td>
+                                    <td class="text-center">
                                         <?php if ($data->BuktiPembayaran == 'default_payment.PNG') : ?>
                                             <span class="badge rounded-pill bg-danger text-white">Belum Dibayar</span>
                                         <?php else : ?>
@@ -43,7 +51,11 @@
                                     </td>
                                     <td class="text-center">
                                         <?php if ($data->BuktiPembayaran == 'default_payment.PNG') : ?>
-                                            <small><i>(Belum Dibayar)</i></small>
+                                            <?php if (time() - $data->TanggalTransaksi < (60 * 60 * 24)) { ?>
+                                                <small><i>(Belum Dibayar)</i></small>
+                                            <?php } else { ?>
+                                                <span class="badge rounded-pill bg-danger text-white">Expired</span>
+                                            <?php } ?>
                                         <?php else : ?>
                                             <?php if ($data->StatusPembayaran == 'Pending') { ?>
                                                 <span class="badge rounded-pill bg-warning text-white">Belum Dikonfirmasi</span>
@@ -54,6 +66,10 @@
                                     </td>
                                     <td class="text-center">
                                         <a href="<?= base_url("superadmin/detail_pembayaran/" . encrypt_url($data->IdPembayaran) . "") ?>" class="btn btn-info btn-sm mb-1">Detail</a>
+                                        <?php if (time() - $data->TanggalTransaksi > (60 * 60 * 24) && $data->BuktiPembayaran == 'default_payment.PNG') { ?>
+                                            <a href="#" onclick="hapus_pembayaran('<?= encrypt_url($data->IdPembayaran) ?>')" id="hapus_pembayaran" class="btn btn-danger btn-sm mb-1">Hapus</a>
+                                        <?php } else { ?>
+                                        <?php } ?>
                                         <?php if ($data->BuktiPembayaran == 'default_payment.PNG') : ?>
                                         <?php else : ?>
                                             <?php if ($data->StatusPembayaran == 'Diterima') : ?>

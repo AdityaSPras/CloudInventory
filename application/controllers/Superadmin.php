@@ -386,6 +386,16 @@ class Superadmin extends CI_Controller
         $this->perusahaan->statusPaket($data, 'tb_aktivasi');
     }
 
+    // Fungsi Untuk Hapus Pembayaran Paket Perusahaan
+    public function hapus_pembayaran($id)
+    {
+        $id    = decrypt_url($id);
+        $where = array('IdPembayaran' => $id);
+
+        $this->pembayaran->hapusPembayaran($where, 'tb_pembayaran');
+        $this->session->set_flashdata('success', 'Pembayaran Berhasil Dihapus');
+        redirect('superadmin/daftar_pembayaran');
+    }
     // -------------------------------------------------------- AKHIR FUNGSI UNTUK PEMBAYARAN & AKTIVASI -------------------------------------------------------- //
 
     // -------------------------------------------------------- AWAL FUNGSI UNTUK KRITIK & SARAN -------------------------------------------------------- //

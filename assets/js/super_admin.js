@@ -26,6 +26,24 @@ if (errorSuperAdmin) {
     })
 }
 
+function hapus_pembayaran(id) {
+  var base_url = $('#hapus_pembayaran').val();
+
+  Swal.fire({
+    title: 'Apakah Anda Yakin Ingin Menghapus Data Ini?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Hapus Data!',
+    confirmButtonColor: '#4e73df',
+    cancelButtonText: 'Batal',
+    cancelButtonColor: '#d33',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      document.location.href = base_url + "hapus_pembayaran/" + id;
+    }
+  })
+}
+
 function hapus_kritik_saran(id) {
   var base_url = $('#hapus_kritik_saran').val();
 

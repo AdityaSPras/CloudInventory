@@ -109,6 +109,7 @@ class Pembayaran_model extends CI_Model
         $this->db->where('tpe.IdPembayaran', $where);
         $this->db->join('tb_user as tu', 'tu.IdUser = tpe.IdUser', 'left');
         $this->db->join('tb_perusahaan as tph', 'tph.IdPerusahaan = tpe.IdPerusahaan', 'left');
+        $this->db->join('tb_aktivasi as ta', 'ta.IdPembayaran = tpe.IdPembayaran', 'left');
         $this->db->join('tb_paket as tp', 'tp.IdPaket = tpe.IdPaket', 'left');
 
         return $this->db->get();
@@ -134,5 +135,16 @@ class Pembayaran_model extends CI_Model
     public function statusKonfirmasi($data, $table)
     {
         $this->db->insert($table, $data);
+    }
+
+    // Fungsi Untuk Hapus Pembayaran Perusahaan (tb_pembayaran)
+    public function hapusPembayaran($where, $table)
+    {
+        $this->db->where($where);
+        $this->db->delete($table);
+        if ($this->db->affected_rows() == 1) {
+            return TRUE;
+        }
+        return false;
     }
 }

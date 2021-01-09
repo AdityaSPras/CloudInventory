@@ -63,7 +63,7 @@
                         </a>
                         <?php if ($status_paket['IdPaket'] == 1) { ?>
                         <?php } else { ?>
-                            <a href="<?= base_url('admin/ubah_paket'); ?>" class="btn btn-warning btn-md mb-2">
+                            <a href="<?= base_url('admin/perpanjang_paket'); ?>" class="btn btn-warning btn-md mb-2">
                                 <span class="text text-white">Perpanjang Paket</span>
                             </a>
                         <?php } ?>

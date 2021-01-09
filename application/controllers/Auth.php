@@ -51,9 +51,10 @@ class Auth extends CI_Controller
     // Fungsi Proses Login (Private)
     private function _login()
     {
-        $email    = $this->input->post('Email');
-        $password = $this->input->post('Password');
-        $user     = $this->db->get_where('tb_user', ['Email' => $email])->row_array();
+        $email      = $this->input->post('Email');
+        $password   = $this->input->post('Password');
+        $user       = $this->db->get_where('tb_user', ['Email' => $email])->row_array();
+        $perusahaan = $this->db->get_where('tb_perusahaan', ['IdPaket'])->row_array();
 
         if ($user) {
             if ($user['Status'] == 'Aktif') {
@@ -62,7 +63,8 @@ class Auth extends CI_Controller
                         'IdUser'       => $user['IdUser'],
                         'IdPerusahaan' => $user['IdPerusahaan'],
                         'Email'        => $user['Email'],
-                        'Level'        => $user['Level']
+                        'Level'        => $user['Level'],
+                        'IdPaket'      => $perusahaan['IdPaket']
                     ];
 
                     $this->session->set_userdata($data);

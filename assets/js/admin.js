@@ -291,7 +291,7 @@ function validasiAdminBayarPaket() {
   var BuktiPembayaran = document.forms["formAdminBayarPaket"]["BuktiPembayaran"].value;
   
   if (NamaBank == '') {
-    validasi('Nama Bank Tidak Boleh Kosong!', 'warning');
+    validasi('Nama Bank Belum Dipilih!', 'warning');
     return false;
   } else if (NomorRekening == '') {
     validasi('Nomor Rekening Tidak Boleh Kosong!', 'warning');

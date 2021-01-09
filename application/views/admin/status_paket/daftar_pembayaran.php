@@ -1,14 +1,14 @@
     <!-- Begin Page Content -->
     <div class="container-fluid">
 
-        <div class="success-flash-admin" data-flashdata="<?= $this->session->flashdata('success'); ?>"></div>
+        <div class="warning-flash-admin" data-flashdata="<?= $this->session->flashdata('warning'); ?>"></div>
 
         <div class="col-lg-12 mb-4" id="container">
 
             <!-- Illustrations -->
             <div class="card shadow mb-2">
                 <div class="card-header py-3">
-                    <h4 class="m-0 font-weight-bold text-primary text-center">Riwayat <?= $title; ?></h4>
+                    <h4 class="m-0 font-weight-bold text-primary text-center"><?= $title; ?></h4>
                     <h6 class="m-0 font-weight-bold text-primary text-center">( <?= $perusahaan['NamaPerusahaan']; ?> )</h6>
                 </div>
                 <div class="card-body">
@@ -50,7 +50,11 @@
                                             <?php } ?>
                                         </td>
                                         <?php if ($data->BuktiPembayaran == 'default_payment.PNG') { ?>
-                                            <td class="btn-danger text-center btn-sm">Menunggu Pembayaran</td>
+                                            <?php if (time() - $data->TanggalTransaksi < (60 * 60 * 24)) { ?>
+                                                <td class="btn-warning text-center btn-sm">Menunggu Pembayaran</td>
+                                            <?php } else { ?>
+                                                <td class="btn-danger text-center btn-sm">Waktu Pembayaran Habis</td>
+                                            <?php } ?>
                                         <?php } else { ?>
                                             <?php if ($data->StatusPembayaran == 'Pending') { ?>
                                                 <td class="btn-warning text-center btn-sm">Diproses</td>
@@ -64,7 +68,11 @@
                                                 <a href="<?= base_url("admin/detail_pembayaran/" . encrypt_url($data->IdPembayaran) . "") ?>" class="btn btn-info btn-sm mb-1">Detail</a>
                                             <?php } ?>
                                             <?php if ($data->BuktiPembayaran == 'default_payment.PNG') { ?>
-                                                <a href="<?= base_url("admin/bayar_paket/" . encrypt_url($data->IdPembayaran) . "") ?>" class="btn btn-warning btn-sm mb-1">Bayar Sekarang</a>
+                                                <?php if (time() - $data->TanggalTransaksi < (60 * 60 * 24)) { ?>
+                                                    <a href="<?= base_url("admin/pembayaran_paket/" . encrypt_url($data->IdPembayaran) . "") ?>" class="btn btn-warning btn-sm mb-1">Bayar Sekarang</a>
+                                                <?php } else { ?>
+                                                    <span class="btn-muted text-danger btn-sm">Expired</span>
+                                                <?php } ?>
                                             <?php } else { ?>
                                             <?php } ?>
                                         </td>
