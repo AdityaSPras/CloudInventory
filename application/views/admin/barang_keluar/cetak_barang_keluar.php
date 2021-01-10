@@ -50,6 +50,11 @@
     <hr>
     <br>
     <h3 align="center"><?= $title; ?></h3>
+    <?php if ($TanggalAwal == '' || $TanggalAkhir == '') : ?>
+        <h6 align="center">Semua Tanggal</h6>
+    <?php else : ?>
+        <h6 align="center"><?= tgl_indo($TanggalAwal) ?> - <?= tgl_indo($TanggalAkhir) ?></h6>
+    <?php endif; ?>
     <table id="isi">
         <tr>
             <th align="center">No</th>
@@ -85,6 +90,26 @@
                 <td align="center"><?= rupiah($data->TotalKeluar) ?></td>
             </tr>
         <?php } ?>
+        <tr>
+            <th colspan="3" align="right">Total Harga Keluar:</th>
+            <th colspan="3" align="center">
+                <?php
+                if ($TanggalAwal != '' && $TanggalAkhir != '') {
+                    $user             = $this->session->userdata('IdPerusahaan');
+                    $data1            = $this->db->select_sum('TotalKeluar')->from('tb_barang_keluar as tbk')->where('tbk.IdPerusahaan', $user)->where('tbk.TanggalKeluar >=', $TanggalAwal)->where('tbk.TanggalKeluar <=', $TanggalAkhir)->get();
+                    $HargaKeluar      = $data1->row();
+                    $TotalHargaKeluar = intval($HargaKeluar->TotalKeluar);
+                } else {
+                    $user             = $this->session->userdata('IdPerusahaan');
+                    $data1            = $this->db->select_sum('TotalKeluar')->from('tb_barang_keluar as tbk')->where('tbk.IdPerusahaan', $user)->get();
+                    $HargaKeluar      = $data1->row();
+                    $TotalHargaKeluar = intval($HargaKeluar->TotalKeluar);
+                }
+                ?>
+
+                <?= rupiah($TotalHargaKeluar); ?>
+            </th>
+        </tr>
     </table>
 </body>
 

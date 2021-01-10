@@ -1533,10 +1533,21 @@ class Admin extends CI_Controller
         $data['title']               = 'Laporan Barang Masuk';
         $data['user']                = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
         $data['perusahaan']          = $this->profil->dataProfil()->row_array();
-        $data['daftar_barang_masuk'] = $this->barang_masuk->daftarBarangMasuk()->result();
         $data['data_supplier']       = $this->supplier->dataSupplier()->result();
         $data['jumlah_supplier']     = $this->supplier->dataSupplier()->num_rows();
         $data['status_paket']        = $this->profil->statusPaket()->row_array();
+
+        $TanggalAwal  = $this->input->post('TanggalAwal');
+        $TanggalAkhir = $this->input->post('TanggalAkhir');
+
+        if ($TanggalAwal != '' && $TanggalAkhir != '') {
+            $data['daftar_barang_masuk'] = $this->barang_masuk->filterBarangMasuk($TanggalAwal, $TanggalAkhir)->result();
+        } else {
+            $data['daftar_barang_masuk'] = $this->barang_masuk->daftarBarangMasuk()->result();
+        }
+
+        $data['TanggalAwal']  = $TanggalAwal;
+        $data['TanggalAkhir'] = $TanggalAkhir;
 
         $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => 'A4-L']);
         $html = $this->load->view('admin/barang_masuk/cetak_barang_masuk', $data, true);
@@ -1544,8 +1555,9 @@ class Admin extends CI_Controller
         $mpdf->WriteHTML($html);
         date_default_timezone_set('Asia/Jakarta');
 
-        $Tanggal  = date('dMY_his');
-        $namaFile = 'Laporan Barang Masuk ' . $Tanggal . '.pdf';
+        $Perusahaan = $this->profil->dataProfil()->row_array();
+        $Tanggal    = date('dMY_his');
+        $namaFile   = 'Laporan Barang Masuk ' . $Perusahaan["NamaPerusahaan"] . " " . $Tanggal . '.pdf';
 
         $mpdf->Output($namaFile, 'D');
     }
@@ -1743,8 +1755,19 @@ class Admin extends CI_Controller
         $data['title']                = 'Laporan Barang Keluar';
         $data['user']                 = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
         $data['perusahaan']           = $this->profil->dataProfil()->row_array();
-        $data['daftar_barang_keluar'] = $this->barang_keluar->daftarBarangKeluar()->result();
         $data['status_paket']         = $this->profil->statusPaket()->row_array();
+
+        $TanggalAwal  = $this->input->post('TanggalAwal');
+        $TanggalAkhir = $this->input->post('TanggalAkhir');
+
+        if ($TanggalAwal != '' && $TanggalAkhir != '') {
+            $data['daftar_barang_keluar'] = $this->barang_keluar->filterBarangKeluar($TanggalAwal, $TanggalAkhir)->result();
+        } else {
+            $data['daftar_barang_keluar'] = $this->barang_keluar->daftarBarangKeluar()->result();
+        }
+
+        $data['TanggalAwal']  = $TanggalAwal;
+        $data['TanggalAkhir'] = $TanggalAkhir;
 
         $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => 'A4-L']);
         $html = $this->load->view('admin/barang_keluar/cetak_barang_keluar', $data, true);
@@ -1752,8 +1775,9 @@ class Admin extends CI_Controller
         $mpdf->WriteHTML($html);
         date_default_timezone_set('Asia/Jakarta');
 
-        $Tanggal  = date('dMY_his');
-        $namaFile = 'Laporan Barang Keluar ' . $Tanggal . '.pdf';
+        $Perusahaan = $this->profil->dataProfil()->row_array();
+        $Tanggal    = date('dMY_his');
+        $namaFile   = 'Laporan Barang Keluar ' . $Perusahaan["NamaPerusahaan"] . " " . $Tanggal . '.pdf';
 
         $mpdf->Output($namaFile, 'D');
     }

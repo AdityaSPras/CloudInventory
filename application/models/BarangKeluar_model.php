@@ -73,6 +73,23 @@ class BarangKeluar_model extends CI_Model
         return $query;
     }
 
+    function filterBarangKeluar($TanggalAwal, $TanggalAkhir)
+    {
+        $user = $this->session->userdata('IdPerusahaan');
+
+        $this->db->select('*');
+        $this->db->from('tb_barang_keluar as tbk');
+        $this->db->join('tb_user as tu', 'tu.IdUser = tbk.IdUser', 'left');
+        $this->db->join('tb_barang as tb', 'tb.IdBarang = tbk.IdBarang', 'left');
+        $this->db->join('tb_satuan as ts', 'ts.IdSatuan = tb.IdSatuan', 'left');
+        $this->db->where('tbk.IdPerusahaan', $user);
+        $this->db->where('tbk.TanggalKeluar >=', $TanggalAwal);
+        $this->db->where('tbk.TanggalKeluar <=', $TanggalAkhir);
+
+        $query = $this->db->get();
+        return $query;
+    }
+
     // Fungsi Untuk Menampilkan Detail Barang Keluar Milik Perusahaan Dengan Menggabungkan 4 Tabel Secara Left Join (tb_barang_keluar, tb_user, tb_barang, dan tb_satuan)
     public function detailBarangKeluar($where)
     {

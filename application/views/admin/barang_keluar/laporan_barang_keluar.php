@@ -37,19 +37,12 @@
                             </div>
 
                             <div class="col-sm mb-2">
-                                <a href="#" class="btn btn-md btn-primary btn-icon-split">
-                                    <span class=" text text-white">Filter</span>
-                                    <span class="icon text-white-50">
-                                        <i class="fas fa-search"></i>
-                                    </span>
-                                </a>
-
-                                <a href="#" class="btn btn-md btn-secondary btn-icon-split">
+                                <button type="reset" class="btn btn-md btn-secondary btn-icon-split">
                                     <span class="text text-white">Reset</span>
                                     <span class="icon text-white-50">
                                         <i class="fas fa-undo"></i>
                                     </span>
-                                </a>
+                                </button>
                             </div>
 
                             <div class="col-sm mb-2 text-right">

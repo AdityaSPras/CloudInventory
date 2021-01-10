@@ -74,6 +74,24 @@ class BarangMasuk_model extends CI_Model
         return $query;
     }
 
+    function filterBarangMasuk($TanggalAwal, $TanggalAkhir)
+    {
+        $user = $this->session->userdata('IdPerusahaan');
+
+        $this->db->select('*');
+        $this->db->from('tb_barang_masuk as tbm');
+        $this->db->join('tb_user as tu', 'tu.IdUser = tbm.IdUser', 'left');
+        $this->db->join('tb_barang as tb', 'tb.IdBarang = tbm.IdBarang', 'left');
+        $this->db->join('tb_supplier as ts', 'ts.IdSupplier = tbm.IdSupplier', 'left');
+        $this->db->join('tb_satuan as tsa', 'tsa.IdSatuan = tb.IdSatuan', 'left');
+        $this->db->where('tbm.IdPerusahaan', $user);
+        $this->db->where('tbm.TanggalMasuk >=', $TanggalAwal);
+        $this->db->where('tbm.TanggalMasuk <=', $TanggalAkhir);
+
+        $query = $this->db->get();
+        return $query;
+    }
+
     // Fungsi Untuk Menampilkan Detail Barang Keluar Milik Perusahaan Dengan Menggabungkan 5 Tabel Secara Left Join (tb_barang_masuk, tb_user, tb_barang, tb_supplier, dan tb_satuan)
     public function detailBarangMasuk($where)
     {
