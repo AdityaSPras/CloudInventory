@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 09, 2021 at 08:02 PM
+-- Generation Time: Jan 20, 2021 at 09:04 PM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 7.4.13
 
@@ -34,7 +34,8 @@ CREATE TABLE `tb_aktivasi` (
   `IdPembayaran` varchar(15) NOT NULL,
   `IdPaket` int(11) NOT NULL,
   `AwalAktif` date NOT NULL,
-  `AkhirAktif` date NOT NULL
+  `AkhirAktif` date NOT NULL,
+  `Opsi` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -54,7 +55,8 @@ CREATE TABLE `tb_barang` (
   `HargaJual` int(11) NOT NULL,
   `Stok` int(11) NOT NULL,
   `StokMinimum` int(11) NOT NULL,
-  `TanggalBarang` int(11) NOT NULL
+  `TanggalBarang` int(11) NOT NULL,
+  `StatusData` enum('Aktif','Tidak Aktif') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -258,17 +260,19 @@ CREATE TABLE `tb_user` (
   `Password` varchar(255) NOT NULL,
   `Level` enum('Super Admin','Admin','Karyawan') NOT NULL,
   `Status` enum('Aktif','Tidak Aktif') NOT NULL,
-  `TanggalDibuat` int(11) NOT NULL
+  `TanggalDibuat` int(11) NOT NULL,
+  `StatusDataUser` enum('Aktif','Tidak Aktif') DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `tb_user`
 --
 
-INSERT INTO `tb_user` (`IdUser`, `IdPerusahaan`, `NamaLengkap`, `Alamat`, `JenisKelamin`, `Foto`, `NomorTelepon`, `Email`, `Password`, `Level`, `Status`, `TanggalDibuat`) VALUES
-('1', '', 'Cloud Inventory', 'Jl. Raya Puputan No.86, Denpasar Timur', NULL, 'Icon.png', '+62 851 5617 5274', 'admin@cloud.com', '$2y$10$mOEii1TlodRK7PXGk4Lj9ecNBHy6xzn1s3S4tRbNaAMQrHAGe8aw.', 'Super Admin', 'Aktif', 1608269508),
-('ID-ADM-002', 'ID-PRH-001', 'Abdul Wahab', 'Denpasar', 'Laki-Laki', 'user_default.png', '+62 812 3627 9999', 'abdulwahab@gmail.com', '$2y$10$Wnok0IhBaTton/qqSsZEJeXZwk2FOBDYRHLnpoiAuuJCYQSUIrxXC', 'Admin', 'Aktif', 1608272261),
-('ID-ADM-003', 'ID-PRH-002', 'Aditya Suryo Prastomo', 'Jl. Gunung Lebah No.32, Denpasar Barat', 'Laki-Laki', 'Foto.png', '+62 857 4564 6074', 'adityaspras@gmail.com', '$2y$10$Sb8ZmzRERw8fSmVcgiwa7eWB53znwgks9ReWoQQH/zyCHAkjrpZdS', 'Admin', 'Aktif', 1608272261);
+INSERT INTO `tb_user` (`IdUser`, `IdPerusahaan`, `NamaLengkap`, `Alamat`, `JenisKelamin`, `Foto`, `NomorTelepon`, `Email`, `Password`, `Level`, `Status`, `TanggalDibuat`, `StatusDataUser`) VALUES
+('1', '', 'Cloud Inventory', 'Jl. Raya Puputan No.86, Denpasar Timur', NULL, 'Icon.png', '+62 851 5617 5274', 'admin@cloud.com', '$2y$10$NOW9Y0/9bTTzi.SPy0ZWwuh2wqqpcVpwF3kWTPuF3e80ZHlG1gAZS', 'Super Admin', 'Aktif', 1608269508, NULL),
+('ID-ADM-002', 'ID-PRH-001', 'Abdul Wahab', 'Denpasar', 'Laki-Laki', 'user_default.png', '+62 812 3627 9999', 'abdulwahab@gmail.com', '$2y$10$Wnok0IhBaTton/qqSsZEJeXZwk2FOBDYRHLnpoiAuuJCYQSUIrxXC', 'Admin', 'Aktif', 1608272261, NULL),
+('ID-ADM-003', 'ID-PRH-002', 'Aditya Suryo Prastomo', 'Jl. Gunung Lebah No.32, Denpasar Barat', 'Laki-Laki', 'Foto.png', '+62 857 4564 6074', 'adityaspras@gmail.com', '$2y$10$e.UoYWSrw0eIGVzCuycDu.U3v0owFSvOEcAAW2aVBdXoGrebIc/sO', 'Admin', 'Aktif', 1608272261, NULL),
+('ID-KRY-004', 'ID-PRH-001', 'Luh Ayu Martini', 'Denpasar', 'Perempuan', 'user_default.png', '+62 819 9927 9272', 'ayumartini@gmail.com', '$2y$10$rv9W5DCuTxFpGUThjq22fO0bLsjzWdYuxa1TSBy7UXMNcG5tTOR3G', 'Karyawan', 'Aktif', 1610281288, 'Aktif');
 
 --
 -- Indexes for dumped tables
@@ -360,7 +364,7 @@ ALTER TABLE `tb_user`
 -- AUTO_INCREMENT for table `tb_kritik_saran`
 --
 ALTER TABLE `tb_kritik_saran`
-  MODIFY `IdKritikSaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `IdKritikSaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `tb_paket`
@@ -372,7 +376,7 @@ ALTER TABLE `tb_paket`
 -- AUTO_INCREMENT for table `tb_token`
 --
 ALTER TABLE `tb_token`
-  MODIFY `IdToken` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `IdToken` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

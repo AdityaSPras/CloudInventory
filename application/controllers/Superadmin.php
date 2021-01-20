@@ -380,7 +380,8 @@ class Superadmin extends CI_Controller
             'IdPembayaran' => $IdPembayaran,
             'IdPaket'      => $IdPaket,
             'AwalAktif'    => $AwalAktif,
-            'AkhirAktif'   => date('Y-m-d', strtotime(+$AkhirAktif['SubBayar'] .  'month', strtotime($AwalAktif)))
+            'AkhirAktif'   => date('Y-m-d', strtotime(+$AkhirAktif['SubBayar'] .  'month', strtotime($AwalAktif))),
+            'Opsi'         => date('Y-m-d', strtotime(+$AkhirAktif['SubBayar'] .  'month' . '-7 day', strtotime($AwalAktif)))
         ];
 
         $this->perusahaan->statusPaket($data, 'tb_aktivasi');

@@ -63,9 +63,12 @@
                         </a>
                         <?php if ($status_paket['IdPaket'] == 1) { ?>
                         <?php } else { ?>
-                            <a href="<?= base_url('admin/perpanjang_paket'); ?>" class="btn btn-warning btn-md mb-2">
-                                <span class="text text-white">Perpanjang Paket</span>
-                            </a>
+                            <?php if ($aktif_paket['Opsi'] <= date('Y-m-d')) { ?>
+                                <a href="<?= base_url('admin/perpanjang_paket'); ?>" class="btn btn-warning btn-md mb-2">
+                                    <span class="text text-white">Perpanjang Paket</span>
+                                </a>
+                            <?php } else { ?>
+                            <?php } ?>
                         <?php } ?>
                         <a href="<?= base_url('admin/riwayat_pembayaran'); ?>" class="btn btn-info btn-md mb-2">
                             <span class="text text-white">Pembayaran Paket</span>

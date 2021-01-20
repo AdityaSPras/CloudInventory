@@ -45,6 +45,19 @@ class Users_model extends CI_Model
         return $KodeKaryawan;
     }
 
+    public function jumlahKaryawan()
+    {
+        $user = $this->session->userdata('IdPerusahaan');
+
+        $this->db->select('*');
+        $this->db->from('tb_user');
+        $this->db->where('IdPerusahaan', $user);
+        $this->db->like('Level', 'Karyawan');
+
+        $query = $this->db->get();
+        return $query->num_rows();
+    }
+
     // Fungsi Untuk Menampilkan Daftar Karyawan Perusahaan Berdasarkan Level User Karyawan (tb_user)
     public function dataKaryawan()
     {
@@ -55,9 +68,23 @@ class Users_model extends CI_Model
         $this->db->select('*');
         $this->db->from('tb_user');
         $this->db->where('IdPerusahaan', $user);
+        $this->db->where('StatusDataUser', 'Aktif');
         $this->db->like('Level', 'Karyawan');
         $this->db->limit($paket->JumlahKaryawan);
-        $this->db->order_by('TanggalDibuat', 'DESC');
+
+        $query = $this->db->get();
+        return $query;
+    }
+
+    public function dataManagementKaryawan()
+    {
+        $user = $this->session->userdata('IdPerusahaan');
+
+        $this->db->select('*');
+        $this->db->from('tb_user');
+        $this->db->where('IdPerusahaan', $user);
+        $this->db->like('Level', 'Karyawan');
+        $this->db->order_by('IdUser', 'DESC');
 
         $query = $this->db->get();
         return $query;

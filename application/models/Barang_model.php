@@ -53,8 +53,21 @@ class Barang_model extends CI_Model
         $this->db->join('tb_kategori as tk', 'tk.IdKategori = tb.IdKategori', 'left');
         $this->db->join('tb_satuan as ts', 'ts.IdSatuan = tb.IdSatuan', 'left');
         $this->db->where('tb.IdPerusahaan', $user);
+        $this->db->where('StatusData', 'Aktif');
         $this->db->limit($paket->JumlahBarang);
-        $this->db->order_by('TanggalBarang', 'DESC');
+
+        $query = $this->db->get();
+        return $query;
+    }
+
+    public function dataManagementBarang()
+    {
+        $user = $this->session->userdata('IdPerusahaan');
+
+        $this->db->select('*');
+        $this->db->from('tb_barang as tb');
+        $this->db->where('tb.IdPerusahaan', $user);
+        $this->db->order_by('IdBarang', 'DESC');
 
         $query = $this->db->get();
         return $query;

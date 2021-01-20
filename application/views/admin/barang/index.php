@@ -15,6 +15,14 @@
                 <div class="col-sm-12 text-center">
                     <span class="badge rounded-pill bg-danger text-white">Kuota Barang Sudah Penuh!</span>
                 </div>
+                <div class="col-sm-12 mt-2">
+                    <a href="<?= base_url('admin/management_barang'); ?>" class="btn btn-sm btn-success btn-icon-split">
+                        <span class="text text-white">Data Management</span>
+                        <span class="icon text-white-50">
+                            <i class="fas fa-clipboard-list"></i>
+                        </span>
+                    </a>
+                </div>
             <?php } else { ?>
                 <div class="col-sm-12 mt-2">
                     <a href="<?= base_url('admin/tambah_barang'); ?>" class="btn btn-sm btn-primary btn-icon-split">

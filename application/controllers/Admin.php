@@ -32,7 +32,7 @@ class Admin extends CI_Controller
             $data['title']                = 'Halaman Utama';
             $data['user']                 = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
             $data['profil']               = $this->profil->dataProfil()->row_array();
-            $data['jumlah_karyawan']      = $this->users->dataKaryawan()->num_rows();
+            $data['jumlah_karyawan']      = $this->users->jumlahKaryawan();
             $data['jumlah_barang']        = $this->barang->jumlahBarang();
             $data['status_paket']         = $this->profil->statusPaket()->row_array();
             $data['jumlah_barang_masuk']  = $this->barang_masuk->jumlahBarangMasuk()->num_rows();
@@ -359,7 +359,7 @@ class Admin extends CI_Controller
             $data['user']            = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
             $data['perusahaan']      = $this->profil->dataProfil()->row_array();
             $data['daftar_karyawan'] = $this->users->dataKaryawan()->result();
-            $data['jumlah_karyawan'] = $this->users->dataKaryawan()->num_rows();
+            $data['jumlah_karyawan'] = $this->users->jumlahKaryawan();
             $data['status_paket']    = $this->profil->statusPaket()->row_array();
 
             // Melakukan Load View Halaman Daftar Karyawan Perusahaan Untuk Admin
@@ -372,6 +372,44 @@ class Admin extends CI_Controller
         }
     }
 
+    public function management_karyawan()
+    {
+        // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Admin
+        if ($this->session->userdata('Level') == "Admin") {
+
+            $data['title']           = 'Manajemen Daftar Karyawan';
+            $data['user']            = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['perusahaan']      = $this->profil->dataProfil()->row_array();
+            $data['daftar_karyawan'] = $this->users->dataManagementKaryawan()->result();
+            $data['jumlah_karyawan'] = $this->users->jumlahKaryawan();
+            $data['status_paket']    = $this->profil->statusPaket()->row_array();
+
+            // Melakukan Load View Halaman Manajemen Daftar Barang Perusahaan Untuk Admin
+            $this->load->view('templates/admin_header', $data);
+            $this->load->view('admin/karyawan/data_management', $data);
+            $this->load->view('templates/users_footer');
+        } else {
+            // Jika Session User Level Bukan Admin Maka Akan Diarahkan Ke Halaman Error 403
+            $this->load->view('error');
+        }
+    }
+
+    // Fungsi Untuk Ubah Daftar Karyawan Perusahaan
+    public function ubah_daftar_karyawan()
+    {
+        $Data           = $this->session->userdata('IdPerusahaan');
+        $StatusKaryawan = $this->input->post('StatusDataUser');
+
+        $this->db->set('StatusDataUser', 'Tidak Aktif')->where('IdPerusahaan', $Data)->where_not_in('Level', 'Admin')->update('tb_user');
+
+        foreach ($StatusKaryawan as $IdKaryawan) {
+            $this->db->set('StatusDataUser', 'Aktif')->where('IdUser', decrypt_url($IdKaryawan))->where('IdPerusahaan', $Data)->update('tb_user');
+        }
+
+        $this->session->set_flashdata('success', 'Daftar Karyawan Berhasil Diubah');
+        redirect('admin/karyawan');
+    }
+
     // Fungsi Untuk Tambah Karyawan Perusahaan
     public function tambah_karyawan()
     {
@@ -381,7 +419,7 @@ class Admin extends CI_Controller
             $data['user']            = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
             $data['perusahaan']      = $this->profil->dataProfil()->row_array();
             $data['status_paket']    = $this->profil->statusPaket()->row_array();
-            $data['jumlah_karyawan'] = $this->users->dataKaryawan()->num_rows();
+            $data['jumlah_karyawan'] = $this->users->jumlahKaryawan();
 
             // Membuat Aturan Pengisian Form atau Inputan Untuk Nama Lengkap Karyawan
             $this->form_validation->set_rules('NamaLengkap', 'Nama Lengkap Karyawan', 'required|trim', [
@@ -412,16 +450,17 @@ class Admin extends CI_Controller
                 $this->load->view('admin/karyawan/tambah_karyawan', $data);
                 $this->load->view('templates/users_footer');
             } else {
-                $IdUser        = $this->users->kodeKaryawan();
-                $IdPerusahaan  = $this->session->userdata('IdPerusahaan');
-                $NamaLengkap   = $this->input->post('NamaLengkap', true);
-                $Alamat        = $this->input->post('Alamat', true);
-                $JenisKelamin  = $this->input->post('JenisKelamin', true);
-                $NomorTelepon  = $this->input->post('NomorTelepon', true);
-                $Email         = $this->input->post('Email', true);
-                $Level         = 'Karyawan';
-                $Status        = 'Aktif';
-                $TanggalDibuat = time();
+                $IdUser         = $this->users->kodeKaryawan();
+                $IdPerusahaan   = $this->session->userdata('IdPerusahaan');
+                $NamaLengkap    = $this->input->post('NamaLengkap', true);
+                $Alamat         = $this->input->post('Alamat', true);
+                $JenisKelamin   = $this->input->post('JenisKelamin', true);
+                $NomorTelepon   = $this->input->post('NomorTelepon', true);
+                $Email          = $this->input->post('Email', true);
+                $Level          = 'Karyawan';
+                $Status         = 'Aktif';
+                $TanggalDibuat  = time();
+                $StatusDataUser = 'Aktif';
 
                 $config['allowed_types'] = 'png|PNG|jpg|JPG|jpeg|JPEG';
                 $config['max_size']      = '2048';
@@ -446,18 +485,19 @@ class Admin extends CI_Controller
                 }
 
                 $data = array(
-                    'IdUser'        => $IdUser,
-                    'IdPerusahaan'  => $IdPerusahaan,
-                    'NamaLengkap'   => htmlspecialchars($NamaLengkap),
-                    'Alamat'        => $Alamat,
-                    'JenisKelamin'  => $JenisKelamin,
-                    'Foto'          => $ganti,
-                    'NomorTelepon'  => $NomorTelepon,
-                    'Email'         => htmlspecialchars($Email),
-                    'Password'      => password_hash($this->input->post('Password'), PASSWORD_DEFAULT),
-                    'Level'         => $Level,
-                    'Status'        => $Status,
-                    'TanggalDibuat' => $TanggalDibuat
+                    'IdUser'         => $IdUser,
+                    'IdPerusahaan'   => $IdPerusahaan,
+                    'NamaLengkap'    => htmlspecialchars($NamaLengkap),
+                    'Alamat'         => $Alamat,
+                    'JenisKelamin'   => $JenisKelamin,
+                    'Foto'           => $ganti,
+                    'NomorTelepon'   => $NomorTelepon,
+                    'Email'          => htmlspecialchars($Email),
+                    'Password'       => password_hash($this->input->post('Password'), PASSWORD_DEFAULT),
+                    'Level'          => $Level,
+                    'Status'         => $Status,
+                    'TanggalDibuat'  => $TanggalDibuat,
+                    'StatusDataUser' => $StatusDataUser
                 );
 
                 $this->users->tambahKaryawan($data, 'tb_user');
@@ -505,7 +545,7 @@ class Admin extends CI_Controller
             $data['user']            = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
             $data['perusahaan']      = $this->profil->dataProfil()->row_array();
             $data['daftar_karyawan'] = $this->users->dataKaryawan()->result();
-            $data['jumlah_karyawan'] = $this->users->dataKaryawan()->num_rows();
+            $data['jumlah_karyawan'] = $this->users->jumlahKaryawan();
             $data['status_paket']    = $this->profil->statusPaket()->row_array();
             $id                      = decrypt_url($id);
             $where                   = array('IdUser' => $id);
@@ -1049,6 +1089,44 @@ class Admin extends CI_Controller
             // Jika Session User Level Bukan Admin Maka Akan Diarahkan Ke Halaman Error 403
             $this->load->view('error');
         }
+    }
+
+    public function management_barang()
+    {
+        // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Admin
+        if ($this->session->userdata('Level') == "Admin") {
+
+            $data['title']         = 'Manajemen Daftar Barang';
+            $data['user']          = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['perusahaan']    = $this->profil->dataProfil()->row_array();
+            $data['daftar_barang'] = $this->barang->dataManagementBarang()->result();
+            $data['jumlah_barang'] = $this->barang->jumlahBarang();
+            $data['status_paket']  = $this->profil->statusPaket()->row_array();
+
+            // Melakukan Load View Halaman Manajemen Daftar Barang Perusahaan Untuk Admin
+            $this->load->view('templates/admin_header', $data);
+            $this->load->view('admin/barang/data_management', $data);
+            $this->load->view('templates/users_footer');
+        } else {
+            // Jika Session User Level Bukan Admin Maka Akan Diarahkan Ke Halaman Error 403
+            $this->load->view('error');
+        }
+    }
+
+    // Fungsi Untuk Ubah Daftar Barang Perusahaan
+    public function ubah_daftar_barang()
+    {
+        $Data         = $this->session->userdata('IdPerusahaan');
+        $StatusBarang = $this->input->post('StatusData');
+
+        $this->db->set('StatusData', 'Tidak Aktif')->where('IdPerusahaan', $Data)->update('tb_barang');
+
+        foreach ($StatusBarang as $IdBarang) {
+            $this->db->set('StatusData', 'Aktif')->where('IdBarang', decrypt_url($IdBarang))->where('IdPerusahaan', $Data)->update('tb_barang');
+        }
+
+        $this->session->set_flashdata('success', 'Daftar Barang Berhasil Diubah');
+        redirect('admin/barang');
     }
 
     // Fungsi Untuk Tambah Barang Perusahaan
