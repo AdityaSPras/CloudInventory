@@ -1708,6 +1708,21 @@ class Admin extends CI_Controller
                 'required' => 'Tanggal Keluar Barang Tidak Boleh Kosong!'
             ]);
 
+            $IdBarang     = decrypt_url($this->input->post('IdBarang'));
+            $StokBarang   = $this->db->select_sum('Stok')->from('tb_barang')->where('IdBarang', $IdBarang)->get();
+            $BarangMasuk  = $this->db->select_sum('JumlahMasuk')->from('tb_barang_masuk')->where('IdBarang', $IdBarang)->get();
+            $BarangKeluar = $this->db->select_sum('JumlahKeluar')->from('tb_barang_keluar')->where('IdBarang', $IdBarang)->get();
+
+            $JumlahBarang       = $StokBarang->row();
+            $JumlahBarangMasuk  = $BarangMasuk->row();
+            $JumlahBarangKeluar = $BarangKeluar->row();
+            $TotalStok          = intval($JumlahBarang->Stok) + (intval($JumlahBarangMasuk->JumlahMasuk) - intval($JumlahBarangKeluar->JumlahKeluar));
+
+            if ($TotalStok < $this->input->post('JumlahKeluar', true)) {
+                $this->session->set_flashdata('error', 'Sisa Stok Barang Kurang Dari Jumlah Keluar!');
+                redirect('admin/tambah_barang_keluar');
+            }
+
             if ($this->form_validation->run() == false) {
                 // Melakukan Load View Halaman Tambah Barang Keluar Perusahaan Untuk Admin
                 $this->load->view('templates/admin_header', $data);
@@ -2176,13 +2191,34 @@ class Admin extends CI_Controller
     // -------------------------------------------------------- AKHIR FUNGSI UNTUK STATUS PAKET -------------------------------------------------------- //
 
     // -------------------------------------------------------- AWAL FUNGSI UNTUK KRITIK & SARAN -------------------------------------------------------- //
-    // Fungsi Untuk Memberi Kritik & Saran Kepada Penyedia Layanan
+    // Fungsi Untuk Menampilkan Daftar Kritik & Saran Yang Telah Dikirim
     public function kritik_saran()
     {
         // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Admin
         if ($this->session->userdata('Level') == "Admin") {
 
-            $data['title']        = 'Kritik & Saran';
+            $data['title']               = 'Kritik & Saran';
+            $data['user']                = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+            $data['daftar_kritik_saran'] = $this->kritik_saran->daftarKritikSaranUser()->result();
+            $data['status_paket']        = $this->profil->statusPaket()->row_array();
+
+            // Melakukan Load View Halaman Kirim Kritik & Saran Untuk Admin
+            $this->load->view('templates/admin_header', $data);
+            $this->load->view('admin/kritik_saran/index', $data);
+            $this->load->view('templates/users_footer');
+        } else {
+            // Jika Session User Level Bukan Admin Maka Akan Diarahkan Ke Halaman Error 403
+            $this->load->view('error');
+        }
+    }
+
+    // Fungsi Untuk Memberi Kritik & Saran Kepada Penyedia Layanan
+    public function kirim_kritik_saran()
+    {
+        // Melakukan Cek Session User Level Apakah Benar Yang Mengakses Fungsi Ini Sebagai Admin
+        if ($this->session->userdata('Level') == "Admin") {
+
+            $data['title']        = 'Kirim Kritik & Saran';
             $data['user']         = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
             $data['status_paket'] = $this->profil->statusPaket()->row_array();
 
@@ -2194,19 +2230,19 @@ class Admin extends CI_Controller
             if ($this->form_validation->run() == false) {
                 // Melakukan Load View Halaman Kirim Kritik & Saran Untuk Admin
                 $this->load->view('templates/admin_header', $data);
-                $this->load->view('admin/kritik_saran', $data);
+                $this->load->view('admin/kritik_saran/kirim_kritik_saran', $data);
                 $this->load->view('templates/users_footer');
             } else {
                 $IdUser       = $this->session->userdata('IdUser');
                 $IdPerusahaan = $this->session->userdata('IdPerusahaan');
                 $Pesan        = $this->input->post('Pesan', true);
-                $Tanggal      = time();
+                $TanggalPesan = time();
 
                 $data = [
                     'IdUser'       => $IdUser,
                     'IdPerusahaan' => $IdPerusahaan,
                     'Pesan'        => $Pesan,
-                    'Tanggal'      => $Tanggal
+                    'TanggalPesan' => $TanggalPesan
                 ];
 
                 $this->kritik_saran->kirimKritikSaran($data, 'tb_kritik_saran');

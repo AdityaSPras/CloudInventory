@@ -56,6 +56,17 @@ class Perusahaan_model extends CI_Model
         return $query;
     }
 
+    // Fungsi Untuk Menampilkan Daftar Perusahaan (tb_perusahaan)
+    public function daftarPerusahaan()
+    {
+        $this->db->select('*');
+        $this->db->from('tb_perusahaan');
+        $this->db->order_by('NamaPerusahaan', 'DESC');
+
+        $query = $this->db->get();
+        return $query;
+    }
+
     // Fungsi Untuk Menampilkan Detail Perusahaan Dengan Menggabungkan 3 Tabel (tb_perusahaan, tb_user, dan tb_paket)
     public function detailPerusahaan($where)
     {

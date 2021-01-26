@@ -1,7 +1,7 @@
 <!-- Begin Page Content -->
 <div class="container-fluid">
 
-    <?php if (tgl_indo($aktif_paket['Opsi']) >= date('Y-m-d')) : ?>
+    <?php if ($aktif_paket['Opsi'] >= date('Y-m-d')) : ?>
         <?= redirect('error'); ?>
     <?php else : ?>
         <div class="row">

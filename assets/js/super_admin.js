@@ -82,3 +82,12 @@ function validateFormUbahPaket() {
     return false
   }
 }
+
+function validasiSuperadminBalasan() {
+  var Balasan = document.forms["formSuperadminBalasan"]["Balasan"].value;
+  
+  if (Balasan == '') {
+    validasi('Isi Balasan Tidak Boleh Kosong!', 'warning');
+    return false;
+  }
+}

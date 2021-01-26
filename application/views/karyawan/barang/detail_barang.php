@@ -17,22 +17,26 @@
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <p class="mb-0"><b>Nama Barang</b>
-                                            <br><?= $data->NamaBarang ?></p>
+                                            <br><?= $data->NamaBarang ?>
+                                        </p>
                                         <hr class="mt-0">
                                         <p class="mb-0"><b>Gambar Barang</b>
-                                            <br><img src="<?= base_url('assets/img/items/') . $data->Gambar ?>" alt="" width="200px"></p>
+                                            <br><img src="<?= base_url('assets/img/items/') . $data->Gambar ?>" alt="" width="200px">
+                                        </p>
                                         <hr class="mt-0">
                                         <p class="mb-0"><b>Kategori Barang</b>
                                             <br><?php if ($data->NamaKategori == '') : ?>
                                                 <span class="badge rounded-pill bg-danger text-white">Kategori Barang Telah Terhapus!</span>
                                             <?php else : ?>
                                                 <?= $data->NamaKategori ?>
-                                            <?php endif; ?></p>
+                                            <?php endif; ?>
+                                        </p>
                                         <hr class="mt-0">
                                         <p class="mb-0"><b>Harga Barang</b>
                                             <br><?= rupiah($data->HargaJual) ?><?php if ($data->NamaSatuan == '') : ?>
                                             <?php else : ?>/<?= $data->NamaSatuan ?>
-                                        <?php endif; ?></p>
+                                        <?php endif; ?>
+                                        </p>
                                         <hr class="mt-0">
                                         <p class="mb-0"><b>Stok Barang</b>
                                             <br><?php
@@ -48,14 +52,27 @@
                                             <?php if ($data->NamaSatuan == '') : ?>
                                             <?php else : ?>
                                                 <?= $data->NamaSatuan ?>
-                                            <?php endif; ?></p>
+                                            <?php endif; ?>
+                                        </p>
                                         <hr class="mt-0">
                                         <p class="mb-0"><b>Status Stok Barang</b>
-                                            <br><?php if ($total_stok <= $data->StokMinimum) : ?>
-                                                <span class="badge rounded-pill bg-danger text-white">Hampir Habis!</span>
-                                            <?php else : ?>
+                                            <br>
+                                            <?php
+                                            $BarangMasuk        = $this->db->select_sum('JumlahMasuk')->from('tb_barang_masuk')->where('IdBarang', $data->IdBarang)->get();
+                                            $BarangKeluar       = $this->db->select_sum('JumlahKeluar')->from('tb_barang_keluar')->where('IdBarang', $data->IdBarang)->get();
+                                            $JumlahBarangMasuk  = $BarangMasuk->row();
+                                            $JumlahBarangKeluar = $BarangKeluar->row();
+                                            $TotalStok          = intval($data->Stok) + (intval($JumlahBarangMasuk->JumlahMasuk) - intval($JumlahBarangKeluar->JumlahKeluar));
+                                            ?>
+
+                                            <?php if ($TotalStok == 0) { ?>
+                                                <span class="badge rounded-pill bg-danger text-white">Stok Habis</span>
+                                            <?php } elseif ($TotalStok > $data->StokMinimum) { ?>
                                                 <span class="badge rounded-pill bg-success text-white">Normal</span>
-                                            <?php endif; ?></p>
+                                            <?php } elseif ($TotalStok <= $data->StokMinimum) { ?>
+                                                <span class="badge rounded-pill bg-warning text-white">Stok Hampir Habis</span>
+                                            <?php } ?>
+                                        </p>
                                         <hr class="mt-0">
                                     </div>
                                 </div>

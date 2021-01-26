@@ -10,6 +10,14 @@
             <div class="card-header py-3">
                 <h4 class="m-0 font-weight-bold text-primary text-center">Daftar <?= $title; ?></h4>
             </div>
+            <div class="col-sm-12 mt-2">
+                <a href="<?= base_url('superadmin/laporan_pembayaran'); ?>" class="btn btn-sm btn-success btn-icon-split">
+                    <span class="text text-white">Laporan <?= $title; ?></span>
+                    <span class="icon text-white-50">
+                        <i class="fas fa-file"></i>
+                    </span>
+                </a>
+            </div>
             <div class="card-body">
                 <div class="table-responsive table-hover">
                     <table id="pagination" class="table table-sm" width="100%" cellspacing="0">

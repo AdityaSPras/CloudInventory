@@ -42,7 +42,7 @@
                                 <th width="30%" class="text-center">Nama Barang</th>
                                 <th width="15%" class="text-center">Gambar Barang</th>
                                 <th width="20%" class="text-center">Stok</th>
-                                <th width="15%" class="text-center">Harga</th>
+                                <th width="15%" class="text-center">Harga Jual</th>
                                 <th width="15%" class="text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -55,21 +55,20 @@
                                     <td class="text-center"><img src="<?= base_url('assets/img/items/') . $data->Gambar ?>" alt="" width="60px"></td>
                                     <td class="text-center">
                                         <?php
-                                        $data1 = $this->db->select_sum('JumlahMasuk')->from('tb_barang_masuk')->where('IdBarang', $data->IdBarang)->get();
-                                        $data2 = $this->db->select_sum('JumlahKeluar')->from('tb_barang_keluar')->where('IdBarang', $data->IdBarang)->get();
-
-
-                                        $bm = $data1->row();
-                                        $bk = $data2->row();
-                                        $total_stok = intval($data->Stok) + (intval($bm->JumlahMasuk) - intval($bk->JumlahKeluar));
+                                        $BarangMasuk        = $this->db->select_sum('JumlahMasuk')->from('tb_barang_masuk')->where('IdBarang', $data->IdBarang)->get();
+                                        $BarangKeluar       = $this->db->select_sum('JumlahKeluar')->from('tb_barang_keluar')->where('IdBarang', $data->IdBarang)->get();
+                                        $JumlahBarangMasuk  = $BarangMasuk->row();
+                                        $JumlahBarangKeluar = $BarangKeluar->row();
+                                        $TotalStok          = intval($data->Stok) + (intval($JumlahBarangMasuk->JumlahMasuk) - intval($JumlahBarangKeluar->JumlahKeluar));
                                         ?>
 
-                                        <?php if ($total_stok <= $data->StokMinimum) { ?>
-                                            <span class="badge rounded-pill bg-danger text-white">Stok Hampir Habis</span>
-                                        <?php } else { ?>
-                                            <span><?= $total_stok ?> <?= $data->NamaSatuan ?></span>
+                                        <?php if ($TotalStok == 0) { ?>
+                                            <span class="badge rounded-pill bg-danger text-white">Stok Habis</span>
+                                        <?php } elseif ($TotalStok > $data->StokMinimum) { ?>
+                                            <span><?= $TotalStok ?> <?= $data->NamaSatuan ?></span>
+                                        <?php } elseif ($TotalStok <= $data->StokMinimum) { ?>
+                                            <span class="badge rounded-pill bg-warning text-white">Stok Hampir Habis</span>
                                         <?php } ?>
-
                                     </td>
                                     <td class="text-center">
                                         <?= rupiah($data->HargaJual) ?><?php if ($data->NamaSatuan == '') : ?>

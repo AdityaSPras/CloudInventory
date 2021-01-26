@@ -78,7 +78,7 @@
                     </li>
 
                     <!-- Pembayaran & Aktivasi -->
-                    <?php if ($title == 'Pembayaran' or $title == 'Detail Pembayaran') : ?>
+                    <?php if ($title == 'Pembayaran' or $title == 'Detail Pembayaran' or $title == 'Laporan Pembayaran') : ?>
                         <li class="nav-item active">
                         <?php else : ?>
                         <li class="nav-item">

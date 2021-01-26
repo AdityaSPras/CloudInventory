@@ -58,9 +58,9 @@
                                     </td>
                                     <td class="text-center">
                                         <?php if ($data->NamaSatuan == '') : ?>
-                                            <span class="badge badge-warning"> <i class="fa fa-minus"></i> <?= $data->JumlahMasuk ?></span>
+                                            <span class="badge badge-success"> <i class="fa fa-plus"></i> <?= $data->JumlahMasuk ?></span>
                                         <?php else : ?>
-                                            <span class="badge badge-warning"> <i class="fa fa-minus"></i> <?= $data->JumlahMasuk ?> <?= $data->NamaSatuan ?></span>
+                                            <span class="badge badge-success"> <i class="fa fa-plus"></i> <?= $data->JumlahMasuk ?> <?= $data->NamaSatuan ?></span>
                                         <?php endif; ?>
                                     <td class="text-center">
                                         <?= rupiah($data->HargaMasuk / $data->JumlahMasuk) ?><?php if ($data->NamaSatuan == '') : ?>

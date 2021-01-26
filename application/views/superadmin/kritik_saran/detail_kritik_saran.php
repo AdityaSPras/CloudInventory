@@ -16,8 +16,9 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-sm-12 text-left">
-                                        <p class="mb-0"><b>Tanggal</b>
-                                            <br><?= tgl_indo(date('Y-m-d', $data->Tanggal)); ?></p>
+                                        <p class="mb-0"><b>Tanggal Pesan</b>
+                                            <br><?= tgl_indo(date('Y-m-d', $data->TanggalPesan)); ?>
+                                        </p>
                                         <hr class="mt-0">
                                         <p class="mb-0"><b>Nama Pengguna</b>
                                             <br><?= $data->Level ?> (<?php if ($data->NamaPerusahaan == '') : ?>
@@ -29,10 +30,28 @@
                                                 <span class="badge rounded-pill bg-danger text-white">User Telah Dihapus</span>
                                             <?php else : ?>
                                                 <?= $data->NamaLengkap ?>
-                                            <?php endif; ?></p>
+                                            <?php endif; ?>
+                                        </p>
                                         <hr class="mt-0">
                                         <p class="mb-0"><b>Pesan</b>
-                                            <br><?= $data->Pesan ?></p>
+                                            <br><?= $data->Pesan ?>
+                                        </p>
+                                        <hr class="mt-0">
+                                        <p class="mb-0"><b>Balasan Anda</b>
+                                            <?php if ($data->Balasan == '') : ?>
+                                                <br><b class="text-danger">Anda Belum Membalas Kritik & Saran Ini!</b>
+                                            <?php else : ?>
+                                                <br><?= $data->Balasan ?>
+                                            <?php endif; ?>
+                                        </p>
+                                        <hr class="mt-0">
+                                        <p class="mb-0"><b>Tanggal Balasan</b>
+                                            <?php if ($data->TanggalBalasan == '') : ?>
+                                                <br><b class="text-danger">Anda Belum Membalas Kritik & Saran Ini!</b>
+                                            <?php else : ?>
+                                                <br><?= tgl_indo(date('Y-m-d', $data->TanggalBalasan)); ?>
+                                            <?php endif; ?>
+                                        </p>
                                         <hr class="mt-0">
                                     </div>
                                 </div>

@@ -101,6 +101,43 @@ class Pembayaran_model extends CI_Model
         return $query;
     }
 
+    // Fungsi Untuk Menampilkan Daftar Pembayaran Paket Perusahaan Dengan Menggabungkan 4 Tabel Secara Left Join (tb_pembayaran, tb_user, tb_perusahaan, dan tb_paket)
+    public function daftarPembayaranLunas()
+    {
+        $this->db->select('*');
+        $this->db->from('tb_pembayaran as tpe');
+        $this->db->join('tb_user as tu', 'tu.IdUser = tpe.IdUser', 'left');
+        $this->db->join('tb_perusahaan as tph', 'tph.IdPerusahaan = tpe.IdPerusahaan', 'left');
+        $this->db->join('tb_paket as tp', 'tp.IdPaket = tpe.IdPaket', 'left');
+        $this->db->where('tpe.StatusPembayaran', 'Diterima');
+        $this->db->order_by('IdPembayaran', 'DESC');
+
+        $query = $this->db->get();
+        return $query;
+    }
+
+    function filterPembayaran($IdPerusahaan)
+    {
+        $this->db->select('*');
+        $this->db->from('tb_pembayaran as tpe');
+        $this->db->join('tb_perusahaan as tph', 'tph.IdPerusahaan = tpe.IdPerusahaan', 'left');
+        $this->db->join('tb_paket as tp', 'tp.IdPaket = tpe.IdPaket', 'left');
+        $this->db->where('tpe.StatusPembayaran', 'Diterima');
+        $this->db->where('tpe.IdPerusahaan', $IdPerusahaan);
+        $this->db->order_by('IdPembayaran', 'DESC');
+
+        $query = $this->db->get();
+        return $query;
+    }
+
+    function getPerusahaan($IdPerusahaan)
+    {
+        $this->db->select("*");
+        $this->db->where("IdPerusahaan", $IdPerusahaan);
+
+        return $this->db->get('tb_perusahaan')->row();
+    }
+
     // Fungsi Untuk Menampilkan Detail Pembayaran Dengan Menggabungkan 4 Tabel Secara Left Join (tb_pembayaran, tb_user, tb_perusahaan, dan tb_paket)
     public function detailPembayaran($where)
     {

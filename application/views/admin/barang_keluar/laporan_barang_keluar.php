@@ -17,7 +17,7 @@
                         <div class="row">
                             <div class="col-sm-3 mb-2">
                                 <div class="input-group">
-                                    <input name="TanggalAwal" placeholder="Tanggal Awal" class="form-control datepicker1">
+                                    <input name="TanggalAwal" placeholder="Tanggal Awal" class="form-control datepicker1" autocomplete="off">
                                     <div class="input-group-append">
                                         <span class="btn btn-secondary">
                                             <i class="fas fa-calendar fa-sm"></i>
@@ -27,7 +27,7 @@
                             </div>
                             <div class="col-sm-3 mb-2">
                                 <div class="input-group">
-                                    <input name="TanggalAkhir" placeholder="Tanggal Akhir" class="form-control datepicker2">
+                                    <input name="TanggalAkhir" placeholder="Tanggal Akhir" class="form-control datepicker2" autocomplete="off">
                                     <div class="input-group-append">
                                         <span class="btn btn-secondary">
                                             <i class="fas fa-calendar fa-sm"></i>

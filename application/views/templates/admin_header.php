@@ -145,7 +145,7 @@
 
 
                                     <!-- Kritik & Saran -->
-                                    <?php if ($title == 'Kritik & Saran') : ?>
+                                    <?php if ($title == 'Kritik & Saran' or $title == 'Kirim Kritik & Saran') : ?>
                                         <li class="nav-item active">
                                         <?php else : ?>
                                         <li class="nav-item">

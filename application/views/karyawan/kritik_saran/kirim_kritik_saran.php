@@ -12,19 +12,23 @@
                             <h4 class="m-0 font-weight-bold text-primary text-center"><?= $title; ?></h4>
                         </div>
                         <div class="card-body p-4">
-                            <form action="<?= base_url('karyawan/kritik_saran'); ?>" method="POST">
+                            <form action="<?= base_url('karyawan/kirim_kritik_saran'); ?>" method="POST">
                                 <div class="form-group text-left">
                                     <label for="Pesan">Pesan:</label>
                                     <textarea class="form-control" id="pesan" name="Pesan" rows="6"></textarea>
                                     <?= form_error('Pesan', '<small class="text-danger">', '</small>'); ?>
                                 </div>
                                 <div class="form-group text-center">
-                                    <button type="reset" class="btn btn-warning btn-md btn-icon-split mb-2">
+                                    <a href="<?= base_url('karyawan/kritik_saran'); ?>" class="btn btn-warning btn-md btn-icon-split mb-2">
+                                        <span class="icon text-white"><i class="fas fa-arrow-left"></i></span>
+                                        <span class="text text-white">Kembali</span>
+                                    </a>
+                                    <button type="reset" class="btn btn-danger btn-md btn-icon-split mb-2">
                                         <span class="icon text-white"><i class="fas fa-eraser"></i></span>
                                         <span class="text text-white">Reset</span>
                                     </button>
                                     <button type="submit" class="btn btn-success btn-md btn-icon-split mb-2">
-                                        <span class="icon text-white"><i class="fas fa-save"></i></span>
+                                        <span class="icon text-white"><i class="fas fa-paper-plane"></i></span>
                                         <span class="text text-white">Kirim</span>
                                     </button>
                                 </div>

@@ -1,6 +1,8 @@
 <!-- Begin Page Content -->
 <div class="container-fluid">
 
+    <div class="error-flash-admin" data-flashdata="<?= $this->session->flashdata('error'); ?>"></div>
+
     <div class="row">
         <div class="col-lg-12">
             <div class="card shadow mb-4">

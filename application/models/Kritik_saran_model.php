@@ -16,6 +16,21 @@ class Kritik_saran_model extends CI_Model
         $this->db->from('tb_kritik_saran');
         $this->db->join('tb_user', 'tb_user.IdUser = tb_kritik_saran.IdUser', 'left');
         $this->db->join('tb_perusahaan', 'tb_perusahaan.IdPerusahaan = tb_kritik_saran.IdPerusahaan', 'left');
+        $this->db->order_by('IdKritikSaran', 'DESC');
+
+
+        $query = $this->db->get();
+        return $query;
+    }
+
+    public function daftarKritikSaranUser()
+    {
+        $user = $this->session->userdata('IdUser');
+
+        $this->db->select('*');
+        $this->db->from('tb_kritik_saran');
+        $this->db->where('IdUser', $user);
+        $this->db->order_by('IdKritikSaran', 'DESC');
 
         $query = $this->db->get();
         return $query;
@@ -31,6 +46,13 @@ class Kritik_saran_model extends CI_Model
         $this->db->join('tb_perusahaan as tp', 'tp.IdPerusahaan = tbs.IdPerusahaan', 'left');
 
         return $this->db->get();
+    }
+
+    // Fungsi Untuk Memberi Balasan Kritik & Saran (tb_kritik_saran)
+    public function balasanKritikSaran($where, $data, $table)
+    {
+        $this->db->where($where);
+        $this->db->update($table, $data);
     }
 
     // Fungsi Untuk Hapus Kritik & Saran (tb_kritik_saran)

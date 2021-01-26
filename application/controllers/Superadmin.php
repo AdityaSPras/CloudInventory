@@ -339,6 +339,56 @@ class Superadmin extends CI_Controller
         }
     }
 
+    public function laporan_pembayaran()
+    {
+        // Melakukan Cek Session Level User Apakah Benar Yang Mengakses Fungsi Ini Sebagai Super Admin
+        if ($this->session->userdata('Level') == "Super Admin") {
+
+            $data['title']             = 'Laporan Pembayaran';
+            $data['daftar_pembayaran'] = $this->pembayaran->daftarPembayaranLunas()->result();
+            $data['daftar_perusahaan'] = $this->perusahaan->daftarPerusahaan()->result();
+            $data['user']              = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+
+            // Melakukan Load View Halaman Detail Pembayaran Untuk Super Admin
+            $this->load->view('templates/super_admin_header', $data);
+            $this->load->view('superadmin/pembayaran/laporan_pembayaran', $data);
+            $this->load->view('templates/users_footer');
+        } else {
+            // Jika Session Level User Bukan Super Admin Maka Akan Diarahkan Ke Halaman Error 403
+            $this->load->view('error');
+        }
+    }
+
+    public function cetak_pembayaran()
+    {
+        $data['title']             = 'Laporan Pembayaran Paket';
+        $data['daftar_pembayaran'] = $this->pembayaran->daftarPembayaranLunas()->result();
+        $data['daftar_perusahaan'] = $this->perusahaan->daftarPerusahaan()->result();
+        $data['user']              = $this->db->get_where('tb_user', ['Email' => $this->session->userdata('Email')])->row_array();
+
+        $IdPerusahaan       = $this->input->post('IdPerusahaan');
+        $data['perusahaan'] = $this->pembayaran->getPerusahaan($IdPerusahaan)->NamaPerusahaan;
+
+        if ($IdPerusahaan != '') {
+            $data['daftar_pembayaran'] = $this->pembayaran->filterPembayaran($IdPerusahaan)->result();
+        } else {
+            $data['daftar_pembayaran'] = $this->pembayaran->daftarPembayaranLunas()->result();
+        }
+
+        $data['IdPerusahaan']    = $IdPerusahaan;
+
+        $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => 'A4-L']);
+        $html = $this->load->view('superadmin/pembayaran/cetak_pembayaran', $data, true);
+
+        $mpdf->WriteHTML($html);
+        date_default_timezone_set('Asia/Jakarta');
+
+        $Tanggal    = date('his');
+        $namaFile   = 'Laporan Pembayaran Paket ' . " " . $Tanggal . '.pdf';
+
+        $mpdf->Output($namaFile, 'D');
+    }
+
     // Fungsi Untuk Tombol Konfirmasi Pembayaran
     public function konfirmasi_pembayaran($IdPembayaran, $IdPerusahaan, $IdPaket, $IdUser)
     {
@@ -439,6 +489,26 @@ class Superadmin extends CI_Controller
             // Jika Session Level User Bukan Super Admin Maka Akan Diarahkan Ke Halaman Error 403
             $this->load->view('error');
         }
+    }
+
+    // Fungsi Untuk Membalas Kritik & Saran
+    public function balas_kritik_saran()
+    {
+        $IdKritikSaran  = $this->input->post('IdKritikSaran');
+        $Balasan        = $this->input->post('Balasan', true);
+        $TanggalBalasan = time();
+
+        $data = array(
+            'Balasan'        => $Balasan,
+            'TanggalBalasan' => $TanggalBalasan
+        );
+
+        $id    = decrypt_url($IdKritikSaran);
+        $where = array('IdKritikSaran' => $id);
+
+        $this->kritik_saran->balasanKritikSaran($where, $data, 'tb_kritik_saran');
+        $this->session->set_flashdata('success', 'Balasan Kritik & Saran Berhasil Terkirim');
+        redirect('superadmin/kritik_saran');
     }
 
     // Fungsi Hapus Kritik & Saran
