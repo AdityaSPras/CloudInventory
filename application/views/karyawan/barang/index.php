@@ -55,10 +55,12 @@
                                         ?>
 
                                         <?php if ($TotalStok == 0) { ?>
+                                            <span class="text-danger"><?= $TotalStok ?> <?= $data->NamaSatuan ?></span><br>
                                             <span class="badge rounded-pill bg-danger text-white">Stok Habis</span>
                                         <?php } elseif ($TotalStok > $data->StokMinimum) { ?>
                                             <span><?= $TotalStok ?> <?= $data->NamaSatuan ?></span>
                                         <?php } elseif ($TotalStok <= $data->StokMinimum) { ?>
+                                            <span class="text-warning"><?= $TotalStok ?> <?= $data->NamaSatuan ?></span><br>
                                             <span class="badge rounded-pill bg-warning text-white">Stok Hampir Habis</span>
                                         <?php } ?>
                                     </td>

@@ -17,42 +17,60 @@
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <p class="mb-0"><b>Tanggal Masuk</b>
-                                            <br><?= tgl_indo($data->TanggalMasuk) ?></p>
+                                            <br><?= tgl_indo($data->TanggalMasuk) ?>
+                                        </p>
                                         <hr class="mt-0">
                                         <p class="mb-0"><b>Nama Barang</b>
                                             <br><?php if ($data->NamaBarang == '') : ?>
                                                 <span class="badge rounded-pill bg-danger text-white">Barang Telah Terhapus!</span>
                                             <?php else : ?>
                                                 <?= $data->NamaBarang ?>
-                                            <?php endif; ?></p>
+                                            <?php endif; ?>
+                                        </p>
                                         <hr class="mt-0">
                                         <p class="mb-0"><b>Gambar Barang</b>
                                             <br><?php if ($data->Gambar == '') : ?>
                                                 <span class="badge rounded-pill bg-danger text-white">Gambar Tidak Tersedia!</span>
                                             <?php else : ?>
                                                 <img src="<?= base_url('assets/img/items/') . $data->Gambar ?>" alt="" width="200px">
-                                            <?php endif; ?></p>
+                                            <?php endif; ?>
+                                        </p>
                                         <hr class="mt-0">
                                         <p class="mb-0"><b>Supplier Barang</b>
                                             <br><?php if ($data->NamaSupplier == '') : ?>
                                                 <span class="badge rounded-pill bg-danger text-white">Supplier Telah Terhapus!</span>
                                             <?php else : ?>
                                                 <?= $data->NamaSupplier ?>
-                                            <?php endif; ?></p>
-                                        <hr class="mt-0">
-                                        <p class="mb-0"><b>Total Harga Masuk</b>
-                                            <br><?= rupiah($data->HargaMasuk) ?></p>
+                                            <?php endif; ?>
+                                        </p>
                                         <hr class="mt-0">
                                         <p class="mb-0"><b>Jumlah Masuk</b>
                                             <br><?php if ($data->NamaSatuan == '') : ?>
                                                 <?= $data->JumlahMasuk ?>
                                             <?php else : ?>
                                                 <?= $data->JumlahMasuk ?> <?= $data->NamaSatuan ?>
-                                            <?php endif; ?></p>
+                                            <?php endif; ?>
+                                        </p>
+                                        <hr class="mt-0">
+                                        <p class="mb-0"><b>Total Harga Masuk</b>
+                                            <br><?= rupiah($data->HargaMasuk) ?>
+                                        </p>
                                         <hr class="mt-0">
                                         <p class="mb-0"><b>Harga Satuan Supplier</b>
                                             <br><?= rupiah($data->HargaMasuk / $data->JumlahMasuk) ?><?php if ($data->NamaSatuan == '') : ?>
-                                            <?php else : ?>/<?= $data->NamaSatuan ?><?php endif; ?></p>
+                                            <?php else : ?>/<?= $data->NamaSatuan ?><?php endif; ?>
+                                        </p>
+                                        <hr class="mt-0">
+                                        <p class="mb-0"><b>Harga Jual</b>
+                                            <br><?= rupiah($data->HargaJual) ?><?php if ($data->NamaSatuan == '') : ?>
+                                            <?php else : ?>/<?= $data->NamaSatuan ?><?php endif; ?>
+                                        </p>
+                                        <hr class="mt-0">
+                                        <p class="mb-0"><b>Keuntungan</b>
+                                            <br>
+                                            <?= rupiah($data->HargaJual - $data->HargaMasuk / $data->JumlahMasuk) ?><?php if ($data->NamaSatuan == '') : ?>
+                                            <?php else : ?>/<?= $data->NamaSatuan ?><?php endif; ?>
+                                        </p>
                                         <hr class="mt-0">
                                     </div>
                                 </div>

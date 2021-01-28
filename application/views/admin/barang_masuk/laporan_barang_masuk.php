@@ -65,8 +65,8 @@
                                     <th class="text-center">Tanggal Masuk</th>
                                     <th class="text-center">Supplier</th>
                                     <th class="text-center">Nama Barang</th>
-                                    <th class="text-center">Total Harga</th>
                                     <th class="text-center">Jumlah Masuk</th>
+                                    <th class="text-center">Total Harga</th>
                                     <th class="text-center">Harga Satuan</th>
                                 </tr>
                             </thead>
@@ -91,14 +91,14 @@
                                             <?php endif; ?>
                                         </td>
                                         <td class="text-center">
-                                            <?= rupiah($data->HargaMasuk) ?></td>
-                                        </td>
-                                        <td class="text-center">
                                             <?php if ($data->NamaSatuan == '') : ?>
                                                 <span><?= $data->JumlahMasuk ?></span>
                                             <?php else : ?>
                                                 <span><?= $data->JumlahMasuk ?> <?= $data->NamaSatuan ?></span>
                                             <?php endif; ?>
+                                        </td>
+                                        <td class="text-center">
+                                            <?= rupiah($data->HargaMasuk) ?></td>
                                         </td>
                                         <td class="text-center">
                                             <?= rupiah($data->HargaMasuk / $data->JumlahMasuk) ?><?php if ($data->NamaSatuan == '') : ?>

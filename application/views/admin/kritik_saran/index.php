@@ -24,7 +24,7 @@
                         <thead>
                             <tr>
                                 <th class="text-center">No</th>
-                                <th class="text-center">Isi Pesan</th>
+                                <th class="text-center">Pesan</th>
                                 <th class="text-center">Tanggal Kirim Pesan</th>
                                 <th class="text-center">Balasan</th>
                                 <th class="text-center">Tanggal Balasan</th>

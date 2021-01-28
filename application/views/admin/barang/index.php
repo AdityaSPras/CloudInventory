@@ -38,12 +38,12 @@
                     <table id="pagination" class="table table-sm" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th width="5%" class="text-center">No</th>
-                                <th width="30%" class="text-center">Nama Barang</th>
-                                <th width="15%" class="text-center">Gambar Barang</th>
-                                <th width="20%" class="text-center">Stok</th>
-                                <th width="15%" class="text-center">Harga Jual</th>
-                                <th width="15%" class="text-center">Aksi</th>
+                                <th class="text-center">No</th>
+                                <th class="text-center">Nama Barang</th>
+                                <th class="text-center">Gambar Barang</th>
+                                <th class="text-center">Stok</th>
+                                <th class="text-center">Harga Jual</th>
+                                <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -63,16 +63,19 @@
                                         ?>
 
                                         <?php if ($TotalStok == 0) { ?>
+                                            <span class="text-danger"><?= $TotalStok ?> <?= $data->NamaSatuan ?></span><br>
                                             <span class="badge rounded-pill bg-danger text-white">Stok Habis</span>
                                         <?php } elseif ($TotalStok > $data->StokMinimum) { ?>
                                             <span><?= $TotalStok ?> <?= $data->NamaSatuan ?></span>
                                         <?php } elseif ($TotalStok <= $data->StokMinimum) { ?>
+                                            <span class="text-warning"><?= $TotalStok ?> <?= $data->NamaSatuan ?></span><br>
                                             <span class="badge rounded-pill bg-warning text-white">Stok Hampir Habis</span>
                                         <?php } ?>
                                     </td>
                                     <td class="text-center">
                                         <?= rupiah($data->HargaJual) ?><?php if ($data->NamaSatuan == '') : ?>
                                         <?php else : ?>/<?= $data->NamaSatuan ?><?php endif; ?>
+                                    </td>
                                     <td class="text-center">
                                         <a href="<?= base_url("admin/detail_barang/" . encrypt_url($data->IdBarang) . "") ?>" class="btn btn-circle btn-info btn-sm mb-1">
                                             <i class="fas fa-info"></i>

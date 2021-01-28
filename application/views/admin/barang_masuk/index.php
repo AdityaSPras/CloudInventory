@@ -21,20 +21,21 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive table-hover">
-                    <table id="pagination" class="table table-sm" width="100%" cellspacing="0">
+                    <table id="pagination" class="table table-sm text-xs" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th class="text-center" width="5%">No</th>
-                                <th class="text-center" width="15%">Nama Barang</th>
-                                <th class="text-center" width="15%">Supplier</th>
-                                <th class="text-center">Total Harga</th>
+                                <th class="text-center">No</th>
+                                <th class="text-center">Nama Barang</th>
+                                <th class="text-center">Supplier</th>
                                 <th class="text-center">Jumlah Masuk</th>
+                                <th class="text-center">Total Harga</th>
                                 <th class="text-center">Harga Satuan</th>
+                                <th class="text-center">Harga Jual</th>
                                 <th class="text-center">Tanggal Masuk</th>
                                 <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="font-weight-bold">
                             <?php $no = 1;
                             foreach ($daftar_barang_masuk as $data) { ?>
                                 <tr>
@@ -54,17 +55,42 @@
                                         <?php endif; ?>
                                     </td>
                                     <td class="text-center">
-                                        <?= rupiah($data->HargaMasuk) ?></td>
-                                    </td>
-                                    <td class="text-center">
                                         <?php if ($data->NamaSatuan == '') : ?>
                                             <span class="badge badge-success"> <i class="fa fa-plus"></i> <?= $data->JumlahMasuk ?></span>
                                         <?php else : ?>
                                             <span class="badge badge-success"> <i class="fa fa-plus"></i> <?= $data->JumlahMasuk ?> <?= $data->NamaSatuan ?></span>
                                         <?php endif; ?>
+                                    </td>
                                     <td class="text-center">
-                                        <?= rupiah($data->HargaMasuk / $data->JumlahMasuk) ?><?php if ($data->NamaSatuan == '') : ?>
-                                        <?php else : ?>/<?= $data->NamaSatuan ?><?php endif; ?>
+                                        <?= rupiah($data->HargaMasuk) ?></td>
+                                    </td>
+                                    <td class="text-center">
+                                        <?php if ($data->HargaMasuk / $data->JumlahMasuk == $data->HargaJual) : ?>
+                                            <span class="text-warning"><?= rupiah($data->HargaMasuk / $data->JumlahMasuk) ?><?php if ($data->NamaSatuan == '') : ?>
+                                                <?php else : ?>/<?= $data->NamaSatuan ?><?php endif; ?></span>
+                                            <br><span class="badge badge-warning">Harga Satuan Dengan Harga Jual Sama</span>
+                                        <?php elseif ($data->HargaMasuk / $data->JumlahMasuk > $data->HargaJual) : ?>
+                                            <span class="text-danger"><?= rupiah($data->HargaMasuk / $data->JumlahMasuk) ?><?php if ($data->NamaSatuan == '') : ?>
+                                                <?php else : ?>/<?= $data->NamaSatuan ?><?php endif; ?></span>
+                                            <br><span class="badge badge-danger">Harga Satuan Terlalu Tinggi</span>
+                                        <?php else : ?>
+                                            <?= rupiah($data->HargaMasuk / $data->JumlahMasuk) ?><?php if ($data->NamaSatuan == '') : ?>
+                                            <?php else : ?>/<?= $data->NamaSatuan ?><?php endif; ?>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td class="text-center">
+                                        <?php if ($data->HargaMasuk / $data->JumlahMasuk == $data->HargaJual) : ?>
+                                            <span class="text-warning"><?= rupiah($data->HargaJual) ?><?php if ($data->NamaSatuan == '') : ?>
+                                                <?php else : ?>/<?= $data->NamaSatuan ?><?php endif; ?></span>
+                                            <br><span class="badge badge-warning">Harga Jual Dengan Harga Satuan Sama</span>
+                                        <?php elseif ($data->HargaMasuk / $data->JumlahMasuk > $data->HargaJual) : ?>
+                                            <span class="text-danger"><?= rupiah($data->HargaJual) ?><?php if ($data->NamaSatuan == '') : ?>
+                                                <?php else : ?>/<?= $data->NamaSatuan ?><?php endif; ?></span>
+                                            <br><span class="badge badge-danger">Harga Jual Terlalu Rendah</span>
+                                        <?php else : ?>
+                                            <?= rupiah($data->HargaJual) ?><?php if ($data->NamaSatuan == '') : ?>
+                                            <?php else : ?>/<?= $data->NamaSatuan ?><?php endif; ?>
+                                        <?php endif; ?>
                                     </td>
                                     <td class="text-center"><?= tgl_indo($data->TanggalMasuk) ?> </td>
                                     <td class="text-center">
